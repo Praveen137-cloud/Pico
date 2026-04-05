@@ -10,18 +10,10 @@ import Profile from './pages/Profile';
 import Map from './pages/Map';
 import Lesson from './pages/Lesson';
 import Celebration from './pages/Celebration';
-import Auth from './pages/Auth';
 import Puzzles from './pages/Puzzles';
 import { AuthProvider, AuthContext } from './context/AuthContext';
 
 export const AudioContext = React.createContext();
-
-const ProtectedRoute = ({ children }) => {
-  const { token, loading } = useContext(AuthContext);
-  if (loading) return <div style={{color: 'white', padding: 40, textAlign: 'center'}}>Authenticating...</div>;
-  if (!token) return <Navigate to="/auth" replace />;
-  return children;
-};
 
 // Component to hide navigation dock on auth page
 const MainLayout = ({ children }) => {
@@ -97,27 +89,25 @@ function App() {
         <div className="app-container" onClick={handleGlobalClick}>
           <Router>
             <Routes>
-              {/* Public Route */}
-              <Route path="/auth" element={<div className="main-content"><Auth /></div>} />
-
-              {/* Protected Routes directly in layout */}
+              {/* No more separate /auth route unless specifically requested for future use */}
+              {/* All routes are now in standard layout */}
               <Route path="/*" element={
-                <ProtectedRoute>
-                  <MainLayout>
-                    <Routes>
-                      <Route path="/" element={<Home />} />
-                      <Route path="/code" element={<Code />} />
-                      <Route path="/league" element={<League />} />
-                      <Route path="/feed" element={<Feed />} />
-                      <Route path="/basics" element={<Basics />} />
-                      <Route path="/profile" element={<Profile />} />
-                      <Route path="/puzzles" element={<Puzzles />} />
-                      <Route path="/map/:subjectId/:sectionId" element={<Map />} />
-                      <Route path="/lesson/:subjectId/:sectionId/:unitId" element={<Lesson />} />
-                      <Route path="/celebration" element={<Celebration />} />
-                    </Routes>
-                  </MainLayout>
-                </ProtectedRoute>
+                <MainLayout>
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/code" element={<Code />} />
+                    <Route path="/league" element={<League />} />
+                    <Route path="/feed" element={<Feed />} />
+                    <Route path="/basics" element={<Basics />} />
+                    <Route path="/profile" element={<Profile />} />
+                    <Route path="/puzzles" element={<Puzzles />} />
+                    <Route path="/map/:subjectId/:sectionId" element={<Map />} />
+                    <Route path="/lesson/:subjectId/:sectionId/:unitId" element={<Lesson />} />
+                    <Route path="/celebration" element={<Celebration />} />
+                    {/* Fallback for old auth links */}
+                    <Route path="/auth" element={<Navigate to="/" replace />} />
+                  </Routes>
+                </MainLayout>
               } />
             </Routes>
           </Router>
