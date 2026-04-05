@@ -267,8 +267,10 @@ const subjects = [
     ]
   }
 ];
+module.exports = subjects;
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/pico_dsa')
+if (require.main === module) {
+  mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/pico_dsa')
   .then(async () => {
     console.log('Expanding Core 4 Subjects (Full 16 Stages, 5 Lessons Each)...');
     await Subject.deleteMany({});
@@ -277,3 +279,4 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/pico_dsa'
     process.exit(0);
   })
   .catch(err => { console.error(err.message); process.exit(1); });
+}

@@ -61,6 +61,9 @@ const zohoProblems = [
     ]
   }
 ];
+module.exports = zohoProblems;
+
+if (require.main === module) {
 
 mongoose.connect('mongodb://127.0.0.1:27017/pico_dsa')
   .then(async () => {
@@ -73,3 +76,4 @@ mongoose.connect('mongodb://127.0.0.1:27017/pico_dsa')
     process.exit(0);
   })
   .catch(err => { console.error(err.message); process.exit(1); });
+}

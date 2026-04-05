@@ -128,8 +128,7 @@ app.post('/api/run', async (req, res) => {
   }
 });
 
-const Subject = require('./models/Subject');
-const User = require('./models/User');
+// Redundant imports removed
 
 app.get('/api/subjects', authMiddleware, async (req, res) => {
   try {
