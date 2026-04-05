@@ -14,6 +14,13 @@ const Subject = require('./models/Subject');
 const User = require('./models/User');
 const Problem = require('./models/Problem');
 
+const app = express();
+const PORT = process.env.PORT || 5000;
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+  cors: { origin: '*' }
+});
+
 app.use(cors({
   origin: function (origin, callback) {
     const allowed = ['https://pico-sooty.vercel.app', 'http://localhost:5173'];
