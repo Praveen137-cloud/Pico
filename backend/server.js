@@ -18,7 +18,11 @@ const io = new Server(httpServer, {
 });
 
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: [
+    process.env.FRONTEND_URL,
+    'http://localhost:5173',
+    /\.vercel\.app$/ // This allows all Vercel subdomains (important for your deployment!)
+  ].filter(Boolean),
   credentials: true
 }));
 app.use(express.json());
