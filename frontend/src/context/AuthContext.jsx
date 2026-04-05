@@ -16,10 +16,10 @@ export const AuthProvider = ({ children }) => {
         setUser(res.data);
       } catch (err) {
         console.error('Failed to fetch user:', err);
-        // If it really fails (500), just ensure we are in a clean guest-like state locally
         setUser(null);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
     fetchUser();
   }, [token]);

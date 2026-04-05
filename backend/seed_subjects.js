@@ -268,12 +268,22 @@ const subjects = [
   }
 ];
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/pico_dsa')
-  .then(async () => {
-    console.log('Expanding Core 4 Subjects (Full 16 Stages, 5 Lessons Each)...');
-    await Subject.deleteMany({});
-    await Subject.insertMany(subjects);
-    console.log('✅ Success! Curriculum is now massive and interactive.');
-    process.exit(0);
-  })
-  .catch(err => { console.error(err.message); process.exit(1); });
+const seedData = async () => {
+    try {
+        await mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/pico_dsa');
+        console.log('Expanding Core 4 Subjects (Full 16 Stages, 5 Lessons Each)...');
+        await Subject.deleteMany({});
+        await Subject.insertMany(subjects);
+        console.log('✅ Success! Curriculum is now massive and interactive.');
+        process.exit(0);
+    } catch (err) {
+        console.error(err.message);
+        process.exit(1);
+    }
+};
+
+if (require.main === module) {
+    seedData();
+}
+
+module.exports = subjects;
