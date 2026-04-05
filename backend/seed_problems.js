@@ -62,23 +62,14 @@ const zohoProblems = [
   }
 ];
 
-const seedProblems = async () => {
-    try {
-        await mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/pico_dsa');
-        console.log('Seeding Zoho 5 Coding Challenges into The Forge...');
-        for (const p of zohoProblems) {
-            await Problem.findOneAndUpdate({ title: p.title }, p, { upsert: true });
-        }
-        console.log('✅ Success! The Forge is now Zoho-Ready.');
-        process.exit(0);
-    } catch (err) {
-        console.error(err.message);
-        process.exit(1);
+mongoose.connect('mongodb://127.0.0.1:27017/pico_dsa')
+  .then(async () => {
+    console.log('Seeding Zoho 5 Coding Challenges into The Forge...');
+    // We keep existing problems but add these or update
+    for (const p of zohoProblems) {
+      await Problem.findOneAndUpdate({ title: p.title }, p, { upsert: true });
     }
-};
-
-if (require.main === module) {
-    seedProblems();
-}
-
-module.exports = zohoProblems;
+    console.log('✅ Success! The Forge is now Zoho-Ready.');
+    process.exit(0);
+  })
+  .catch(err => { console.error(err.message); process.exit(1); });

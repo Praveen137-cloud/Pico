@@ -21,20 +21,22 @@ const themes = [
 ];
 
 const Profile = () => {
-  const { user: authUser, loading, logout, setUser: setAuthUser } = useContext(AuthContext);
-  const [user, setUser] = useState(authUser);
+  const { user: authUser, logout, setUser: setAuthUser } = useContext(AuthContext);
+  const [user, setUser] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [editName, setEditName] = useState(authUser?.name || '');
+  const [editName, setEditName] = useState('');
   const [activeTheme, setActiveTheme] = useState('Gold');
-  const [prefLang, setPrefLang] = useState(authUser?.preferredLanguage || 'c');
+  const [prefLang, setPrefLang] = useState('c');
 
   useEffect(() => {
-    if (authUser) {
-      setUser(authUser);
-      setEditName(authUser.name);
-      setPrefLang(authUser.preferredLanguage || 'c');
-    }
-  }, [authUser]);
+    api.get('/api/user')
+      .then(res => {
+        setUser(res.data);
+        setEditName(res.data.name);
+        setPrefLang(res.data.preferredLanguage || 'c');
+      })
+      .catch(err => console.error(err));
+  }, []);
 
   const saveProfile = async (updates) => {
     try {
@@ -44,7 +46,6 @@ const Profile = () => {
         ...updates
       });
       setUser(res.data);
-      if (setAuthUser) setAuthUser(res.data);
     } catch (err) {
       console.error('Failed to update profile', err);
     }
@@ -69,8 +70,7 @@ const Profile = () => {
     document.documentElement.style.setProperty('--theme-secondary', nextTheme.secondary);
   };
 
-  if (loading) return <div style={{padding: 40, textAlign: 'center', color: 'white'}}>Initializing Profile...</div>;
-  if (!user && !authUser) return <div style={{padding: 40, textAlign: 'center', color: 'white'}}>User Profile Not Found. Try refreshing or logging in.</div>;
+  if (!user) return <div style={{padding: 24, textAlign: 'center'}}>Loading User Profile...</div>;
 
   const currentAvatarEmoji = avatarsList.find(a => a.name === user.avatar)?.emoji || '🦜';
 
