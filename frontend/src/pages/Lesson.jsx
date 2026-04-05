@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import api from '../api';
 import { useParams, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 import { AudioContext } from '../App';
 import TypingEffect from '../components/TypingEffect';
 import _Editor from 'react-simple-code-editor';
@@ -186,13 +187,22 @@ const Lesson = () => {
     setIsCompiling(false);
   };
 
+  const { setUser, setSubjects } = useContext(AuthContext);
+
   const handleNext = async () => {
     if (currentLessonIndex + 1 < unit.lessons.length) {
       setCurrentLessonIndex(prev => prev + 1);
     } else {
       // Completed unit! Call API to unlock next lesson and update XP
       try {
-        await api.post('/api/unlock', { subjectId, sectionId, unitId });
+        const res = await api.post('/api/unlock', { subjectId, sectionId, unitId });
+        if (res.data.success) {
+          // Update global state immediately
+          setUser(res.data.user);
+          // Also fetch updated subjects to refresh 'isCompleted' flags
+          const subjRes = await api.get('/api/subjects');
+          setSubjects(subjRes.data);
+        }
       } catch (err) {
         console.error('Unlock error:', err);
       }
