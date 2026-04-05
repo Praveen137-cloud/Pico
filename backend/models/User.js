@@ -1,0 +1,53 @@
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+
+const userSchema = new mongoose.Schema({
+  name: { type: String, default: 'Student' },
+  email: { type: String, required: true, unique: true },
+  password: { type: String }, // Optional to allow future OAuth where passwords aren't present
+  googleId: { type: String, sparse: true }, // For future OAuth compatibility
+  preferredLanguage: { type: String, default: 'c', enum: ['c', 'python', 'java'] },
+  
+  avatar: { type: String, default: 'Parrot' },
+  xp: { type: Number, default: 0 },
+  lessonsCompleted: { type: Number, default: 0 },
+  streak: { type: Number, default: 0 },
+  lastStreakUpdate: { type: Date, default: null },
+  completedSubjects: [{ type: String }],
+  completedUnits: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Subject' }], 
+  questsClaimed: [{ type: String }], // e.g. "quest_c_compile", "quest_login"
+  progress: {
+    subjectProgress: {
+      type: Map,
+      of: new mongoose.Schema({
+        currentSectionIndex: { type: Number, default: 0 },
+        currentUnitIndex: { type: Number, default: 0 },
+        currentLessonIndex: { type: Number, default: 0 }
+      })
+    }
+  },
+  submissions: [{
+    problemId: { type: mongoose.Schema.Types.ObjectId, ref: 'Problem' },
+    problemTitle: { type: String },
+    language: { type: String },
+    status: { type: String },
+    solvedAt: { type: Date, default: Date.now }
+  }]
+}, { timestamps: true });
+
+// Pre-save hook to hash password before saving to database
+userSchema.pre('save', async function() {
+  if (!this.isModified('password')) {
+    return;
+  }
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+});
+
+// Helper method to compare password during login
+userSchema.methods.comparePassword = async function(candidatePassword) {
+  if (!this.password) return false;
+  return await bcrypt.compare(candidatePassword, this.password);
+};
+
+module.exports = mongoose.model('User', userSchema);
