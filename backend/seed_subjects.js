@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+require('dotenv').config();
 const Subject = require('./models/Subject');
 
 const subjects = [
@@ -267,7 +268,7 @@ const subjects = [
   }
 ];
 
-mongoose.connect('mongodb://127.0.0.1:27017/pico_dsa')
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/pico_dsa')
   .then(async () => {
     console.log('Expanding Core 4 Subjects (Full 16 Stages, 5 Lessons Each)...');
     await Subject.deleteMany({});
