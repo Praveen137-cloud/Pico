@@ -18,7 +18,10 @@ const io = new Server(httpServer, {
 });
 
 app.use(cors({
-  origin: true,
+  origin: function (host, callback) {
+    // Explicitly allow all origins while debugging
+    callback(null, true);
+  },
   credentials: true
 }));
 app.use(express.json());

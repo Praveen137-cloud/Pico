@@ -26,7 +26,9 @@ const Auth = () => {
       }
       navigate('/');
     } catch (err) {
-      setErrorMsg(err.response?.data?.error || 'Authentication failed. Check your credentials.');
+      console.error('Auth Error Details:', err);
+      const detailedError = err.response?.data?.error || err.message || 'Authentication failed.';
+      setErrorMsg(detailedError);
     }
     setLoading(false);
   };
