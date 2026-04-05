@@ -10,21 +10,46 @@ const authRoutes = require('./routes/auth');
 const problemsRoutes = require('./routes/problems');
 const authMiddleware = require('./middleware/auth');
 
-const app = express();
-const PORT = process.env.PORT || 5000;
-const httpServer = createServer(app);
-const io = new Server(httpServer, {
-  cors: { origin: '*' } // Allow all origins for Socket.io
-});
+const Subject = require('./models/Subject');
+const User = require('./models/User');
+const Problem = require('./models/Problem');
 
 app.use(cors({
-  origin: function (host, callback) {
-    // Explicitly allow all origins while debugging
-    callback(null, true);
+  origin: function (origin, callback) {
+    const allowed = ['https://pico-sooty.vercel.app', 'http://localhost:5173'];
+    if (!origin || allowed.indexOf(origin) !== -1 || origin.includes('vercel.app')) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
   },
   credentials: true
 }));
 app.use(express.json());
+
+// Admin Seeding Routes
+app.get('/api/admin/seed', async (req, res) => {
+  try {
+    const subjects = require('./seed_subjects');
+    await Subject.deleteMany({});
+    await Subject.insertMany(subjects);
+    res.json({ success: true, message: 'Subjects seeded' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/admin/seed-problems', async (req, res) => {
+  try {
+    const problems = require('./seed_problems');
+    for (const p of problems) {
+      await Problem.findOneAndUpdate({ title: p.title }, p, { upsert: true });
+    }
+    res.json({ success: true, message: 'Problems seeded' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 // MongoDB connection
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/pico_dsa';

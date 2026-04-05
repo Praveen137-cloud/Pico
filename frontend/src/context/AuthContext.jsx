@@ -11,16 +11,19 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      if (token) {
-        try {
+      try {
+        if (token) {
           const res = await api.get('/api/user');
           setUser(res.data);
-        } catch (err) {
-          console.error('Invalid token or failed to fetch user:', err);
-          logout(); // Clear invalid token
+        } else {
+          setUser(null);
         }
+      } catch (err) {
+        console.error('Invalid token or failed to fetch user:', err);
+        logout(); // Clear invalid token
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
     fetchUser();
   }, [token]);

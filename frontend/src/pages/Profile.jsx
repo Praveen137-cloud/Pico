@@ -21,24 +21,23 @@ const themes = [
 ];
 
 const Profile = () => {
-  const { user: authUser, logout, setUser: setAuthUser } = useContext(AuthContext);
-  const [user, setUser] = useState(null);
+  const { user: authUser, loading, logout, setUser: setAuthUser } = useContext(AuthContext);
+  const [user, setUser] = useState(authUser);
   const [isEditing, setIsEditing] = useState(false);
-  const [editName, setEditName] = useState('');
+  const [editName, setEditName] = useState(authUser?.name || '');
   const [activeTheme, setActiveTheme] = useState('Gold');
-  const [prefLang, setPrefLang] = useState('c');
+  const [prefLang, setPrefLang] = useState(authUser?.preferredLanguage || 'c');
 
   useEffect(() => {
-    api.get('/api/user')
-      .then(res => {
-        setUser(res.data);
-        setEditName(res.data.name);
-        setPrefLang(res.data.preferredLanguage || 'c');
-      })
-      .catch(err => console.error(err));
-  }, []);
+    if (authUser) {
+      setUser(authUser);
+      setEditName(authUser.name);
+      setPrefLang(authUser.preferredLanguage || 'c');
+    }
+  }, [authUser]);
 
   const saveProfile = async (updates) => {
+    if (!user) return;
     try {
       const res = await api.put('/api/user', {
         name: user.name,
@@ -46,6 +45,7 @@ const Profile = () => {
         ...updates
       });
       setUser(res.data);
+      if (setAuthUser) setAuthUser(res.data);
     } catch (err) {
       console.error('Failed to update profile', err);
     }
@@ -53,6 +53,7 @@ const Profile = () => {
 
   const handleNameSave = () => {
     setIsEditing(false);
+    if (!user) return;
     if (editName.trim() !== '' && editName !== user.name) {
       saveProfile({ name: editName });
     } else {
@@ -70,7 +71,8 @@ const Profile = () => {
     document.documentElement.style.setProperty('--theme-secondary', nextTheme.secondary);
   };
 
-  if (!user) return <div style={{padding: 24, textAlign: 'center'}}>Loading User Profile...</div>;
+  if (loading) return <div style={{padding: 40, textAlign: 'center', color: 'white'}}>Initializing Profile...</div>;
+  if (!user && !authUser) return <div style={{padding: 40, textAlign: 'center', color: 'white'}}>User Profile Not Found. Please Login Again.</div>;
 
   const currentAvatarEmoji = avatarsList.find(a => a.name === user.avatar)?.emoji || '🦜';
 
