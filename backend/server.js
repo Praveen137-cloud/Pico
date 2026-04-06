@@ -23,14 +23,29 @@ const io = new Server(httpServer, {
 
 app.use(cors({
   origin: function (origin, callback) {
-    const allowed = ['https://pico-sooty.vercel.app', 'http://localhost:5173'];
-    if (!origin || allowed.indexOf(origin) !== -1 || origin.includes('vercel.app')) {
+    // List of explicitly allowed origins
+    const allowedOrigins = [
+      'https://pico-sooty.vercel.app', 
+      'http://localhost:5173',
+      'http://localhost:3000'
+    ];
+    
+    // Check if origin is allowed or matches vercel.app subdomain
+    const isAllowed = !origin || 
+                      allowedOrigins.indexOf(origin) !== -1 || 
+                      origin.endsWith('.vercel.app') ||
+                      origin.includes('pico');
+
+    if (isAllowed) {
       callback(null, true);
     } else {
+      console.warn(`[CORS Blocked] Origin: ${origin}`);
       callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json());
 

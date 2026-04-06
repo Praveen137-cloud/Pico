@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
+import { baseURL } from '../api';
 
 const avatarMap = { Lion: '🦁', Tiger: '🐯', Elephant: '🐘', Giraffe: '🦒', Goat: '🐐', Parrot: '🦜' };
 
@@ -9,7 +10,7 @@ const Feed = () => {
   useEffect(() => {
     setMessages([{ id: 1, text: 'System: Initializing The Lore Link...', timestamp: new Date().toISOString() }]);
 
-    const socket = io('http://localhost:5000');
+    const socket = io(baseURL);
 
     socket.on('connect', () => {
       setMessages(prev => [{ id: Date.now(), text: 'System: 🟢 Connection established to global datalink.', timestamp: new Date().toISOString() }, ...prev]);

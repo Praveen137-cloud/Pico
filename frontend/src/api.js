@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create a dedicated axios instance that ALWAYS attaches the latest token from localStorage
 // Smart URL Detection: Automatically points to production Render or Localhost
-const baseURL = window.location.hostname === 'localhost' 
+export const baseURL = window.location.hostname === 'localhost' 
   ? 'http://localhost:5000' 
   : 'https://pico-3haq.onrender.com';
 

@@ -15,19 +15,22 @@ router.post('/register', async (req, res) => {
     // Check if user already exists
     let user = await User.findOne({ email });
     if (user) {
+      console.log(`[Auth] Registration failed: Email ${email} already exists.`);
       return res.status(400).json({ error: 'This email is already registered. Please login instead!' });
     }
 
     user = new User({ name, email, password });
     await user.save();
 
+    console.log(`[Auth] Registration successful for: ${email}`);
+
     const payload = { user: { id: user.id } };
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
 
     res.json({ token, user });
   } catch (err) {
-    console.error('Registration Error:', err.message);
-    res.status(500).json({ error: 'Server error during registration' });
+    console.error(`[Auth Error] Registration failure for ${req.body.email || 'unknown'}:`, err);
+    res.status(500).json({ error: 'Server error during registration', details: err.message });
   }
 });
 
