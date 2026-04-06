@@ -17,7 +17,11 @@ const themes = [
   { name: 'Gold', primary: '#FBBF24', secondary: '#F59E0B' },
   { name: 'Cyber', primary: '#C084FC', secondary: '#7E22CE' },  
   { name: 'Jade', primary: '#10B981', secondary: '#047857' },
-  { name: 'Sapphire', primary: '#3B82F6', secondary: '#1D4ED8' }
+  { name: 'Sapphire', primary: '#3B82F6', secondary: '#1D4ED8' },
+  { name: 'Ruby', primary: '#EF4444', secondary: '#991B1B' },
+  { name: 'Forest', primary: '#22C55E', secondary: '#14532D' },
+  { name: 'Sunset', primary: '#FB923C', secondary: '#9A3412' },
+  { name: 'Midnight', primary: '#94A3B8', secondary: '#1E293B' }
 ];
 
 const Profile = () => {
@@ -209,11 +213,34 @@ const Profile = () => {
 
       <div className="profile-support-box">
         <h4 style={{color: '#fff', marginBottom: 8, fontSize: 18, fontWeight: 800}}>Support Pico 🦜</h4>
-        <p style={{color: 'var(--text-muted)', fontSize: 14, maxWidth: '400px', margin: '0 auto'}}>
+        <p style={{color: 'var(--text-muted)', fontSize: 14, maxWidth: '400px', margin: '0 auto', marginBottom: 20}}>
           Love the platform? Support development directly and help us build more premium features!
         </p>
-        <div className="profile-support-upi">
-          <strong>UPI ID:</strong> praveenkumar63811@oksbi
+        
+        {/* UPI Direct Pay Button */}
+        <a 
+          href="upi://pay?pa=praveenkumar63811@oksbi&pn=Praveen%20Kumar&cu=INR&tn=Supporting%20Pico"
+          className="profile-support-btn"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            background: 'linear-gradient(135deg, #FFD700, #F59E0B)',
+            color: '#000',
+            padding: '14px 24px',
+            borderRadius: '12px',
+            fontWeight: 800,
+            textDecoration: 'none',
+            fontSize: '15px',
+            transition: 'all 0.2s',
+            boxShadow: '0 4px 15px rgba(245, 158, 11, 0.4)'
+          }}
+        >
+          <span>⚡</span> DIRECT PAY (UPI)
+        </a>
+        <div style={{color: 'var(--text-muted)', fontSize: 11, marginTop: 12}}>
+          Works with GPay, PhonePe, Paytm & BHIM
         </div>
       </div>
 

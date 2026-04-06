@@ -206,7 +206,7 @@ const Lesson = () => {
       } catch (err) {
         console.error('Unlock error:', err);
       }
-      navigate(`/celebration`, { state: { subjectId, sectionId } });
+      navigate(`/celebration`, { state: { subjectId, sectionId, xpGained: unit.xp || 20 } });
     }
   };
 

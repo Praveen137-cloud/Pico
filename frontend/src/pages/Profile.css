@@ -283,15 +283,12 @@
   margin-bottom: 80px;
 }
 
-.profile-support-upi {
-  background-color: #10131C;
-  border: 1px solid var(--theme-primary);
-  color: #fff;
-  padding: 16px 24px;
-  border-radius: 8px;
-  font-family: monospace;
-  font-size: 16px;
-  user-select: all;
-  margin-top: 16px;
-  letter-spacing: 1px;
+.profile-support-btn:hover {
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.6);
+  filter: brightness(1.1);
+}
+
+.profile-support-btn:active {
+  transform: scale(0.98);
 }

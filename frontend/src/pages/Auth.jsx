@@ -1,6 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { GoogleLogin } from '@react-oauth/google';
+import api from '../api';
 import './Auth.css';
 
 const Auth = () => {
@@ -11,8 +13,22 @@ const Auth = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { login, register } = useContext(AuthContext);
+  const { login, register, setUser } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  const handleGoogleSuccess = async (response) => {
+    setLoading(true);
+    try {
+      const res = await api.post('/api/auth/google', { credential: response.credential });
+      localStorage.setItem('token', res.data.token);
+      setUser(res.data.user);
+      navigate('/');
+    } catch (err) {
+      setErrorMsg('Google login failed.');
+      console.error(err);
+    }
+    setLoading(false);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -102,10 +118,17 @@ const Auth = () => {
 
         <div className="auth-divider">Or</div>
 
-        <button className="auth-google-btn" type="button" disabled>
-          <span style={{ fontSize: 18, fontWeight: 900 }}>G</span>
-          Continue with Google (Coming Soon)
-        </button>
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={() => setErrorMsg('Google login failed')}
+            theme="filled_black"
+            text="continue_with"
+            shape="pill"
+            size="large"
+            width="100%"
+          />
+        </div>
       </div>
     </div>
   );
