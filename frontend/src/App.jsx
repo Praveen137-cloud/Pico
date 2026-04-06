@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import Home from './pages/Home';
 import Code from './pages/Code';
@@ -25,12 +25,15 @@ const ProtectedRoute = ({ children }) => {
 
 // Component to hide navigation dock on auth page
 const MainLayout = ({ children }) => {
+  const location = useLocation();
+  const hideNav = location.pathname.startsWith('/lesson') || location.pathname === '/celebration';
+  
   return (
     <>
-      <div className="main-content">
+      <div className={`main-content ${hideNav ? 'no-nav' : ''}`}>
         {children}
       </div>
-      <Navigation />
+      {!hideNav && <Navigation />}
     </>
   );
 };

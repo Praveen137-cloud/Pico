@@ -411,7 +411,7 @@ const Lesson = () => {
 };
 
 const styles = {
-  page: { display: 'flex', flexDirection: 'column', height: '100vh', backgroundColor: 'var(--bg-dark)' },
+  page: { display: 'flex', flexDirection: 'column', height: '100dvh', backgroundColor: 'var(--bg-dark)' },
   header: { display: 'flex', alignItems: 'center', padding: '16px', gap: '16px' },
   closeBtn: { background: 'none', border: 'none', color: '#fff', fontSize: '24px', cursor: 'pointer' },
   progressBarWrapper: { flex: 1, height: '12px', backgroundColor: '#2D3748', borderRadius: '6px', overflow: 'hidden' },

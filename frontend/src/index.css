@@ -107,6 +107,10 @@ body {
   padding-bottom: 70px; /* Space for bottom nav */
 }
 
+.main-content.no-nav {
+  padding-bottom: 0;
+}
+
 /* Reusable buttons */
 .btn-primary {
   background: linear-gradient(135deg, var(--theme-primary), var(--theme-secondary));
