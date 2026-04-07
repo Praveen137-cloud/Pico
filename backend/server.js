@@ -8,6 +8,7 @@ const { Server } = require('socket.io');
 const executionRoutes = require('./routes/execute');
 const authRoutes = require('./routes/auth');
 const problemsRoutes = require('./routes/problems');
+const curriculumRoutes = require('./routes/curriculum');
 const authMiddleware = require('./middleware/auth');
 
 const Subject = require('./models/Subject');
@@ -93,6 +94,7 @@ mongoose.connect(MONGODB_URI)
 app.use('/api/execute', (req, res, next) => { req.io = io; next(); }, executionRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/problems', problemsRoutes);
+app.use('/api/curriculum', curriculumRoutes);
 
 // Free-play code runner for the Code Playground (no test cases, just raw execution)
 const { exec } = require('child_process');
