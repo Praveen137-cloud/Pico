@@ -19,19 +19,36 @@ const Puzzles = lazy(() => import('./pages/Puzzles'));
 const Missions = lazy(() => import('./pages/Missions'));
 const Pyqs = lazy(() => import('./pages/Pyqs'));
 
+export const Onboarding = lazy(() => import('./pages/Onboarding'));
+
 export const AudioContext = React.createContext();
 
 const ProtectedRoute = ({ children }) => {
-  const { token, loading } = useContext(AuthContext);
+  const { authUser, token, loading } = useContext(AuthContext);
+  const location = useLocation();
+
   if (loading) return <div style={{color: 'white', padding: 40, textAlign: 'center'}}>Authenticating...</div>;
   if (!token) return <Navigate to="/auth" replace />;
+
+  // Force onboarding if subject isn't set yet (new users)
+  // We check if lastVisitedSubject is default 'Arrays' or null 
+  // and we're not already on the onboarding page
+  const hasNoSubjectData = !authUser || !authUser.lastVisitedSubject || authUser.lastVisitedSubject === 'Arrays';
+  
+  if (hasNoSubjectData && location.pathname !== '/onboarding') {
+    return <Navigate to="/onboarding" replace />;
+  }
+
   return children;
 };
 
-// Component to hide navigation dock on auth page
+// Component to hide navigation dock on auth and onboarding pages
 const MainLayout = ({ children }) => {
   const location = useLocation();
-  const hideNav = location.pathname.startsWith('/lesson') || location.pathname === '/celebration';
+  const hideNav = location.pathname.startsWith('/lesson') || 
+                  location.pathname === '/celebration' ||
+                  location.pathname === '/onboarding' ||
+                  location.pathname === '/auth';
   
   return (
     <>

@@ -1,0 +1,123 @@
+.onboarding-page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--bg-dark);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  overflow-y: auto;
+}
+
+.onboarding-content {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.onboarding-mascot {
+  margin-bottom: 24px;
+}
+
+.mascot-animation {
+  width: 120px;
+  height: 120px;
+  animation: float 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px var(--theme-primary));
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-10px) scale(1.05); }
+}
+
+.onboarding-title {
+  color: #fff;
+  font-size: 32px;
+  font-weight: 900;
+  margin-bottom: 40px;
+  text-align: center;
+  letter-spacing: 1px;
+  min-height: 40px;
+  text-shadow: 0 0 10px rgba(0, 242, 255, 0.3);
+}
+
+.onboarding-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  width: 100%;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.onboarding-grid.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (min-width: 600px) {
+  .onboarding-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .onboarding-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.onboarding-card {
+  background: var(--bg-card);
+  padding: 30px 20px;
+  border-radius: 20px;
+  border: 1px solid var(--divider);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.onboarding-card:hover {
+  transform: translateY(-10px) scale(1.05);
+  border-color: var(--theme-primary);
+  box-shadow: 0 15px 40px rgba(0, 242, 255, 0.15);
+}
+
+.onboarding-card.selected {
+  background: linear-gradient(135deg, var(--theme-primary)33, var(--theme-secondary)33);
+  border-color: var(--theme-primary);
+  box-shadow: 0 0 30px var(--theme-primary)55;
+  transform: scale(1.1);
+  z-index: 10;
+}
+
+.card-icon {
+  font-size: 32px;
+  color: var(--theme-primary);
+  margin-bottom: 16px;
+  transition: all 0.3s;
+}
+
+.onboarding-card:hover .card-icon {
+  transform: scale(1.2) rotate(10deg);
+}
+
+.card-label {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: center;
+}

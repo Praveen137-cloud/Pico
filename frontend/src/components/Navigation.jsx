@@ -69,24 +69,25 @@ const Navigation = () => {
         </div>
       </nav>
 
-      {/* Fullscreen Navigation Menu Overlay */}
+      {/* Professional Slider Menu Overlay */}
       {isMenuOpen && (
         <div className="menu-overlay" onClick={() => setIsMenuOpen(false)}>
-           <div className="menu-content extreme-card" onClick={e => e.stopPropagation()}>
+           <div className="menu-drawer extreme-card" onClick={e => e.stopPropagation()}>
+              <div className="menu-drag-handle"></div>
               <div className="menu-header">
-                 <h2 className="menu-title">COMMAND CENTER</h2>
-                 <button className="menu-close" onClick={() => setIsMenuOpen(false)}><X size={28}/></button>
+                 <h2 className="menu-title">ELITE COMMAND</h2>
+                 <button className="menu-close-btn" onClick={() => setIsMenuOpen(false)}>✕</button>
               </div>
-              <div className="menu-grid">
+              <div className="menu-list">
                  {menuItems.map(item => (
                    <NavLink 
                     key={item.to} 
                     to={item.to} 
-                    className="menu-item-link"
+                    className="menu-row-link"
                     onClick={() => setIsMenuOpen(false)}
                    >
-                      <div className="menu-item-icon">{item.icon}</div>
-                      <span className="menu-item-label">{item.label}</span>
+                      <div className="menu-row-icon">{item.icon}</div>
+                      <span className="menu-row-label">{item.label}</span>
                    </NavLink>
                  ))}
               </div>

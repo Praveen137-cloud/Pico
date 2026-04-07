@@ -153,4 +153,23 @@ router.get('/leaderboard', async (req, res) => {
   }
 });
 
+// @route   PUT /api/auth/last-subject
+// @desc    Update user's last visited subject for sorting
+// @access  Private (middleware logic simplified/inline for this repo)
+router.put('/last-subject', async (req, res) => {
+  try {
+    const { userId, subjectName } = req.body;
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    user.lastVisitedSubject = subjectName;
+    await user.save();
+    
+    res.json({ success: true, lastVisitedSubject: subjectName });
+  } catch (err) {
+    console.error('Update Last Subject Error:', err);
+    res.status(500).json({ error: 'Failed to update subject preference' });
+  }
+});
+
 module.exports = router;
