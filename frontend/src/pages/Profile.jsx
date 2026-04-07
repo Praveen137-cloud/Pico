@@ -122,6 +122,7 @@ const Profile = () => {
             onKeyDown={(e) => e.key === 'Enter' && handleNameSave()}
           />
         ) : (
+          <div className="profile-name-container" onClick={() => setIsEditing(true)}>
             <h2 className="profile-name">{user.name}</h2>
             <span className="profile-edit-hint">Tap to edit username</span>
           </div>
@@ -131,7 +132,7 @@ const Profile = () => {
           className={`profile-share-btn ${shareFeedback ? 'copied' : ''}`}
           onClick={handleShare}
         >
-          <Share2 size={18} />
+          <Share2 size={14} />
           {shareFeedback ? 'COPIED!' : 'SHARE PROFILE'}
         </button>
       </div>

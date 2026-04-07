@@ -10,7 +10,15 @@ const Map = () => {
   const [toastMessage, setToastMessage] = useState(null);
   const [toastType, setToastType] = useState('info'); // 'info' | 'success'
   const [isClaiming, setIsClaiming] = useState(false);
+  const [showMissionBar, setShowMissionBar] = useState(false);
   const navigate = useNavigate();
+
+  // Show mission bar on mount
+  useEffect(() => {
+    const timerDown = setTimeout(() => setShowMissionBar(true), 1000);
+    const timerUp = setTimeout(() => setShowMissionBar(false), 5000);
+    return () => { clearTimeout(timerDown); clearTimeout(timerUp); };
+  }, []);
 
   // Subject Mastery Check
   useEffect(() => {
@@ -108,6 +116,22 @@ const Map = () => {
         ))}
       </div>
 
+      {/* Daily Mission Bar - Top Overlay */}
+      <div style={{
+        ...styles.missionBar,
+        transform: showMissionBar ? 'translateY(0)' : 'translateY(-140%)',
+        opacity: showMissionBar ? 1 : 0
+      }}>
+        <div style={styles.missionIcon}>🎯</div>
+        <div style={{ flex: 1 }}>
+          <div style={styles.missionLabel}>DAILY MISSION ACTIVE</div>
+          <div style={styles.missionText}>Complete Unit 2 to earn Double XP!</div>
+        </div>
+        <div style={styles.missionProgress}>
+          <div style={styles.missionProgressFill}></div>
+        </div>
+      </div>
+
       <header style={styles.header}>
         <button style={styles.backBtn} onClick={() => navigate('/')}>←</button>
         <div style={{ flex: 1 }}>
@@ -146,6 +170,19 @@ const Map = () => {
         <div style={styles.nodesList}>
           {section.units.map((unit, index) => (
             <div key={index} style={styles.nodeWrapper}>
+              {/* Insert Gift Box between Unit 1 and Unit 2 */}
+              {index === 1 && section.units.length > 1 && (
+                <div style={styles.giftBoxContainer}>
+                   <div style={styles.giftLine} />
+                   <div style={styles.giftBoxWrapper}>
+                      <div style={styles.giftBoxGlow}></div>
+                      <div style={styles.giftBox}>🎁</div>
+                      <div style={styles.giftTag}>SURPRISE!</div>
+                   </div>
+                   <div style={styles.giftLine} />
+                </div>
+              )}
+
               <div
                 className={(unit.isUnlocked && !unit.isCompleted) ? 'animate-pulse' : ''}
                 style={{
@@ -154,16 +191,22 @@ const Map = () => {
                   width: unit.isUnlocked ? '80px' : '60px',
                   height: unit.isUnlocked ? '80px' : '60px',
                   boxShadow: unit.isUnlocked ? '0 0 20px var(--theme-primary)66' : '0 4px 6px rgba(0,0,0,0.3)',
-                  cursor: unit.isUnlocked ? 'pointer' : 'not-allowed'
+                  cursor: unit.isUnlocked ? 'pointer' : 'not-allowed',
+                  position: 'relative'
                 }}
                 onClick={() => handleUnitClick(unit, index)}
               >
                 {unit.isCompleted ? '✔️' : (unit.isUnlocked ? '▶️' : '🔒')}
+                
+                {/* Double XP Indicator for the unit after the gift box (Unit 2) */}
+                {index === 1 && unit.isUnlocked && (
+                  <div style={styles.doubleXPBadge}>2X XP</div>
+                )}
               </div>
 
               {/* XP Badge for completed units */}
               {unit.isCompleted && (
-                <div style={styles.xpBadge}>+10 XP</div>
+                <div style={styles.xpBadge}>+{index === 1 ? '20' : '10'} XP</div>
               )}
 
               <div style={{ color: unit.isUnlocked ? '#fff' : '#94A3B8', marginTop: 6, fontWeight: 600, textAlign: 'center', maxWidth: 120, fontSize: 13 }}>
@@ -243,6 +286,23 @@ const Map = () => {
           0%, 100% { box-shadow: 0 0 20px var(--theme-primary)66; }
           50% { box-shadow: 0 0 40px var(--theme-primary); }
         }
+        @keyframes giftFloat {
+          0%, 100% { transform: translateY(0) scale(1) rotate(0deg); }
+          50% { transform: translateY(-15px) scale(1.1) rotate(5deg); }
+        }
+        @keyframes giftGlow {
+          0% { transform: scale(1); opacity: 0.3; }
+          50% { transform: scale(1.5); opacity: 0.6; }
+          100% { transform: scale(1); opacity: 0.3; }
+        }
+        @keyframes missionGlow {
+          0%, 100% { border-color: rgba(29, 210, 139, 0.5); }
+          50% { border-color: rgba(255, 215, 0, 0.8); }
+        }
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
       `}</style>
     </div>
   );
@@ -282,7 +342,41 @@ const styles = {
   badgeIcon: { fontSize: '40px', filter: 'drop-shadow(0 0 10px gold)' },
   badgeTitle: { color: '#FFD700', fontSize: '20px', fontWeight: '900', letterSpacing: '2px' },
   badgeSubtitle: { color: 'rgba(255, 215, 0, 0.7)', fontSize: '12px', fontWeight: '700' },
-  toast: { position: 'fixed', bottom: '90px', left: '50%', transform: 'translateX(-50%)', color: '#fff', padding: '14px 28px', borderRadius: '28px', fontWeight: '700', zIndex: 100, whiteSpace: 'nowrap', animation: 'toastIn 0.3s ease-out', fontSize: 14 }
+  toast: { position: 'fixed', bottom: '90px', left: '50%', transform: 'translateX(-50%)', color: '#fff', padding: '14px 28px', borderRadius: '28px', fontWeight: '700', zIndex: 100, whiteSpace: 'nowrap', animation: 'toastIn 0.3s ease-out', fontSize: 14 },
+  
+  // Mission Bar Styles
+  missionBar: {
+    position: 'fixed',
+    top: '20px',
+    left: '20px',
+    right: '20px',
+    backgroundColor: 'rgba(16, 19, 28, 0.95)',
+    backdropFilter: 'blur(10px)',
+    border: '2px solid var(--theme-primary)',
+    borderRadius: '16px',
+    padding: '16px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '16px',
+    zIndex: 1000,
+    boxShadow: '0 10px 40px rgba(0,0,0,0.6)',
+    transition: 'all 0.6s cubic-bezier(0.19, 1, 0.22, 1)',
+    animation: 'missionGlow 3s infinite ease-in-out'
+  },
+  missionIcon: { fontSize: '32px' },
+  missionLabel: { color: 'var(--theme-primary)', fontSize: '10px', fontWeight: '900', letterSpacing: '2px' },
+  missionText: { color: '#fff', fontSize: '16px', fontWeight: '800' },
+  missionProgress: { width: '40px', height: '40px', borderRadius: '50%', border: '4px solid rgba(255,255,255,0.1)', borderTopColor: 'var(--theme-primary)', position: 'relative' },
+  missionProgressFill: { position: 'absolute', top: '-4px', left: '-4px', right: '-4px', bottom: '-4px', borderRadius: '50%', border: '4px solid transparent', borderTopColor: '#FFD700', animation: 'spin 2s linear infinite' },
+  
+  // Gift Box Styles
+  giftBoxContainer: { display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' },
+  giftLine: { width: '4px', height: '30px', backgroundColor: 'var(--theme-primary)', opacity: 0.4 },
+  giftBoxWrapper: { position: 'relative', margin: '15px 0' },
+  giftBoxGlow: { position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '80px', height: '80px', backgroundColor: 'var(--theme-primary)', borderRadius: '50%', filter: 'blur(25px)', animation: 'giftGlow 2s infinite ease-in-out' },
+  giftBox: { fontSize: '50px', position: 'relative', zIndex: 2, animation: 'giftFloat 3s infinite ease-in-out', cursor: 'pointer' },
+  giftTag: { position: 'absolute', top: '-10px', right: '-20px', backgroundColor: '#EC4899', color: '#fff', fontSize: '9px', fontWeight: '900', padding: '2px 8px', borderRadius: '4px', transform: 'rotate(15deg)', boxShadow: '0 4px 10px rgba(236,72,153,0.4)', zIndex: 3 },
+  doubleXPBadge: { position: 'absolute', top: '-15px', right: '-15px', backgroundColor: '#FFD700', color: '#000', fontSize: '11px', fontWeight: '900', padding: '4px 8px', borderRadius: '8px', boxShadow: '0 4px 12px rgba(255,215,0,0.5)', zIndex: 4, letterSpacing: '0.5px' }
 };
 
 export default Map;
