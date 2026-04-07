@@ -1,10 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
-import api from '../api';
-import SubjectNav from '../components/SubjectNav';
-import PreLoader from '../components/PreLoader';
-import EmptyState from '../components/EmptyState';
-import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
+import './Home.css';
 
 const Home = () => {
   const { subjects, setSubjects, user, setUser } = useContext(AuthContext);
@@ -70,7 +64,7 @@ const Home = () => {
       </div>
 
       {/* Seasonal Event Banner */}
-      <div style={{...styles.seasonBanner, borderColor: season.color}}>
+      <div className="season-banner" style={{borderColor: season.color}}>
         <div style={styles.electricBirdContainer}>
            <img src="/funny-parrot.png" className="electric-bird" style={styles.electricBirdImg} alt="Funny Pico" />
            <div style={styles.logoText}>PICO ELITE</div>
@@ -78,19 +72,19 @@ const Home = () => {
         <div style={{...styles.seasonBadge, backgroundColor: season.color}}>
           {season.icon} {season.name} EVENT ACTIVE
         </div>
-        <div style={styles.seasonContent}>
-          <div style={{flex: 1}}>
-            <div style={styles.seasonTitle}>{season.name} Phase I</div>
-            <div style={styles.seasonDesc}>{season.desc}</div>
+        <div className="season-content">
+          <div className="season-header-left">
+            <div style={styles.seasonTitle} className="season-title">{season.name} Phase I</div>
+            <div style={styles.seasonDesc} className="season-desc">{season.desc}</div>
           </div>
-          <div style={styles.seasonBonus}>
-            <div style={{fontSize: 10, color: 'rgba(255,255,255,0.6)', fontWeight: 800}}>EVENT BONUS</div>
+          <div style={styles.seasonBonus} className="season-bonus">
+            <div style={{fontSize: 10, color: 'rgba(255,255,255,0.6)', fontWeight: 800}} className="bonus-label">EVENT BONUS</div>
             <div style={{fontSize: 20, color: season.color, fontWeight: 900}}>+5 XP</div>
           </div>
         </div>
       </div>
       
-      <div style={styles.curriculumContainer}>
+      <div style={styles.curriculumContainer} className="curriculum-container">
         {currentSubjectData ? (
           currentSubjectData.sections.length > 0 ? (
             currentSubjectData.sections.map((section, index) => (
