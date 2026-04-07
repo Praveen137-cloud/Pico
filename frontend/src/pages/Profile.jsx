@@ -4,6 +4,8 @@ import { Palette, Share2 } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
 import './Profile.css';
 
+const avatarMap = { Lion: '🦁', Tiger: '🐯', Elephant: '🐘', Giraffe: '🦒', Goat: '🐐', Parrot: '🦜', 'Electric Parrot': '⚡🦜' };
+
 const avatarsList = [
   { name: 'Lion', emoji: '🦁' },
   { name: 'Tiger', emoji: '🐯' },
@@ -11,6 +13,7 @@ const avatarsList = [
   { name: 'Giraffe', emoji: '🦒' },
   { name: 'Goat', emoji: '🐐' },
   { name: 'Parrot', emoji: '🦜' },
+  { name: 'Electric Parrot', emoji: '⚡🦜' },
 ];
 
 const themes = [

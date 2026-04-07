@@ -12,6 +12,8 @@ import Lesson from './pages/Lesson';
 import Celebration from './pages/Celebration';
 import Auth from './pages/Auth';
 import Puzzles from './pages/Puzzles';
+import Missions from './pages/Missions';
+import Pyqs from './pages/Pyqs';
 import { AuthProvider, AuthContext } from './context/AuthContext';
 
 export const AudioContext = React.createContext();
@@ -124,6 +126,8 @@ function App() {
                       <Route path="/basics" element={<Basics />} />
                       <Route path="/profile" element={<Profile />} />
                       <Route path="/puzzles" element={<Puzzles />} />
+                      <Route path="/missions" element={<Missions />} />
+                      <Route path="/pyqs" element={<Pyqs />} />
                       <Route path="/map/:subjectId/:sectionId" element={<Map />} />
                       <Route path="/lesson/:subjectId/:sectionId/:unitId" element={<Lesson />} />
                       <Route path="/celebration" element={<Celebration />} />

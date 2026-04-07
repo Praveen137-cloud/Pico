@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Code2, Trophy, BookOpen, Brain, Laptop, User } from 'lucide-react';
+import { Home, Code2, Trophy, BookOpen, Brain, Laptop, User, Target, Award } from 'lucide-react';
 
 const Navigation = () => {
   return (
@@ -33,6 +33,26 @@ const Navigation = () => {
                 <Trophy size={24} color={isActive ? '#0E0707' : '#9CA3AF'} />
               </div>
               <span style={isActive ? styles.labelActive : styles.label}>Arena</span>
+            </>
+          )}
+        </NavLink>
+        <NavLink to="/missions" style={({ isActive }) => (isActive ? { ...styles.navItem, ...styles.active } : styles.navItem)}>
+          {({ isActive }) => (
+            <>
+              <div style={isActive ? styles.iconWrapperActive : styles.iconWrapper}>
+                <Target size={24} color={isActive ? '#0E0707' : '#9CA3AF'} />
+              </div>
+              <span style={isActive ? styles.labelActive : styles.label}>Missions</span>
+            </>
+          )}
+        </NavLink>
+        <NavLink to="/pyqs" style={({ isActive }) => (isActive ? { ...styles.navItem, ...styles.active } : styles.navItem)}>
+          {({ isActive }) => (
+            <>
+              <div style={isActive ? styles.iconWrapperActive : styles.iconWrapper}>
+                <Award size={24} color={isActive ? '#0E0707' : '#9CA3AF'} />
+              </div>
+              <span style={isActive ? styles.labelActive : styles.label}>PYQs</span>
             </>
           )}
         </NavLink>
@@ -100,7 +120,7 @@ const styles = {
     justifyContent: 'space-around',
     alignItems: 'flex-end', // align bottoms
     width: '100%',
-    maxWidth: '550px',
+    maxWidth: '650px',
     backgroundColor: 'rgba(31, 16, 16, 0.85)',
     backdropFilter: 'blur(10px)',
     padding: '4px 12px',
@@ -114,7 +134,7 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'center',
     textDecoration: 'none',
-    width: '50px',
+    width: '45px',
     transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
   },
   active: {

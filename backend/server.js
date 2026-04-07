@@ -192,7 +192,7 @@ app.get('/api/subjects', authMiddleware, async (req, res) => {
 // Real leaderboard from DB — all users ranked by XP
 app.get('/api/leaderboard', authMiddleware, async (req, res) => {
   try {
-    const users = await User.find({}, 'name xp avatar streak lessonsCompleted').sort({ xp: -1 }).limit(50);
+    const users = await User.find({}, 'name xp avatar streak lessonsCompleted').sort({ xp: -1 }).limit(10);
     res.json(users.map((u, idx) => ({
       rank: idx + 1,
       _id: u._id,

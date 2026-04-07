@@ -10,7 +10,7 @@ const tiers = [
   { name: 'Master',  minXP: 5000, color: '#FF00FF', icon: '👑' }
 ];
 
-const avatarMap = { Lion: '🦁', Tiger: '🐯', Elephant: '🐘', Giraffe: '🦒', Goat: '🐐', Parrot: '🦜' };
+const avatarMap = { Lion: '🦁', Tiger: '🐯', Elephant: '🐘', Giraffe: '🦒', Goat: '🐐', Parrot: '🦜', 'Electric Parrot': '⚡🦜' };
 
 const getTier = (xp) => {
   for (let i = tiers.length - 1; i >= 0; i--) {
@@ -99,7 +99,7 @@ const League = () => {
       <div style={styles.leaderboardTitle}>Global Rankings</div>
 
       {loading ? (
-        [...Array(5)].map((_, i) => (
+        [...Array(10)].map((_, i) => (
           <div key={i} style={{ ...styles.playerRow, opacity: 0.3, animation: 'pulse 1.5s infinite' }}>
             <div style={{ ...styles.rankNum, background: 'var(--divider)', borderRadius: 4, width: 30, height: 20 }} />
             <div style={{ ...styles.avatarBox, background: 'var(--divider)', borderRadius: '50%', width: 40, height: 40 }} />

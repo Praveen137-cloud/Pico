@@ -29,24 +29,7 @@ const Home = () => {
     }
   }, [subjects, setSubjects]);
 
-  const claimQuest = async (questId, xpReward) => {
-    try {
-      const res = await api.post('/api/quest/claim', { questId, xpReward });
-      setUser(res.data.user);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   const currentSubjectData = subjects.find(s => s.name === activeSubject);
-  const dailyQuests = [
-    { id: 'quest_login', title: 'Daily Check-in', desc: 'Secure connection. Accessing The Arena.', xp: 50 },
-    { id: 'quest_read', title: 'Intelligence Gathering', desc: 'Monitor the live lore broadcast feed.', xp: 100 },
-    { id: 'quest_streak', title: 'Streak Master', desc: 'Progress your coding streak at the Academy.', xp: 75 },
-    { id: 'quest_problem', title: 'Algo Architect', desc: 'Finalize a training unit algorithm.', xp: 150 },
-    { id: 'quest_leaderboard', title: 'Climb the Ranks', desc: 'Compare your matrix performance on the leaderboard.', xp: 50 },
-    { id: 'quest_profile', title: 'Agent Identity', desc: 'Update your localized agent profile avatar.', xp: 100 }
-  ];
 
   const getSeasonInfo = () => {
     const month = new Date().getMonth();
@@ -98,37 +81,6 @@ const Home = () => {
         </div>
       </div>
       
-      {/* Daily Quests Board */}
-      <div style={styles.questsContainer}>
-        <div style={{display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12}}>
-          <span style={{fontSize: 20}}>📜</span>
-          <h3 style={{color: '#fff', fontSize: 16, fontWeight: 900, letterSpacing: 1, textTransform: 'uppercase'}}>Daily Missions</h3>
-        </div>
-        <div style={{display: 'flex', flexDirection: 'column', gap: 8}}>
-          {user && dailyQuests.map(q => {
-            const isClaimed = user.questsClaimed?.includes(q.id);
-            return (
-              <div key={q.id} style={{...styles.questCard, opacity: isClaimed ? 0.5 : 1, borderColor: isClaimed ? 'var(--divider)' : 'var(--theme-primary)'}}>
-                <div style={{flex: 1}}>
-                  <div style={{color: '#fff', fontWeight: 800, fontSize: 14}}>{q.title}</div>
-                  <div style={{color: 'var(--text-muted)', fontSize: 11}}>{q.desc}</div>
-                </div>
-                <button 
-                  style={{
-                    backgroundColor: isClaimed ? 'var(--divider)' : 'var(--theme-secondary)', 
-                    color: isClaimed ? 'var(--text-muted)' : '#000', 
-                    border: 'none', padding: '8px 16px', borderRadius: '4px', fontWeight: 900, cursor: isClaimed ? 'default' : 'pointer'
-                  }}
-                  onClick={() => !isClaimed && claimQuest(q.id, q.xp)}
-                >
-                  {isClaimed ? 'CLAIMED' : `+${q.xp} XP`}
-                </button>
-              </div>
-            )
-          })}
-        </div>
-      </div>
-
       <div style={styles.curriculumContainer}>
         {currentSubjectData ? (
           currentSubjectData.sections.length > 0 ? (
@@ -256,22 +208,6 @@ const styles = {
     flexDirection: 'column',
     gap: '16px',
     paddingBottom: '24px'
-  },
-  questsContainer: {
-    padding: '16px',
-    backgroundColor: '#10131C',
-    margin: '16px',
-    borderRadius: '8px',
-    border: '1px solid var(--divider)'
-  },
-  questCard: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '12px',
-    backgroundColor: 'var(--bg-card)',
-    borderRadius: '4px',
-    border: '2px solid'
   },
   sectionCard: {
     backgroundColor: 'var(--bg-card)',
