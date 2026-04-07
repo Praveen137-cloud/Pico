@@ -40,8 +40,12 @@ const Home = () => {
 
   const currentSubjectData = subjects.find(s => s.name === activeSubject);
   const dailyQuests = [
-    { id: 'quest_login', title: 'Daily Check-in', desc: 'Log in to The Arena', xp: 50 },
-    { id: 'quest_read', title: 'Intelligence Gathering', desc: 'View the Live Lore Feed', xp: 100 }
+    { id: 'quest_login', title: 'Daily Check-in', desc: 'Secure connection. Accessing The Arena.', xp: 50 },
+    { id: 'quest_read', title: 'Intelligence Gathering', desc: 'Monitor the live lore broadcast feed.', xp: 100 },
+    { id: 'quest_streak', title: 'Streak Master', desc: 'Progress your coding streak at the Academy.', xp: 75 },
+    { id: 'quest_problem', title: 'Algo Architect', desc: 'Finalize a training unit algorithm.', xp: 150 },
+    { id: 'quest_leaderboard', title: 'Climb the Ranks', desc: 'Compare your matrix performance on the leaderboard.', xp: 50 },
+    { id: 'quest_profile', title: 'Agent Identity', desc: 'Update your localized agent profile avatar.', xp: 100 }
   ];
 
   const getSeasonInfo = () => {
@@ -198,13 +202,14 @@ const styles = {
   },
   seasonBanner: {
     margin: '16px',
-    padding: '24px 16px 16px 16px',
+    padding: '36px 16px 16px 16px',
     backgroundColor: '#0F121E',
     border: '1px solid',
     borderRadius: '12px',
     position: 'relative',
     overflow: 'hidden',
-    boxShadow: '0 8px 32px rgba(0,0,0,0.4)'
+    boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+    minHeight: '120px'
   },
   seasonBadge: {
     position: 'absolute',
@@ -224,11 +229,12 @@ const styles = {
     gap: '16px'
   },
   seasonTitle: {
-    fontSize: '20px',
+    fontSize: '22px',
     fontWeight: '900',
     color: '#fff',
     letterSpacing: '1px',
-    textTransform: 'uppercase'
+    textTransform: 'uppercase',
+    marginTop: '4px'
   },
   seasonDesc: {
     fontSize: '12px',
