@@ -67,7 +67,7 @@ const Home = () => {
       {/* Seasonal Event Banner */}
       <div style={{...styles.seasonBanner, borderColor: season.color}}>
         <div style={styles.electricBirdContainer}>
-           <img src="/electric-bird.png" className="electric-bird" style={styles.electricBirdImg} alt="Pico Logo" />
+           <img src="/funny-parrot.png" className="electric-bird" style={styles.electricBirdImg} alt="Funny Pico" />
            <div style={styles.logoText}>PICO ELITE</div>
         </div>
         <div style={{...styles.seasonBadge, backgroundColor: season.color}}>

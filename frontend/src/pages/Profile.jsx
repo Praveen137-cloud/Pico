@@ -40,6 +40,8 @@ const Profile = () => {
   const [prefLang, setPrefLang] = useState(authUser?.preferredLanguage || 'c');
   const [shareFeedback, setShareFeedback] = useState(false);
 
+  const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
+
   useEffect(() => {
     if (authUser) {
       setUser(authUser);
@@ -113,7 +115,14 @@ const Profile = () => {
   return (
     <div className="profile-page">
       <div className="profile-header">
-        <div className="profile-avatar-circle">{currentAvatarEmoji}</div>
+        <div 
+          className="profile-avatar-circle" 
+          onClick={() => setIsAvatarModalOpen(true)}
+          style={{ cursor: 'pointer', position: 'relative' }}
+        >
+          {currentAvatarEmoji}
+          <div className="avatar-edit-badge">✎</div>
+        </div>
         
         {isEditing ? (
           <input 
@@ -195,6 +204,33 @@ const Profile = () => {
         ))}
       </div>
 
+      {/* Avatar Selection Modal */}
+      {isAvatarModalOpen && (
+        <div className="avatar-modal-overlay" onClick={() => setIsAvatarModalOpen(false)}>
+          <div className="avatar-modal-content extreme-card" onClick={e => e.stopPropagation()}>
+             <div className="modal-header">
+                <h3 className="modal-title">CHOOSE YOUR AGENT</h3>
+                <button className="modal-close" onClick={() => setIsAvatarModalOpen(false)}>✕</button>
+             </div>
+             <div className="profile-avatar-grid">
+                {avatarsList.map(av => (
+                  <div 
+                    key={av.name} 
+                    className={`profile-avatar-option ${user.avatar === av.name ? 'active' : ''}`}
+                    onClick={() => {
+                      saveProfile({ avatar: av.name });
+                      setIsAvatarModalOpen(false);
+                    }}
+                  >
+                    <div className="profile-avatar-emoji">{av.emoji}</div>
+                    <div className="profile-avatar-name">{av.name}</div>
+                  </div>
+                ))}
+             </div>
+          </div>
+        </div>
+      )}
+
       <h3 className="profile-section-title">Solved Problems 🏆</h3>
       {(!user.submissions || user.submissions.length === 0) ? (
         <div style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--divider)', borderRadius: 8, padding: '20px', textAlign: 'center', color: 'var(--text-muted)', fontSize: 14, marginBottom: 24 }}>
@@ -217,23 +253,6 @@ const Profile = () => {
           {user.submissions.length > 20 && <p style={{ color: 'var(--text-muted)', fontSize: 12, textAlign: 'center' }}>Showing last 20 submissions</p>}
         </div>
       )}
-
-      <h3 className="profile-section-title">Select Avatar</h3>
-      <div className="profile-avatar-grid">
-        {avatarsList.map(av => {
-          const isActive = user.avatar === av.name;
-          return (
-            <div 
-              key={av.name} 
-              className={`profile-avatar-option ${isActive ? 'active' : ''}`}
-              onClick={() => saveProfile({ avatar: av.name })}
-            >
-              <div className="profile-avatar-emoji">{av.emoji}</div>
-              <div className="profile-avatar-name">{av.name}</div>
-            </div>
-          )
-        })}
-      </div>
 
       <h3 className="profile-section-title">Community & Support</h3>
       <a 
