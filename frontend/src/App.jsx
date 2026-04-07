@@ -43,6 +43,8 @@ const MainLayout = ({ children }) => {
   );
 };
 
+import DigitalBackground from './components/DigitalBackground';
+
 function App() {
   const [bgmMuted, setBgmMuted] = useState(false);
   const [interacted, setInteracted] = useState(false);
@@ -111,6 +113,8 @@ function App() {
   return (
     <AudioContext.Provider value={{ playClick, playSuccess, playError, playFanfare, bgmMuted, setBgmMuted }}>
       <AuthProvider>
+        <DigitalBackground />
+        <div className="crt-overlay" />
         <div className="app-container" onClick={handleGlobalClick}>
           <Router>
             <Suspense fallback={<div style={{ color: 'white', padding: 40, textAlign: 'center' }}>Loading...</div>}>

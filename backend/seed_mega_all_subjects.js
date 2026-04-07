@@ -103,7 +103,7 @@ async function seed() {
       
       const megaSections = stages.map((stage, sIdx) => {
         const units = [];
-        for (let uIdx = 1; uIdx <= 10; uIdx++) {
+        for (let uIdx = 1; uIdx <= 20; uIdx++) {
           units.push({
             title: `Unit ${uIdx}: ${subjectData.prefix} ${stage.theme}`,
             desc: `Master ${subjectData.name} in ${stage.title}.`,

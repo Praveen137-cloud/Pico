@@ -8,7 +8,7 @@
       "sizes": "any"
     },
     {
-      "src": "/logo.png",
+      "src": "/electric-bird.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "any maskable"

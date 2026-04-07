@@ -21,6 +21,7 @@ const Lesson = () => {
 
   const [unit, setUnit] = useState(null);
   const [currentLessonIndex, setCurrentLessonIndex] = useState(0);
+  const [isImpact, setIsImpact] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
   const [feedback, setFeedback] = useState(null);
   const [showHint, setShowHint] = useState(false);
@@ -118,6 +119,8 @@ const Lesson = () => {
       if (isAllCorrect) {
         setFeedback('correct');
         playSound(true);
+        setIsImpact(true);
+        setTimeout(() => setIsImpact(false), 500);
       } else {
         setFeedback('wrong');
         playSound(false);
@@ -237,7 +240,7 @@ const Lesson = () => {
   const currentLesson = unit.lessons[currentLessonIndex];
 
   return (
-    <div style={styles.page}>
+    <div style={styles.page} className={isImpact ? 'animate-shake' : ''}>
       <header style={styles.header}>
         <button style={styles.closeBtn} onClick={() => navigate(-1)}>✕</button>
         <div style={styles.progressBarWrapper}>

@@ -1,37 +1,51 @@
-import React from 'react';
-
-const subjectsList = [
-  { name: 'Arrays', icon: '🗄️', color: 'var(--theme-primary)' },
-  { name: 'Strings', icon: '🧬', color: 'var(--theme-secondary)' },
-  { name: 'Two Pointers', icon: '🎯', color: 'var(--theme-primary)' },
-  { name: 'Hash Maps', icon: '💎', color: 'var(--theme-secondary)' },
-  { name: 'Recursion', icon: '🌀', color: 'var(--theme-primary)' },
-  { name: 'Sorting', icon: '⚔️', color: 'var(--theme-secondary)' },
-  { name: 'Trees', icon: '🛡️', color: 'var(--theme-secondary)' },
-  { name: 'Graphs', icon: '🕸️', color: 'var(--theme-primary)' },
-  { name: 'Zoho Basics (C)', icon: '⚙️', color: 'var(--theme-secondary)' },
-];
+import { AuthContext } from '../context/AuthContext';
 
 const SubjectNav = ({ activeSubject, onSelect }) => {
+  const { subjects } = React.useContext(AuthContext);
+
+  // Helper to get consistent icons/colors for subjects
+  const getSubjectMeta = (name) => {
+    const meta = {
+      'Arrays': { icon: '🗄️', color: '#6366F1' },
+      'Strings': { icon: '🧬', color: '#A855F7' },
+      'Two Pointers': { icon: '🎯', color: '#EC4899' },
+      'Hash Maps': { icon: '💎', color: '#10B981' },
+      'Recursion': { icon: '🌀', color: '#F59E0B' },
+      'Sorting': { icon: '⚔️', color: '#3B82F6' },
+      'Math': { icon: '🔢', color: '#8B5CF6' },
+      'Stacks & Queues': { icon: '🥞', color: '#EF4444' },
+      'Linked Lists': { icon: '🔗', color: '#06B6D4' },
+      'Dynamic Programming': { icon: '🧠', color: '#F43F5E' },
+      'Basics': { icon: '⚙️', color: '#94A3B8' },
+      'Zoho Elite': { icon: '👑', color: '#FBBF24' }
+    };
+    return meta[name] || { icon: '📚', color: '#6366F1' };
+  };
+
   return (
     <div style={styles.container}>
-      {subjectsList.map((subj) => {
+      {subjects.map((subj) => {
         const isActive = activeSubject === subj.name;
+        const meta = getSubjectMeta(subj.name);
         return (
           <div 
-            key={subj.name} 
+            key={subj._id} 
             style={{
               ...styles.tab, 
-              borderColor: isActive ? subj.color : 'transparent',
-              background: isActive ? `linear-gradient(180deg, #1F1010, ${subj.color}33)` : '#1F1010',
-              boxShadow: isActive ? `0 0 15px ${subj.color}66` : 'none',
-              transform: isActive ? 'scale(1.05) skewX(-5deg)' : 'scale(1) skewX(-5deg)'
+              borderColor: isActive ? meta.color : 'transparent',
+              background: isActive ? `linear-gradient(180deg, #1F1010, ${meta.color}33)` : 'rgba(255,255,255,0.02)',
+              boxShadow: isActive ? `0 0 20px ${meta.color}55` : 'none',
+              transform: isActive ? 'scale(1.05) translateY(-2px)' : 'scale(1)'
             }}
             onClick={() => onSelect(subj.name)}
           >
-            <div style={{ transform: 'skewX(5deg)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
-              <span style={{...styles.icon, filter: isActive ? `drop-shadow(0 0 8px ${subj.color})` : 'grayscale(80%)'}}>{subj.icon}</span>
-              <span style={{...styles.name, color: isActive ? subj.color : 'var(--text-muted)'}}>{subj.name}</span>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+              <span style={{...styles.icon, filter: isActive ? `drop-shadow(0 0 10px ${meta.color})` : 'grayscale(100%)', opacity: isActive ? 1 : 0.6}}>
+                {meta.icon}
+              </span>
+              <span style={{...styles.name, color: isActive ? '#fff' : 'rgba(255,255,255,0.4)'}}>
+                {subj.name}
+              </span>
             </div>
           </div>
         )

@@ -66,6 +66,10 @@ const Home = () => {
 
       {/* Seasonal Event Banner */}
       <div style={{...styles.seasonBanner, borderColor: season.color}}>
+        <div style={styles.electricBirdContainer}>
+           <img src="/electric-bird.png" className="electric-bird" style={styles.electricBirdImg} alt="Pico Logo" />
+           <div style={styles.logoText}>PICO ELITE</div>
+        </div>
         <div style={{...styles.seasonBadge, backgroundColor: season.color}}>
           {season.icon} {season.name} EVENT ACTIVE
         </div>
@@ -85,7 +89,7 @@ const Home = () => {
         {currentSubjectData ? (
           currentSubjectData.sections.length > 0 ? (
             currentSubjectData.sections.map((section, index) => (
-              <div key={index} style={styles.sectionCard}>
+              <div key={index} className="extreme-card" style={styles.sectionCard}>
                 <div style={styles.sectionHeader}>
                   <div style={styles.badgeWrapper}>
                     <div style={styles.sectionNum}>STAGE {index + 1}</div>
@@ -154,14 +158,37 @@ const styles = {
   },
   seasonBanner: {
     margin: '16px',
-    padding: '36px 16px 16px 16px',
-    backgroundColor: '#0F121E',
+    padding: '60px 16px 16px 16px',
+    backgroundColor: 'rgba(15, 18, 30, 0.8)',
+    backdropFilter: 'blur(10px)',
     border: '1px solid',
-    borderRadius: '12px',
+    borderRadius: '24px',
     position: 'relative',
     overflow: 'hidden',
     boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
-    minHeight: '120px'
+    minHeight: '160px'
+  },
+  electricBirdContainer: {
+    position: 'absolute',
+    top: '10px',
+    left: '20px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px',
+    zIndex: 10
+  },
+  electricBirdImg: {
+    width: '50px',
+    height: '50px',
+    objectFit: 'contain',
+    filter: 'drop-shadow(0 0 15px rgba(0, 242, 255, 0.8))'
+  },
+  logoText: {
+    fontSize: '18px',
+    fontWeight: '900',
+    color: '#fff',
+    letterSpacing: '3px',
+    textShadow: '0 0 10px rgba(0,242,255,0.5)'
   },
   seasonBadge: {
     position: 'absolute',
