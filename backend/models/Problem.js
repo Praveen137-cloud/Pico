@@ -14,7 +14,7 @@ const problemSchema = new mongoose.Schema({
   title: { type: String, required: true },
   desc: { type: String, required: true },
   difficulty: { type: String, default: 'Easy', enum: ['Easy', 'Medium', 'Hard'] },
-  tag: { type: String, default: 'Math', enum: ['Arrays', 'Strings', 'Math', 'Sorting', 'Recursion', 'Two Pointers', 'Hash Maps', 'Zoho Elite', 'Zoho PYQ'] },
+  tag: { type: String, default: 'Math', enum: ['Arrays', 'Strings', 'Math', 'Sorting', 'Recursion', 'Two Pointers', 'Hash Maps', 'Stacks & Queues', 'Linked Lists', 'Dynamic Programming', 'Greedy', 'Heaps', 'Bit Manipulation', 'Sliding Window', 'Backtracking', 'Zoho Elite', 'Zoho PYQ'] },
   hints: [{ type: String }],
   testCases: [testCaseSchema],
   templates: {

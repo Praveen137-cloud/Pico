@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema({
   
   avatar: { type: String, default: 'Parrot' },
   xp: { type: Number, default: 0 },
+  xpBoostUntil: { type: Date, default: null }, // For Double XP boosters
   lessonsCompleted: { type: Number, default: 0 },
   streak: { type: Number, default: 0 },
   lastStreakUpdate: { type: Date, default: null },

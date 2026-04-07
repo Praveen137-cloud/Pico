@@ -1,20 +1,23 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Navigation from './components/Navigation';
-import Home from './pages/Home';
-import Code from './pages/Code';
-import League from './pages/League';
-import Feed from './pages/Feed';
-import Basics from './pages/Basics';
-import Profile from './pages/Profile';
-import Map from './pages/Map';
-import Lesson from './pages/Lesson';
-import Celebration from './pages/Celebration';
-import Auth from './pages/Auth';
-import Puzzles from './pages/Puzzles';
-import Missions from './pages/Missions';
-import Pyqs from './pages/Pyqs';
 import { AuthProvider, AuthContext } from './context/AuthContext';
+
+// Lazy load pages for performance
+const Home = lazy(() => import('./pages/Home'));
+const Code = lazy(() => import('./pages/Code'));
+const League = React.lazy(() => import('./pages/League'));
+const Certificate = React.lazy(() => import('./pages/Certificate'));
+const Feed = lazy(() => import('./pages/Feed'));
+const Basics = lazy(() => import('./pages/Basics'));
+const Profile = lazy(() => import('./pages/Profile'));
+const Map = lazy(() => import('./pages/Map'));
+const Lesson = lazy(() => import('./pages/Lesson'));
+const Celebration = lazy(() => import('./pages/Celebration'));
+const Auth = lazy(() => import('./pages/Auth'));
+const Puzzles = lazy(() => import('./pages/Puzzles'));
+const Missions = lazy(() => import('./pages/Missions'));
+const Pyqs = lazy(() => import('./pages/Pyqs'));
 
 export const AudioContext = React.createContext();
 
@@ -110,32 +113,37 @@ function App() {
       <AuthProvider>
         <div className="app-container" onClick={handleGlobalClick}>
           <Router>
-            <Routes>
-              {/* Public Route */}
-              <Route path="/auth" element={<div className="main-content"><Auth /></div>} />
+            <Suspense fallback={<div style={{ color: 'white', padding: 40, textAlign: 'center' }}>Loading...</div>}>
+              <Routes>
+                {/* Public Route */}
+                <Route path="/auth" element={<div className="main-content"><Auth /></div>} />
 
-              {/* Protected Routes directly in layout */}
-              <Route path="/*" element={
-                <ProtectedRoute>
-                  <MainLayout>
-                    <Routes>
-                      <Route path="/" element={<Home />} />
-                      <Route path="/code" element={<Code />} />
-                      <Route path="/league" element={<League />} />
-                      <Route path="/feed" element={<Feed />} />
-                      <Route path="/basics" element={<Basics />} />
-                      <Route path="/profile" element={<Profile />} />
-                      <Route path="/puzzles" element={<Puzzles />} />
-                      <Route path="/missions" element={<Missions />} />
-                      <Route path="/pyqs" element={<Pyqs />} />
-                      <Route path="/map/:subjectId/:sectionId" element={<Map />} />
-                      <Route path="/lesson/:subjectId/:sectionId/:unitId" element={<Lesson />} />
-                      <Route path="/celebration" element={<Celebration />} />
-                    </Routes>
-                  </MainLayout>
-                </ProtectedRoute>
-              } />
-            </Routes>
+                {/* Protected Routes directly in layout */}
+                <Route path="/*" element={
+                  <ProtectedRoute>
+                    <MainLayout>
+                      <Suspense fallback={<div style={{ color: 'white', padding: 20, textAlign: 'center' }}>Loading page...</div>}>
+                        <Routes>
+                          <Route path="/" element={<Home />} />
+                          <Route path="/code" element={<Code />} />
+                          <Route path="/league" element={<League />} />
+                          <Route path="/certificate" element={<Certificate />} />
+                          <Route path="/feed" element={<Feed />} />
+                          <Route path="/basics" element={<Basics />} />
+                          <Route path="/profile" element={<Profile />} />
+                          <Route path="/puzzles" element={<Puzzles />} />
+                          <Route path="/missions" element={<Missions />} />
+                          <Route path="/pyqs" element={<Pyqs />} />
+                          <Route path="/map/:subjectId/:sectionId" element={<Map />} />
+                          <Route path="/lesson/:subjectId/:sectionId/:unitId" element={<Lesson />} />
+                          <Route path="/celebration" element={<Celebration />} />
+                        </Routes>
+                      </Suspense>
+                    </MainLayout>
+                  </ProtectedRoute>
+                } />
+              </Routes>
+            </Suspense>
           </Router>
         </div>
       </AuthProvider>

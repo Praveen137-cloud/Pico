@@ -163,64 +163,90 @@ const Map = () => {
 
       <div style={styles.pathContainer}>
         <div style={styles.banner}>
-          <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12, fontWeight: 700 }}>SECTION</div>
-          <div style={{ color: '#fff', fontSize: 24, fontWeight: 800 }}>{section.title}</div>
+          <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, fontWeight: 900, textTransform: 'uppercase', letterSpacing: 1.5 }}>Path to Mastery</div>
+          <div style={{ color: '#fff', fontSize: 28, fontWeight: 900, marginTop: 4 }}>{section.title}</div>
         </div>
 
         <div style={styles.nodesList}>
-          {section.units.map((unit, index) => (
-            <div key={index} style={styles.nodeWrapper}>
-              {/* Insert Gift Box between Unit 1 and Unit 2 */}
-              {index === 1 && section.units.length > 1 && (
-                <div style={styles.giftBoxContainer}>
-                   <div style={styles.giftLine} />
-                   <div style={styles.giftBoxWrapper}>
-                      <div style={styles.giftBoxGlow}></div>
-                      <div style={styles.giftBox}>🎁</div>
-                      <div style={styles.giftTag}>SURPRISE!</div>
-                   </div>
-                   <div style={styles.giftLine} />
-                </div>
-              )}
+          {section.units.map((unit, index) => {
+            // Zig-Zag Logic: Shift nodes left/right based on index
+            const shift = index % 2 === 0 ? '40px' : '-40px';
+            
+            return (
+              <div key={index} style={{ ...styles.nodeWrapper, transform: `translateX(${shift})` }}>
+                {/* Periodically insert Gift Boxes (every 5 units) */}
+                {index > 0 && index % 5 === 0 && (
+                  <div style={{ ...styles.giftBoxContainer, transform: `translateX(${-parseFloat(shift)}px)` }}>
+                     <div style={styles.giftLine} />
+                     <div style={styles.giftBoxWrapper}>
+                        <div style={styles.giftBoxGlow}></div>
+                        <div style={styles.giftBox}>🎁</div>
+                        <div style={styles.giftTag}>ELITE GIFT</div>
+                     </div>
+                     <div style={styles.giftLine} />
+                  </div>
+                )}
 
-              <div
-                className={(unit.isUnlocked && !unit.isCompleted) ? 'animate-pulse' : ''}
-                style={{
-                  ...styles.nodeCircle,
-                  backgroundColor: unit.isUnlocked ? 'var(--theme-primary)' : '#2D3748',
-                  width: unit.isUnlocked ? '80px' : '60px',
-                  height: unit.isUnlocked ? '80px' : '60px',
-                  boxShadow: unit.isUnlocked ? '0 0 20px var(--theme-primary)66' : '0 4px 6px rgba(0,0,0,0.3)',
-                  cursor: unit.isUnlocked ? 'pointer' : 'not-allowed',
-                  position: 'relative'
-                }}
-                onClick={() => handleUnitClick(unit, index)}
-              >
-                {unit.isCompleted ? '✔️' : (unit.isUnlocked ? '▶️' : '🔒')}
-                
-                {/* Double XP Indicator for the unit after the gift box (Unit 2) */}
-                {index === 1 && unit.isUnlocked && (
-                  <div style={styles.doubleXPBadge}>2X XP</div>
+                <div
+                  className={(unit.isUnlocked && !unit.isCompleted) ? 'animate-pulse' : ''}
+                  style={{
+                    ...styles.nodeCircle,
+                    backgroundColor: unit.isUnlocked ? 'var(--theme-primary)' : '#1A202C',
+                    width: unit.isUnlocked ? '90px' : '70px',
+                    height: unit.isUnlocked ? '90px' : '70px',
+                    boxShadow: unit.isUnlocked 
+                      ? `0 0 30px ${unit.isCompleted ? '#10B981' : 'var(--theme-primary)'}66, inset 0 0 15px rgba(255,255,255,0.2)` 
+                      : '0 8px 16px rgba(0,0,0,0.4)',
+                    cursor: unit.isUnlocked ? 'pointer' : 'not-allowed',
+                    border: unit.isUnlocked ? `3px solid ${unit.isCompleted ? '#10B981' : '#fff'}` : '3px solid transparent',
+                    position: 'relative',
+                    background: unit.isUnlocked 
+                      ? `radial-gradient(circle at 30% 30%, ${unit.isCompleted ? '#34D399' : 'var(--theme-primary)'}, ${unit.isCompleted ? '#059669' : '#107c58'})`
+                      : '#2D3748'
+                  }}
+                  onClick={() => handleUnitClick(unit, index)}
+                >
+                  <span style={{ fontSize: unit.isUnlocked ? '32px' : '24px', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' }}>
+                    {unit.isCompleted ? '⭐' : (unit.isUnlocked ? '🦜' : '🔒')}
+                  </span>
+                  
+                  {/* Double XP Indicator */}
+                  {index === 1 && unit.isUnlocked && (
+                    <div style={styles.doubleXPBadge}>X2 XP</div>
+                  )}
+                </div>
+
+                {/* XP Badge for completed units */}
+                {unit.isCompleted && (
+                  <div style={styles.xpBadge}>+{index === 1 ? '20' : '10'} XP CLAIMED</div>
+                )}
+
+                <div style={{ 
+                  color: unit.isUnlocked ? '#fff' : '#718096', 
+                  marginTop: 12, 
+                  fontWeight: 900, 
+                  textAlign: 'center', 
+                  maxWidth: 140, 
+                  fontSize: 14,
+                  textShadow: '0 2px 4px rgba(0,0,0,0.5)',
+                  textTransform: 'uppercase',
+                  letterSpacing: 0.5
+                }}>
+                  {unit.title}
+                </div>
+
+                {index < section.units.length - 1 && (
+                  <div style={{
+                    ...styles.pathLine,
+                    backgroundColor: section.units[index + 1]?.isUnlocked ? 'var(--theme-primary)' : '#2D3748',
+                    height: '60px',
+                    transform: `rotate(${index % 2 === 0 ? '-15deg' : '15deg'}) translateY(-10px)`,
+                    opacity: 0.6
+                  }} />
                 )}
               </div>
-
-              {/* XP Badge for completed units */}
-              {unit.isCompleted && (
-                <div style={styles.xpBadge}>+{index === 1 ? '20' : '10'} XP</div>
-              )}
-
-              <div style={{ color: unit.isUnlocked ? '#fff' : '#94A3B8', marginTop: 6, fontWeight: 600, textAlign: 'center', maxWidth: 120, fontSize: 13 }}>
-                {unit.title}
-              </div>
-
-              {index < section.units.length - 1 && (
-                <div style={{
-                  ...styles.pathLine,
-                  backgroundColor: section.units[index + 1]?.isUnlocked ? 'var(--theme-primary)' : '#2D3748'
-                }} />
-              )}
-            </div>
-          ))}
+            );
+          })}
 
           {section.units.length === 0 && (
             <div style={{ color: '#fff' }}>No units in this section yet.</div>

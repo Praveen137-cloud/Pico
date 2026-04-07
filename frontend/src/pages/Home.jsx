@@ -210,43 +210,45 @@ const styles = {
     paddingBottom: '24px'
   },
   sectionCard: {
-    backgroundColor: 'var(--bg-card)',
-    borderRadius: '4px',
-    padding: '24px',
+    backgroundColor: 'rgba(30, 41, 59, 0.4)',
+    backdropFilter: 'blur(16px)',
+    borderRadius: '24px',
+    padding: '28px',
     display: 'flex',
     flexDirection: 'column',
     gap: '24px',
-    border: '2px solid var(--divider)',
+    border: '1px solid rgba(255,255,255,0.1)',
     position: 'relative',
     overflow: 'hidden',
-    boxShadow: '0 8px 16px rgba(0,0,0,0.4)',
+    boxShadow: '0 20px 50px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,255,255,0.02)',
+    transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
   },
   badgeWrapper: {
-    backgroundColor: 'var(--theme-primary)',
+    backgroundColor: '#6366F1',
     alignSelf: 'flex-start',
-    padding: '4px 12px',
-    borderRadius: '4px',
-    transform: 'skewX(-10deg)',
-    marginBottom: '8px'
+    padding: '6px 14px',
+    borderRadius: '12px',
+    marginBottom: '4px',
+    boxShadow: '0 4px 15px rgba(99, 102, 241, 0.4)'
   },
   sectionHeader: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '4px'
+    gap: '8px'
   },
   sectionNum: {
     color: '#fff',
     fontSize: '11px',
-    letterSpacing: '2px',
+    letterSpacing: '1.5px',
     fontWeight: '900',
-    transform: 'skewX(10deg)'
+    textTransform: 'uppercase'
   },
   sectionTitle: {
-    fontSize: '24px',
+    fontSize: '26px',
     fontWeight: '900',
     color: '#fff',
-    textTransform: 'uppercase',
-    textShadow: '0 2px 5px rgba(0,0,0,0.8)'
+    letterSpacing: '-0.5px',
+    textShadow: '0 4px 12px rgba(0,0,0,0.3)'
   },
   progressContainer: {
     display: 'flex',
@@ -275,18 +277,19 @@ const styles = {
     letterSpacing: '1px'
   },
   openPathBtn: {
-    background: 'linear-gradient(135deg, var(--theme-primary), var(--theme-secondary))',
-    color: '#000',
-    border: '1px solid var(--theme-secondary)',
-    padding: '14px',
-    borderRadius: '4px',
+    background: 'linear-gradient(135deg, #6366F1, #A855F7)',
+    color: '#fff',
+    border: 'none',
+    padding: '16px',
+    borderRadius: '16px',
     fontWeight: '900',
     letterSpacing: '2px',
     cursor: 'pointer',
     marginTop: '-8px',
-    boxShadow: 'inset 0 0 10px rgba(0,0,0,0.5)',
-    transition: 'all 0.2s',
-    textShadow: '0 2px 4px rgba(0,0,0,0.5)'
+    boxShadow: '0 10px 25px rgba(99, 102, 241, 0.4)',
+    transition: 'all 0.3s ease',
+    textTransform: 'uppercase',
+    animation: 'buttonGlow 3s infinite',
   }
 };
 

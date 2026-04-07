@@ -66,12 +66,22 @@ const Celebration = () => {
       </div>
 
       <div style={styles.footer}>
-        <button 
-          style={styles.btnPrimary} 
-          onClick={() => (subjectId && sectionId) ? navigate(`/map/${subjectId}/${sectionId}`) : navigate('/')}
-        >
-          { (subjectId && sectionId) ? 'Back to Map' : 'Back to Lessons' }
-        </button>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%', maxWidth: '500px' }}>
+          {isMastery && (
+            <button 
+              style={{...styles.btnPrimary, backgroundColor: 'gold', color: '#000'}} 
+              onClick={() => navigate('/certificate', { state: { subjectName } })}
+            >
+              📜 Claim Elite Certificate
+            </button>
+          )}
+          <button 
+            style={styles.btnPrimary} 
+            onClick={() => (subjectId && sectionId) ? navigate(`/map/${subjectId}/${sectionId}`) : navigate('/')}
+          >
+            { (subjectId && sectionId) ? 'Back to Map' : 'Back to Lessons' }
+          </button>
+        </div>
       </div>
     </div>
   );

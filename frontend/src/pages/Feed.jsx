@@ -8,7 +8,10 @@ const Feed = () => {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    setMessages([{ id: 1, text: 'System: Initializing The Lore Link...', timestamp: new Date().toISOString() }]);
+    setMessages([
+      { id: 'welcome', text: '🦜 Pico: "Welcome, puny human, to the GLOBAL LORE! Watch your fellow fledglings struggle in real-time. Don\'t forget to preen your feathers!"', timestamp: new Date().toISOString(), isPico: true },
+      { id: 1, text: 'System: Initializing The Lore Link...', timestamp: new Date().toISOString() }
+    ]);
 
     const socket = io(baseURL);
 

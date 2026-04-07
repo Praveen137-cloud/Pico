@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { AudioContext } from '../App';
 import TypingEffect from '../components/TypingEffect';
+import TieredHint from '../components/TieredHint';
 import _Editor from 'react-simple-code-editor';
 const Editor = _Editor.default || _Editor;
 import { highlight, languages } from 'prismjs/components/prism-core';
@@ -160,19 +161,25 @@ const Lesson = () => {
     }
   };
 
+  const [picoMsg, setPicoMsg] = useState('');
+
   const executeAndCheckCode = async () => {
     const currentLesson = unit.lessons[currentLessonIndex];
     setIsCompiling(true);
+    setPicoMsg('');
     try {
       const res = await api.post('/api/execute', {
+        problemId: currentLesson.problemId || '000000000000000000000000', // Handle dummy or real IDs
         code: userCode,
         language: currentLesson.language
       });
+      
+      if (res.data.picoMsg) setPicoMsg(res.data.picoMsg);
+
       const out = res.data.output || res.data.stderr;
       setCodeOutput(out);
       
-      // Basic check: Does the code include what we wanted? In real life we'd verify the output.
-      if (userCode.includes(currentLesson.correctAnswer)) {
+      if (res.data.status === 'SUCCESS') {
         setFeedback('correct');
         playSound(true);
       } else {
@@ -248,15 +255,26 @@ const Lesson = () => {
         <div style={styles.mascotArea}>
           <span style={styles.mascot}>🦜</span>
           <div style={styles.speechBubble} className={shake ? 'animate-shake' : ''}>
-            <TypingEffect text={currentLesson.questionText} />
+            <TypingEffect text={picoMsg || currentLesson.questionText} />
           </div>
-          {feedback === 'wrong' && currentLesson.explanation && (
+          {feedback === 'wrong' && currentLesson.explanation && !picoMsg && (
             <div style={styles.explanationBox}>
               <span style={{marginRight: 8}}>💡</span>
               {currentLesson.explanation}
             </div>
           )}
-          {currentLesson.hint && (
+          
+          {/* New Tiered Hint System */}
+          {(currentLesson.type === 'code_fill_in' || currentLesson.type === 'programming_board') && (
+            <div style={{ width: '100%', maxWidth: 600 }}>
+              <TieredHint 
+                hints={[currentLesson.hint, currentLesson.explanation]} 
+                codeSnippet={currentLesson.correctAnswer} 
+              />
+            </div>
+          )}
+
+          {!picoMsg && currentLesson.hint && currentLesson.type !== 'code_fill_in' && currentLesson.type !== 'programming_board' && (
             <div style={{ width: '100%', maxWidth: 600 }}>
               {showHint
                 ? <div style={{ backgroundColor: 'rgba(251,191,36,0.1)', border: '1px solid rgba(251,191,36,0.3)', borderRadius: 8, padding: '10px 14px', color: '#FBBF24', fontSize: 13, fontStyle: 'italic' }}>💡 {currentLesson.hint}</div>
@@ -369,7 +387,12 @@ const Lesson = () => {
         )}
       </div>
 
-      <div style={{...styles.footer, borderTopColor: feedback === 'correct' ? '#1DD28B' : feedback === 'wrong' ? '#EC4899' : 'var(--divider)'}}>
+      <div style={{
+        ...styles.footer, 
+        borderColor: feedback === 'correct' ? '#1DD28B' : feedback === 'wrong' ? '#EC4899' : 'var(--divider)',
+        boxShadow: feedback === 'correct' ? '0 -10px 40px rgba(29, 210, 139, 0.3)' : feedback === 'wrong' ? '0 -10px 40px rgba(236, 72, 153, 0.2)' : 'none',
+        transition: 'all 0.4s ease'
+      }}>
         {/* Footer actions depending on state and type */}
         {!feedback && (currentLesson.type === 'multiple_choice') && (
           <button style={{...styles.btnPrimary, opacity: selectedOption ? 1 : 0.5}} onClick={checkAnswer} disabled={!selectedOption}>

@@ -136,4 +136,21 @@ router.post('/guest', async (req, res) => {
   }
 });
 
+// @route   GET /api/auth/leaderboard
+// @desc    Get top users for the global leaderboard
+// @access  Public
+router.get('/leaderboard', async (req, res) => {
+  try {
+    const users = await User.find({})
+      .select('name xp avatar streak')
+      .sort({ xp: -1 })
+      .limit(10);
+      
+    res.json(users);
+  } catch (err) {
+    console.error('Leaderboard Fetch Error:', err);
+    res.status(500).json({ error: 'Failed to load leaderboard data' });
+  }
+});
+
 module.exports = router;
