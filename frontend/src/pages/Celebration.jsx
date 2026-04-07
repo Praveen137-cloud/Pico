@@ -7,22 +7,24 @@ const celebrationSfx = 'https://assets.mixkit.co/active_storage/sfx/2018/2018-pr
 const Celebration = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { subjectId, sectionId } = location.state || {};
+  const { subjectId, sectionId, type, subjectName, xpReward } = location.state || {};
   const [showConfetti, setShowConfetti] = useState(true);
+
+  const isMastery = type === 'subject';
 
   useEffect(() => {
     // Play sound upon entering
     const audio = new Audio(celebrationSfx);
     audio.play().catch(e => console.log('Audio error:', e));
 
-    // Stop confetti after 5 seconds to reduce CPU
-    const timer = setTimeout(() => setShowConfetti(false), 5000);
+    // Stop confetti after 7 seconds for mastery
+    const timer = setTimeout(() => setShowConfetti(false), isMastery ? 7000 : 5000);
     return () => clearTimeout(timer);
-  }, []);
+  }, [isMastery]);
 
   return (
     <div style={styles.page}>
-      {showConfetti && <Confetti width={window.innerWidth} height={window.innerHeight} recycle={false} numberOfPieces={500} />}
+      {showConfetti && <Confetti width={window.innerWidth} height={window.innerHeight} recycle={isMastery} numberOfPieces={isMastery ? 800 : 500} />}
       
       <header style={styles.header}>
         <button 
@@ -32,29 +34,35 @@ const Celebration = () => {
       </header>
 
       <div style={styles.content}>
-        <div style={styles.icon}>🎉</div>
-        <h1 style={styles.title}>Lesson Complete!</h1>
+        <div style={styles.icon}>{isMastery ? '👑' : '🎉'}</div>
+        <h1 style={styles.title}>
+          {isMastery ? `${subjectName} Mastered!` : 'Lesson Complete!'}
+        </h1>
         <div style={{fontSize: '64px', marginBottom: '24px'}}>🦜</div>
         
-        <div style={styles.messageBox}>
-          Awesome work! You're making great progress!
+        <div style={{...styles.messageBox, border: isMastery ? '2px solid gold' : '1px solid var(--theme-primary)', color: isMastery ? 'gold' : 'var(--theme-primary)'}}>
+          {isMastery 
+            ? `Tremendous! Every unit in ${subjectName} has been fully mastered! You are a Pico Legend!`
+            : "Awesome work! You're making great progress!"}
         </div>
 
-        <div style={styles.xpCard}>
-          <div style={{color: 'var(--text-muted)', fontSize: '14px', fontWeight: 'bold'}}>XP Earned</div>
-          <div style={{color: '#F59E0B', fontSize: '32px', fontWeight: '800'}}>+10</div>
+        <div style={{...styles.xpCard, borderColor: isMastery ? 'gold' : '#F59E0B'}}>
+          <div style={{color: 'var(--text-muted)', fontSize: '14px', fontWeight: 'bold'}}>Mastery Reward</div>
+          <div style={{color: isMastery ? 'gold' : '#F59E0B', fontSize: '48px', fontWeight: '800'}}>+{xpReward || 10} XP</div>
         </div>
 
-        <div style={styles.statsRow}>
-          <div style={styles.statBox}>
-            <div style={{color: 'var(--text-muted)'}}>Score</div>
-            <div style={{color: '#fff', fontSize: '24px', fontWeight: '700'}}>3/3</div>
+        {!isMastery && (
+          <div style={styles.statsRow}>
+            <div style={styles.statBox}>
+              <div style={{color: 'var(--text-muted)'}}>Score</div>
+              <div style={{color: '#fff', fontSize: '24px', fontWeight: '700'}}>3/3</div>
+            </div>
+            <div style={styles.statBox}>
+              <div style={{color: 'var(--text-muted)'}}>Time</div>
+              <div style={{color: '#fff', fontSize: '24px', fontWeight: '700'}}>45s</div>
+            </div>
           </div>
-          <div style={styles.statBox}>
-            <div style={{color: 'var(--text-muted)'}}>Time</div>
-            <div style={{color: '#fff', fontSize: '24px', fontWeight: '700'}}>45s</div>
-          </div>
-        </div>
+        )}
       </div>
 
       <div style={styles.footer}>

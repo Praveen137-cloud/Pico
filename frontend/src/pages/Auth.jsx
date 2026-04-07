@@ -13,7 +13,7 @@ const Auth = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { login, register, setUser } = useContext(AuthContext);
+  const { login, register, setUser, loginAsGuest } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleGoogleSuccess = async (response) => {
@@ -25,6 +25,18 @@ const Auth = () => {
       navigate('/');
     } catch (err) {
       setErrorMsg('Google login failed.');
+      console.error(err);
+    }
+    setLoading(false);
+  };
+
+  const handleGuestLogin = async () => {
+    setLoading(true);
+    try {
+      await loginAsGuest();
+      navigate('/');
+    } catch (err) {
+      setErrorMsg('Guest initialization failed.');
       console.error(err);
     }
     setLoading(false);
@@ -110,15 +122,17 @@ const Auth = () => {
         </form>
 
         <div className="auth-switch">
-          {isLogin ? "Don't have clearance?" : 'Already initialized?'}
+          <div className="auth-switch-prompt">
+            {isLogin ? "Don't have an account? Create one to track your progress and climb the leaderboard!" : "Already part of the elite? Access your secure training terminal."}
+          </div>
           <span className="auth-switch-link" onClick={switchMode}>
-            {isLogin ? ' Sign up' : ' Log in'}
+            {isLogin ? 'Sign up' : 'Log in'}
           </span>
         </div>
 
         <div className="auth-divider">Or</div>
 
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '10px' }}>
           <GoogleLogin
             onSuccess={handleGoogleSuccess}
             onError={() => setErrorMsg('Google login failed')}
@@ -129,6 +143,14 @@ const Auth = () => {
             width="100%"
           />
         </div>
+
+        <button 
+          className="auth-guest-btn" 
+          onClick={handleGuestLogin}
+          disabled={loading}
+        >
+          {loading ? 'INITIALIZING...' : 'CONTINUE AS GUEST'}
+        </button>
       </div>
     </div>
   );

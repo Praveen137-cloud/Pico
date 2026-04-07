@@ -9,7 +9,38 @@ const Map = () => {
   const [subject, setSubject] = useState(null);
   const [toastMessage, setToastMessage] = useState(null);
   const [toastType, setToastType] = useState('info'); // 'info' | 'success'
+  const [isClaiming, setIsClaiming] = useState(false);
   const navigate = useNavigate();
+
+  // Subject Mastery Check
+  useEffect(() => {
+    if (!subject || !authUser || isClaiming) return;
+
+    const allUnitsOverall = subject.sections.flatMap(s => s.units);
+    const allCompleted = allUnitsOverall.every(u => u.isCompleted);
+    const alreadyRewarded = authUser.completedSubjects && authUser.completedSubjects.includes(subject._id);
+
+    if (allCompleted && !alreadyRewarded) {
+      setIsClaiming(true);
+      api.post(`/api/subjects/${subject._id}/complete`)
+        .then(res => {
+          if (res.data.success) {
+            setUser(res.data.user);
+            navigate('/celebration', { 
+              state: { 
+                type: 'subject', 
+                subjectName: subject.name,
+                xpReward: 500 
+              } 
+            });
+          }
+        })
+        .catch(err => {
+          console.error('Mastery check failed:', err);
+          setIsClaiming(false);
+        });
+    }
+  }, [subject, authUser, isClaiming, navigate, setUser]);
 
   useEffect(() => {
     api.get('/api/subjects')

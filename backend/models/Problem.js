@@ -7,7 +7,7 @@ const testCaseSchema = new mongoose.Schema({
 
 const languageTemplateSchema = new mongoose.Schema({
   starterCode: { type: String, required: true },
-  driverCode: { type: String, required: true }
+  driverCode: { type: String, default: '' }
 });
 
 const problemSchema = new mongoose.Schema({

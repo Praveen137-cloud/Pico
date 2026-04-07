@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const axios = require('axios');
 const { OAuth2Client } = require('google-auth-library');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret_key_123';
@@ -101,6 +102,37 @@ router.post('/google', async (req, res) => {
   } catch (err) {
     console.error('Google Auth Error:', err);
     res.status(401).json({ error: 'Google authentication failed' });
+  }
+});
+
+// @route   POST /api/auth/guest
+// @desc    Create a temporary guest session
+// @access  Public
+router.post('/guest', async (req, res) => {
+  try {
+    const guestId = Math.floor(Math.random() * 900) + 100; // 100-999
+    const uniqueTime = Date.now().toString().slice(-6);
+    const email = `guest_${uniqueTime}_${guestId}@pico.internal`;
+    const name = `Guest Parrot #${guestId}`;
+    
+    const user = new User({
+      name,
+      email,
+      isGuest: true,
+      avatar: 'Parrot',
+      xp: 0
+    });
+    
+    await user.save();
+    
+    const payload = { user: { id: user.id } };
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
+    
+    console.log(`[Auth] Guest session initialized: ${name}`);
+    res.json({ token, user });
+  } catch (err) {
+    console.error('Guest Auth Error:', err);
+    res.status(500).json({ error: 'Failed to initialize system guest access.' });
   }
 });
 

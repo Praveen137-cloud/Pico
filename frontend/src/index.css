@@ -14,6 +14,34 @@
   --theme-secondary: #818CF8; /* Default Indigo */
 }
 
+/* 🌸 Spring Blossom Event */
+:root.season-spring {
+  --theme-primary: #F472B6; /* Pink */
+  --theme-secondary: #DB2777; /* Deep Pink */
+  --primary-accent: #F472B6;
+}
+
+/* ❄️ Winter Frost Event */
+:root.season-winter {
+  --theme-primary: #60A5FA; /* Sky Blue */
+  --theme-secondary: #2563EB; /* Royal Blue */
+  --primary-accent: #60A5FA;
+}
+
+/* ☀️ Summer Blaze Event */
+:root.season-summer {
+  --theme-primary: #FBBF24; /* Amber */
+  --theme-secondary: #D97706; /* Orange */
+  --primary-accent: #FBBF24;
+}
+
+/* 🍂 Autumn Harvest Event */
+:root.season-autumn {
+  --theme-primary: #FB923C; /* Orange */
+  --theme-secondary: #EA580C; /* Burnt Orange */
+  --primary-accent: #FB923C;
+}
+
 @keyframes pulseGold {
   0% { box-shadow: 0 0 10px rgba(251, 191, 36, 0.4); }
   50% { box-shadow: 0 0 25px rgba(251, 191, 36, 0.8); }

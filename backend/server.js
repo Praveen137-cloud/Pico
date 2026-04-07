@@ -17,6 +17,16 @@ const Problem = require('./models/Problem');
 const app = express();
 const PORT = process.env.PORT || 5000;
 const httpServer = createServer(app);
+
+// Seasonal Helper
+const getCurrentSeason = () => {
+  const month = new Date().getMonth(); // 0-11
+  if (month >= 2 && month <= 4) return 'Spring';
+  if (month >= 5 && month <= 7) return 'Summer';
+  if (month >= 8 && month <= 10) return 'Autumn';
+  return 'Winter';
+};
+
 const io = new Server(httpServer, {
   cors: { origin: '*' }
 });
@@ -260,7 +270,11 @@ app.post('/api/unlock', (req, _res, next) => { req.io = io; next(); }, authMiddl
     }
 
     // 3. Grant XP and stats
-    user.xp += 10;
+    let xpEarned = 10;
+    const season = getCurrentSeason();
+    if (season) xpEarned += 5; // Event Bonus!
+
+    user.xp += xpEarned;
     user.lessonsCompleted += 1;
     await user.save();
 
@@ -277,9 +291,9 @@ app.post('/api/unlock', (req, _res, next) => { req.io = io; next(); }, authMiddl
 
     // 🔥 Emit lore event
     const loreMessages = [
-      `just completed "${unitTitle}"! 🔥`,
-      `crushed "${unitTitle}" 💪`,
-      `leveled up on "${unitTitle}"! ⚡`,
+      `just completed "${unitTitle}"! 🔥 (+${xpEarned} XP)`,
+      `crushed "${unitTitle}" 💪 (+${xpEarned} XP)`,
+      `leveled up on "${unitTitle}"! ⚡ (+${xpEarned} XP)`,
     ];
     const text = loreMessages[Math.floor(Math.random() * loreMessages.length)];
     req.io.emit('loreFeed', {
@@ -296,6 +310,60 @@ app.post('/api/unlock', (req, _res, next) => { req.io = io; next(); }, authMiddl
   }
 });
 
+
+app.post('/api/subjects/:id/complete', authMiddleware, async (req, res) => {
+  try {
+    const subjectId = req.params.id;
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    // Check if already rewarded
+    if (user.completedSubjects && user.completedSubjects.includes(subjectId)) {
+      return res.status(400).json({ error: 'Subject reward already claimed' });
+    }
+
+    const subject = await Subject.findById(subjectId);
+    if (!subject) return res.status(404).json({ error: 'Subject not found' });
+
+    // Verify all units are completed
+    let allCompleted = true;
+    const completedIds = user.completedUnits.map(id => id.toString());
+    
+    for (const section of subject.sections) {
+      for (const unit of section.units) {
+        if (!completedIds.includes(unit._id.toString())) {
+          allCompleted = false;
+          break;
+        }
+      }
+      if (!allCompleted) break;
+    }
+
+    if (!allCompleted) {
+      return res.status(400).json({ error: 'Subject not fully completed yet' });
+    }
+
+    // Award XP and mark as completed
+    const XP_REWARD = 500;
+    user.xp += XP_REWARD;
+    if (!user.completedSubjects) user.completedSubjects = [];
+    user.completedSubjects.push(subjectId);
+    await user.save();
+
+    // Broadcast achievement
+    io.emit('loreFeed', {
+      id: Date.now(),
+      text: `🏆 ${user.name} has MASTERED the entire ${subject.name} curriculum! (+500 XP)`,
+      avatar: user.avatar,
+      isReal: true,
+      timestamp: new Date().toISOString()
+    });
+
+    res.json({ success: true, reward: XP_REWARD, user });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 app.post('/api/quest/claim', authMiddleware, async (req, res) => {
   try {

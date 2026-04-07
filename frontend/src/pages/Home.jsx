@@ -44,6 +44,16 @@ const Home = () => {
     { id: 'quest_read', title: 'Intelligence Gathering', desc: 'View the Live Lore Feed', xp: 100 }
   ];
 
+  const getSeasonInfo = () => {
+    const month = new Date().getMonth();
+    if (month >= 2 && month <= 4) return { name: 'Spring Blossom', icon: '🌸', color: '#F472B6', desc: 'The petals of progress are falling. Harness the bloom!' };
+    if (month >= 5 && month <= 7) return { name: 'Summer Blaze', icon: '☀️', color: '#FBBF24', desc: 'The sun is at its peak. Burn through the logic!' };
+    if (month >= 8 && month <= 10) return { name: 'Autumn Harvest', icon: '🍂', color: '#FB923C', desc: 'Reap the rewards of your summer study!' };
+    return { name: 'Winter Frost', icon: '❄️', color: '#60A5FA', desc: 'Cool heads prevail in the deep freeze of code.' };
+  };
+
+  const season = getSeasonInfo();
+
   const handleSelectSubject = (subj) => {
     setActiveSubject(subj);
     localStorage.setItem('lastActiveSubject', subj);
@@ -65,6 +75,23 @@ const Home = () => {
           </div>
         </div>
         <SubjectNav activeSubject={activeSubject} onSelect={handleSelectSubject} />
+      </div>
+
+      {/* Seasonal Event Banner */}
+      <div style={{...styles.seasonBanner, borderColor: season.color}}>
+        <div style={{...styles.seasonBadge, backgroundColor: season.color}}>
+          {season.icon} {season.name} EVENT ACTIVE
+        </div>
+        <div style={styles.seasonContent}>
+          <div style={{flex: 1}}>
+            <div style={styles.seasonTitle}>{season.name} Phase I</div>
+            <div style={styles.seasonDesc}>{season.desc}</div>
+          </div>
+          <div style={styles.seasonBonus}>
+            <div style={{fontSize: 10, color: 'rgba(255,255,255,0.6)', fontWeight: 800}}>EVENT BONUS</div>
+            <div style={{fontSize: 20, color: season.color, fontWeight: 900}}>+5 XP</div>
+          </div>
+        </div>
       </div>
       
       {/* Daily Quests Board */}
@@ -168,6 +195,54 @@ const styles = {
     padding: '10px 20px',
     background: 'rgba(255,255,255,0.03)',
     color: '#fff'
+  },
+  seasonBanner: {
+    margin: '16px',
+    padding: '24px 16px 16px 16px',
+    backgroundColor: '#0F121E',
+    border: '1px solid',
+    borderRadius: '12px',
+    position: 'relative',
+    overflow: 'hidden',
+    boxShadow: '0 8px 32px rgba(0,0,0,0.4)'
+  },
+  seasonBadge: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    padding: '2px 10px',
+    fontSize: '9px',
+    fontWeight: '900',
+    letterSpacing: '1px',
+    color: '#000',
+    borderRadius: '0 0 8px 0',
+    textTransform: 'uppercase'
+  },
+  seasonContent: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '16px'
+  },
+  seasonTitle: {
+    fontSize: '20px',
+    fontWeight: '900',
+    color: '#fff',
+    letterSpacing: '1px',
+    textTransform: 'uppercase'
+  },
+  seasonDesc: {
+    fontSize: '12px',
+    color: 'var(--text-muted)',
+    marginTop: '4px',
+    lineHeight: '1.4'
+  },
+  seasonBonus: {
+    textAlign: 'center',
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    padding: '8px 12px',
+    borderRadius: '8px',
+    border: '1px solid rgba(255,255,255,0.05)',
+    minWidth: '80px'
   },
   curriculumContainer: {
     padding: '16px',

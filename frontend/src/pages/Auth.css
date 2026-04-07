@@ -118,8 +118,13 @@
 .auth-switch {
   text-align: center;
   margin-top: 24px;
-  font-size: 14px;
+}
+
+.auth-switch-prompt {
   color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 4px;
 }
 
 .auth-switch-link {
@@ -164,4 +169,32 @@
   justify-content: center;
   gap: 10px;
   opacity: 0.6;
+}
+
+.auth-guest-btn {
+  background-color: transparent;
+  border: 1px solid var(--divider);
+  color: var(--text-muted);
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: all 0.2s ease;
+  margin-top: 20px;
+  width: 100%;
+  text-transform: uppercase;
+  font-family: inherit;
+}
+
+.auth-guest-btn:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.03);
+  border-color: var(--theme-primary);
+  color: #fff;
+}
+
+.auth-guest-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }

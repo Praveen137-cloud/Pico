@@ -51,6 +51,15 @@ function App() {
   useEffect(() => {
     bgmRef.current.loop = true;
     bgmRef.current.volume = 0.3;
+
+    // Seasonal Theme Initializer
+    const month = new Date().getMonth();
+    let seasonClass = '';
+    if (month >= 2 && month <= 4) seasonClass = 'season-spring';
+    else if (month >= 5 && month <= 7) seasonClass = 'season-summer';
+    else if (month >= 8 && month <= 10) seasonClass = 'season-autumn';
+    else seasonClass = 'season-winter';
+    document.documentElement.className = seasonClass;
   }, []);
 
   useEffect(() => {

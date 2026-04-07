@@ -21,7 +21,11 @@ const themes = [
   { name: 'Ruby', primary: '#EF4444', secondary: '#991B1B' },
   { name: 'Forest', primary: '#22C55E', secondary: '#14532D' },
   { name: 'Sunset', primary: '#FB923C', secondary: '#9A3412' },
-  { name: 'Midnight', primary: '#94A3B8', secondary: '#1E293B' }
+  { name: 'Midnight', primary: '#94A3B8', secondary: '#1E293B' },
+  { name: 'Ocean', primary: '#2DD4BF', secondary: '#0D9488' },
+  { name: 'Amethyst', primary: '#A78BFA', secondary: '#5B21B6' },
+  { name: 'Magma', primary: '#F87171', secondary: '#7F1D1D' },
+  { name: 'Neon', primary: '#A3E635', secondary: '#3F6212' }
 ];
 
 const Profile = () => {

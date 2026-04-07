@@ -20,6 +20,8 @@ const lessonSchema = new mongoose.Schema({
 
 const unitSchema = new mongoose.Schema({
   title: String,
+  desc: String,
+  xp: { type: Number, default: 20 },
   isUnlocked: { type: Boolean, default: false },
   isCompleted: { type: Boolean, default: false },
   lessons: [lessonSchema]
