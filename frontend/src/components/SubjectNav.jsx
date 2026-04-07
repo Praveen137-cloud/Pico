@@ -139,45 +139,58 @@ const styles = {
   modalOverlay: {
     position: 'fixed',
     top: 0, left: 0, right: 0, bottom: 0,
-    backgroundColor: 'rgba(5, 7, 10, 0.95)',
-    zIndex: 2000,
+    backgroundColor: 'rgba(5, 7, 10, 0.98)',
+    zIndex: 9999,
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'center',
-    padding: '20px',
-    backdropFilter: 'blur(10px)'
+    padding: '40px 20px',
+    backdropFilter: 'blur(15px)',
+    overflowY: 'auto'
   },
   modalContent: {
     width: '100%',
-    maxWidth: '600px',
-    maxHeight: '80vh',
-    padding: '30px',
-    overflowY: 'auto'
+    maxWidth: '550px',
+    backgroundColor: 'rgba(20, 24, 35, 0.8)',
+    padding: '24px',
+    borderRadius: '24px',
+    border: '1.5px solid rgba(0, 242, 255, 0.3)',
+    boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
+    position: 'relative'
   },
   modalHeader: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: '30px'
+    marginBottom: '24px',
+    paddingBottom: '16px',
+    borderBottom: '1px solid rgba(255,255,255,0.1)'
   },
   closeBtn: {
-    background: 'none',
+    background: 'rgba(255,255,255,0.1)',
     border: 'none',
     color: '#fff',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    width: '40px',
+    height: '40px',
+    borderRadius: '50%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    transition: 'all 0.2s'
   },
   grid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))',
-    gap: '16px'
+    gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))',
+    gap: '12px'
   },
   gridItem: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    padding: '24px 12px',
-    borderRadius: '20px',
-    border: '2px solid',
+    padding: '20px 10px',
+    borderRadius: '16px',
+    border: '1.5px solid',
     cursor: 'pointer',
     transition: 'all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)',
     textAlign: 'center'
