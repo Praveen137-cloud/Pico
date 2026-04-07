@@ -6,139 +6,69 @@ import { useParams, useNavigate } from 'react-router-dom';
 const Map = () => {
   const { subjectId, sectionId } = useParams();
   const { user: authUser, setUser } = useContext(AuthContext);
-  const [subject, setSubject] = useState(null);
+  const [stage, setStage] = useState(null);
+  const [units, setUnits] = useState([]);
+  const [subjectName, setSubjectName] = useState('');
   const [toastMessage, setToastMessage] = useState(null);
-  const [toastType, setToastType] = useState('info'); // 'info' | 'success'
-  const [isClaiming, setIsClaiming] = useState(false);
-  const [showMissionBar, setShowMissionBar] = useState(false);
+  const [toastType, setToastType] = useState('info');
   const navigate = useNavigate();
 
-  // Show mission bar on mount
+  // 1. Fetch Stage & Subject Info
   useEffect(() => {
-    const timerDown = setTimeout(() => setShowMissionBar(true), 1000);
-    const timerUp = setTimeout(() => setShowMissionBar(false), 5000);
-    return () => { clearTimeout(timerDown); clearTimeout(timerUp); };
-  }, []);
-
-  // Subject Mastery Check
-  useEffect(() => {
-    if (!subject || !authUser || isClaiming) return;
-
-    const allUnitsOverall = subject.sections.flatMap(s => s.units);
-    const allCompleted = allUnitsOverall.every(u => u.isCompleted);
-    const alreadyRewarded = authUser.completedSubjects && authUser.completedSubjects.includes(subject._id);
-
-    if (allCompleted && !alreadyRewarded) {
-      setIsClaiming(true);
-      api.post(`/api/subjects/${subject._id}/complete`)
-        .then(res => {
-          if (res.data.success) {
-            setUser(res.data.user);
-            navigate('/celebration', { 
-              state: { 
-                type: 'subject', 
-                subjectName: subject.name,
-                xpReward: 500 
-              } 
-            });
-          }
-        })
-        .catch(err => {
-          console.error('Mastery check failed:', err);
-          setIsClaiming(false);
-        });
-    }
-  }, [subject, authUser, isClaiming, navigate, setUser]);
-
-  useEffect(() => {
-    api.get('/api/subjects')
+    api.get('/api/curriculum/subjects')
       .then(res => {
         const subj = res.data.find(s => s._id === subjectId);
-        setSubject(subj);
+        if (subj) setSubjectName(subj.name);
       })
       .catch(err => console.error(err));
-  }, [subjectId]);
 
-  if (!subject) return <div style={{ padding: 24, color: '#fff' }}>Loading path...</div>;
+    api.get(`/api/curriculum/subjects/${subjectId}/stages`)
+      .then(res => {
+        const foundStage = res.data.find(s => s._id === sectionId);
+        setStage(foundStage);
+      })
+      .catch(err => console.error(err));
+  }, [subjectId, sectionId]);
 
-  const section = subject.sections.find(s => s._id === sectionId);
-  if (!section) return <div style={{ padding: 24, color: '#fff' }}>Section not found.</div>;
+  // 2. Fetch Units (Lazy Load 200 Units)
+  useEffect(() => {
+    if (!sectionId) return;
+    api.get(`/api/curriculum/stages/${sectionId}/units`)
+      .then(res => {
+        setUnits(res.data);
+      })
+      .catch(err => console.error(err));
+  }, [sectionId]);
 
-  const totalUnits = section.units.length;
-  const completedCount = section.units.filter(u => u.isCompleted).length;
-  const progressPct = totalUnits > 0 ? Math.round((completedCount / totalUnits) * 100) : 0;
-  const isComplete = completedCount === totalUnits && totalUnits > 0;
+  if (!stage) return <div style={{ padding: 24, color: '#fff' }}>Initializing academic path...</div>;
 
-  // Global completion check for the Zoho Warrior Badge
-  // We check if the user has completed a significant portion of the core curriculum
-  const isZohoWarrior = (authUser?.completedUnits?.length || 0) >= 40;
+  const totalUnits = units.length;
+  const completedCount = 0; // Temporarily reset for new architecture
+  const progressPct = 0;
 
-  const handleUnitClick = (unit, index) => {
-    if (!unit.isUnlocked) return;
-
-    if (unit.lessons && unit.lessons.length > 0) {
-      navigate(`/lesson/${subjectId}/${sectionId}/${unit._id}`);
-    } else {
-      setToastType('info');
-      setToastMessage('Coming soon: Content is being cooked for this unit!');
-      setTimeout(() => setToastMessage(null), 3000);
-    }
+  const handleUnitClick = (unit) => {
+    navigate(`/lesson/${subjectId}/${sectionId}/${unit._id}`);
   };
-
-  const wildlife = [
-    { icon: '🦌', top: '15%', left: '10%', anim: 'roam 15s infinite linear' },
-    { icon: '🐄', top: '45%', right: '15%', anim: 'graze 8s infinite ease-in-out' },
-    { icon: '🌿', top: '75%', left: '20%', anim: 'leafSway 4s infinite ease-in-out' },
-    { icon: '🦌', top: '85%', right: '10%', anim: 'roam 18s infinite linear reverse' },
-    { icon: '🌿', top: '25%', right: '25%', anim: 'leafSway 5s infinite ease-in-out' },
-    { icon: '🐄', top: '65%', left: '5%', anim: 'graze 10s infinite ease-in-out' },
-  ];
 
   return (
     <div style={styles.page}>
-      {/* Nature & Wildlife Background Layer */}
+      {/* Professional Grid Background Layer */}
       <div style={styles.wildlifeContainer}>
-        {wildlife.map((w, i) => (
-          <div key={i} style={{
-            position: 'absolute',
-            top: w.top,
-            left: w.left,
-            right: w.right,
-            fontSize: '32px',
-            animation: w.anim,
-            opacity: 0.4,
-            filter: 'drop-shadow(0 0 10px rgba(255,255,255,0.1))',
-            pointerEvents: 'none',
-            userSelect: 'none'
-          }}>
-            {w.icon}
-          </div>
-        ))}
-      </div>
-
-      {/* Daily Mission Bar - Top Overlay */}
-      <div style={{
-        ...styles.missionBar,
-        transform: showMissionBar ? 'translateY(0)' : 'translateY(-140%)',
-        opacity: showMissionBar ? 1 : 0
-      }}>
-        <div style={styles.missionIcon}>🎯</div>
-        <div style={{ flex: 1 }}>
-          <div style={styles.missionLabel}>DAILY MISSION ACTIVE</div>
-          <div style={styles.missionText}>Complete Unit 2 to earn Double XP!</div>
-        </div>
-        <div style={styles.missionProgress}>
-          <div style={styles.missionProgressFill}></div>
-        </div>
+        <div style={{
+          position: 'absolute',
+          top: 0, left: 0, width: '100%', height: '100%',
+          backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0)',
+          backgroundSize: '40px 40px'
+        }} />
       </div>
 
       <header style={styles.header}>
         <button style={styles.backBtn} onClick={() => navigate('/')}>←</button>
         <div style={{ flex: 1 }}>
-          <div style={styles.subjectName}>{subject.name}</div>
-          <div style={styles.sectionTitle}>{section.title}</div>
+          <div style={styles.subjectName}>{subjectName} ACADEMY</div>
+          <div style={styles.sectionTitle}>{stage.title}</div>
         </div>
-        <div style={styles.xpChip}>+{(authUser?.xp ?? 0)} XP</div>
+        <div style={styles.xpChip}>SCORE: {(authUser?.xp ?? 0)}</div>
       </header>
 
       {/* Section Progress Bar */}
@@ -147,28 +77,28 @@ const Map = () => {
           <span style={{ color: 'var(--text-muted)', fontSize: 12, fontWeight: 700 }}>
             PROGRESS
           </span>
-          <span style={{ color: isComplete ? '#10B981' : 'var(--theme-primary)', fontWeight: 900, fontSize: 13 }}>
-            {completedCount} / {totalUnits} units {isComplete ? '✅' : ''}
+          <span style={{ color: 'var(--theme-primary)', fontWeight: 900, fontSize: 13 }}>
+            {completedCount} / {totalUnits} MODULES ANALYZED
           </span>
         </div>
         <div style={styles.progressTrack}>
           <div style={{
             ...styles.progressFill,
             width: `${progressPct}%`,
-            backgroundColor: isComplete ? '#10B981' : 'var(--theme-primary)',
-            boxShadow: isComplete ? '0 0 12px #10B981aa' : '0 0 12px var(--theme-primary)66'
+            backgroundColor: 'var(--theme-primary)',
+            boxShadow: '0 0 12px var(--theme-primary)66'
           }} />
         </div>
       </div>
 
       <div style={styles.pathContainer}>
         <div style={styles.banner}>
-          <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, fontWeight: 900, textTransform: 'uppercase', letterSpacing: 1.5 }}>Path to Mastery</div>
-          <div style={{ color: '#fff', fontSize: 28, fontWeight: 900, marginTop: 4 }}>{section.title}</div>
+          <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, fontWeight: 900, textTransform: 'uppercase', letterSpacing: 1.5 }}>Academic Research Module</div>
+          <div style={{ color: '#fff', fontSize: 28, fontWeight: 900, marginTop: 4 }}>{stage.title}</div>
         </div>
 
         <div style={styles.nodesList}>
-          {section.units.map((unit, index) => {
+          {units.map((unit, index) => {
             // Zig-Zag Logic: Shift nodes left/right based on index
             const shift = index % 2 === 0 ? '40px' : '-40px';
             
@@ -207,7 +137,7 @@ const Map = () => {
                   onClick={() => handleUnitClick(unit, index)}
                 >
                   <span style={{ fontSize: unit.isUnlocked ? '32px' : '24px', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' }}>
-                    {unit.isCompleted ? '⭐' : (unit.isUnlocked ? '🦜' : '🔒')}
+                    {unit.isCompleted ? '⭐' : (unit.isUnlocked ? '💠' : '🔒')}
                   </span>
                   
                   {/* Double XP Indicator */}
@@ -235,10 +165,10 @@ const Map = () => {
                   {unit.title}
                 </div>
 
-                {index < section.units.length - 1 && (
+                {index < units.length - 1 && (
                   <div style={{
                     ...styles.pathLine,
-                    backgroundColor: section.units[index + 1]?.isUnlocked ? 'var(--theme-primary)' : '#2D3748',
+                    backgroundColor: units[index + 1]?.isUnlocked ? 'var(--theme-primary)' : '#2D3748',
                     height: '60px',
                     transform: `rotate(${index % 2 === 0 ? '-15deg' : '15deg'}) translateY(-10px)`,
                     opacity: 0.6
@@ -248,30 +178,8 @@ const Map = () => {
             );
           })}
 
-          {section.units.length === 0 && (
-            <div style={{ color: '#fff' }}>No units in this section yet.</div>
-          )}
-
-          {section.units.length > 0 && (
-            <div style={styles.trophyWrapper}>
-              <div style={{
-                ...styles.trophy,
-                filter: isComplete ? 'drop-shadow(0 0 16px gold)' : 'grayscale(0.7) opacity(0.5)'
-              }}>🏆</div>
-              <div style={{ color: isComplete ? '#FFD700' : 'var(--text-muted)', marginTop: 8, fontWeight: 700, fontSize: 14 }}>
-                {isComplete ? 'Section Complete!' : 'Finish the Section!'}
-              </div>
-            </div>
-          )}
-
-          {isZohoWarrior && (
-            <div style={styles.badgeBanner}>
-              <div style={styles.badgeIcon}>🏅</div>
-              <div>
-                <div style={styles.badgeTitle}>ZOHO WARRIOR</div>
-                <div style={styles.badgeSubtitle}>Core Curriculum Mastered</div>
-              </div>
-            </div>
+          {units.length === 0 && (
+            <div style={{ color: '#fff', textAlign: 'center', opacity: 0.5 }}>SYNCHRONIZING ACADEMIC CORE...</div>
           )}
         </div>
       </div>

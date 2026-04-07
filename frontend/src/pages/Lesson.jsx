@@ -43,22 +43,19 @@ const Lesson = () => {
 
   const audioRef = useRef(new Audio());
 
+  // 1. Fetch Lessons for Unit
   useEffect(() => {
-    api.get('/api/subjects')
+    api.get(`/api/curriculum/units/${unitId}/lessons`)
       .then(res => {
-        const subj = res.data.find(s => s._id === subjectId);
-        const sec = subj?.sections.find(s => s._id === sectionId);
-        const uni = sec?.units.find(u => u._id === unitId);
-        setUnit(uni);
-        if (uni?.lessons[0]) {
-          playTTS(uni.lessons[0].questionText);
-          if (uni.lessons[0].type === 'code_fill_in') {
-            setUserCode(uni.lessons[0].codeSnippet);
+        setUnit({ lessons: res.data });
+        if (res.data[0]) {
+          if (res.data[0].type === 'code_fill_in') {
+            setUserCode(res.data[0].codeSnippet);
           }
         }
       })
       .catch(err => console.error(err));
-  }, [subjectId, sectionId, unitId]);
+  }, [unitId]);
 
   useEffect(() => {
     if (unit && currentLessonIndex < unit.lessons.length) {
@@ -104,23 +101,10 @@ const Lesson = () => {
   };
 
   const checkAnswer = () => {
-    const currentLesson = unit.lessons[currentLessonIndex];
     if (currentLesson.type === 'multiple_choice') {
       if (currentLesson.correctAnswer === selectedOption) {
         setFeedback('correct');
         playSound(true);
-      } else {
-        setFeedback('wrong');
-        playSound(false);
-      }
-    } else if (currentLesson.type === 'programming_board') {
-      const answers = currentLesson.correctAnswer.split('|');
-      const isAllCorrect = answers.every((ans, idx) => (boardAnswers[idx] || '').trim() === ans.trim());
-      if (isAllCorrect) {
-        setFeedback('correct');
-        playSound(true);
-        setIsImpact(true);
-        setTimeout(() => setIsImpact(false), 500);
       } else {
         setFeedback('wrong');
         playSound(false);
@@ -203,20 +187,8 @@ const Lesson = () => {
     if (currentLessonIndex + 1 < unit.lessons.length) {
       setCurrentLessonIndex(prev => prev + 1);
     } else {
-      // Completed unit! Call API to unlock next lesson and update XP
-      try {
-        const res = await api.post('/api/unlock', { subjectId, sectionId, unitId });
-        if (res.data.success) {
-          // Update global state immediately
-          setUser(res.data.user);
-          // Also fetch updated subjects to refresh 'isCompleted' flags
-          const subjRes = await api.get('/api/subjects');
-          setSubjects(subjRes.data);
-        }
-      } catch (err) {
-        console.error('Unlock error:', err);
-      }
-      navigate(`/celebration`, { state: { subjectId, sectionId, xpGained: unit.xp || 20 } });
+      // Completed unit! Call API to mark progress if needed
+      navigate(`/celebration`, { state: { subjectId, sectionId, xpGained: 50 } });
     }
   };
 
@@ -256,33 +228,13 @@ const Lesson = () => {
       <div style={styles.content}>
         <h2 style={styles.unitTitle}>{unit.title}</h2>
         <div style={styles.mascotArea}>
-          <span style={styles.mascot}>🦜</span>
           <div style={styles.speechBubble} className={shake ? 'animate-shake' : ''}>
-            <TypingEffect text={picoMsg || currentLesson.questionText} />
+            <TypingEffect text={currentLesson.questionText} />
           </div>
-          {feedback === 'wrong' && currentLesson.explanation && !picoMsg && (
+          {feedback === 'wrong' && currentLesson.explanation && (
             <div style={styles.explanationBox}>
-              <span style={{marginRight: 8}}>💡</span>
+              <span style={{marginRight: 8}}>📖</span>
               {currentLesson.explanation}
-            </div>
-          )}
-          
-          {/* New Tiered Hint System */}
-          {(currentLesson.type === 'code_fill_in' || currentLesson.type === 'programming_board') && (
-            <div style={{ width: '100%', maxWidth: 600 }}>
-              <TieredHint 
-                hints={[currentLesson.hint, currentLesson.explanation]} 
-                codeSnippet={currentLesson.correctAnswer} 
-              />
-            </div>
-          )}
-
-          {!picoMsg && currentLesson.hint && currentLesson.type !== 'code_fill_in' && currentLesson.type !== 'programming_board' && (
-            <div style={{ width: '100%', maxWidth: 600 }}>
-              {showHint
-                ? <div style={{ backgroundColor: 'rgba(251,191,36,0.1)', border: '1px solid rgba(251,191,36,0.3)', borderRadius: 8, padding: '10px 14px', color: '#FBBF24', fontSize: 13, fontStyle: 'italic' }}>💡 {currentLesson.hint}</div>
-                : <button onClick={() => setShowHint(true)} style={{ background: 'rgba(251,191,36,0.1)', border: '1px solid rgba(251,191,36,0.3)', color: '#FBBF24', borderRadius: 8, padding: '6px 14px', cursor: 'pointer', fontSize: 12, fontWeight: 700 }}>💡 Show Hint</button>
-              }
             </div>
           )}
         </div>
@@ -292,7 +244,7 @@ const Lesson = () => {
             {currentLesson.codeSnippet && (
               <pre style={styles.codeSnippet}>{currentLesson.codeSnippet}</pre>
             )}
-            <button style={styles.btnPrimary} onClick={handleNext}>Got it, Continue →</button>
+            <button style={styles.btnPrimary} onClick={handleNext}>CONCEPT ACKNOWLEDGED →</button>
           </div>
         )}
 
@@ -411,24 +363,19 @@ const Lesson = () => {
 
         {feedback === 'correct' && (
           <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%'}}>
-            <h3 style={{color: '#1DD28B', margin: 0}}>Correct! 🎉</h3>
-            <button style={{...styles.btnPrimary, width: 'auto', backgroundColor: '#1DD28B', padding: '12px 32px', borderRadius: '12px', border: 'none', fontWeight: 700}} onClick={handleNext}>Next</button>
+            <h3 style={{color: '#1DD28B', margin: 0, fontSize: '14px', fontWeight: 900}}>ALIGNMENT CONFIRMED</h3>
+            <button style={{...styles.btnPrimary, width: 'auto', backgroundColor: '#1DD28B', padding: '12px 32px', borderRadius: '12px', border: 'none', fontWeight: 900}} onClick={handleNext}>NEXT PHASE</button>
           </div>
         )}
 
         {feedback === 'wrong' && (
           <div style={{display: 'flex', flexDirection: 'column', gap: '12px', width: '100%'}}>
-            <h3 style={{color: '#EC4899', margin: 0}}>Not quite... 🤔</h3>
+            <h3 style={{color: '#EC4899', margin: 0, fontSize: '14px', fontWeight: 900}}>LOGICAL MISALIGNMENT</h3>
             <div style={{backgroundColor: '#EC489922', padding: '12px', borderRadius: '8px', border: '1px solid #EC4899'}}>
-              <span style={{color: '#EC4899', fontWeight: 'bold'}}>Correct Answer: </span>
-              <span style={{color: '#fff', fontFamily: 'monospace'}}>{currentLesson.correctAnswer}</span>
+              <span style={{color: '#EC4899', fontWeight: '900', fontSize: 10}}>EXPECTED ANALYSIS: </span>
+              <span style={{color: '#fff', fontFamily: 'monospace', fontSize: 13}}>{currentLesson.correctAnswer}</span>
             </div>
-            {currentLesson.explanation && (
-              <div style={{backgroundColor: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.4)', borderRadius: 8, padding: '10px 14px', color: '#93C5FD', fontSize: 13}}>
-                📘 {currentLesson.explanation}
-              </div>
-            )}
-            <button style={{...styles.btnPrimary, width: '100%', backgroundColor: 'var(--divider)', color: '#fff', padding: '12px 32px', borderRadius: '12px', border: 'none', fontWeight: 700}} onClick={handleNext}>Got it, Next</button>
+            <button style={{...styles.btnPrimary, width: '100%', backgroundColor: 'var(--divider)', color: '#fff', padding: '12px 32px', borderRadius: '12px', border: 'none', fontWeight: 900, marginTop: 8}} onClick={handleNext}>SYNC & CONTINUE</button>
           </div>
         )}
       </div>

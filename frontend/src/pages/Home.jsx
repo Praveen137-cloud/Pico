@@ -10,26 +10,38 @@ import './Home.css';
 const Home = () => {
   const { subjects, setSubjects, user, setUser } = useContext(AuthContext);
   const [activeSubject, setActiveSubject] = useState(localStorage.getItem('lastActiveSubject') || 'Arrays');
-  const [isLoading, setIsLoading] = useState(subjects.length === 0);
+  const [stages, setStages] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [isVibrating, setIsVibrating] = useState(false);
   const navigate = useNavigate();
 
+  // 1. Fetch Subject List
   useEffect(() => {
-    if (subjects.length === 0) {
-      api.get('/api/subjects')
-        .then(res => {
-          setSubjects(res.data);
-          // Artificial delay for smooth animation transition
-          setTimeout(() => setIsLoading(false), 2000);
-        })
-        .catch(err => {
-          console.error(err);
-          setIsLoading(false);
-        });
-    } else {
-      setIsLoading(false);
-    }
-  }, [subjects, setSubjects]);
+    api.get('/api/curriculum/subjects')
+      .then(res => {
+        setSubjects(res.data);
+      })
+      .catch(err => console.error(err));
+  }, [setSubjects]);
+
+  // 2. Fetch Stages for Active Subject
+  useEffect(() => {
+    if (subjects.length === 0) return;
+    
+    const subject = subjects.find(s => s.name === activeSubject);
+    if (!subject) return;
+
+    setIsLoading(true);
+    api.get(`/api/curriculum/subjects/${subject._id}/stages`)
+      .then(res => {
+        setStages(res.data);
+        setTimeout(() => setIsLoading(false), 800); // Professional transition
+      })
+      .catch(err => {
+        console.error(err);
+        setIsLoading(false);
+      });
+  }, [activeSubject, subjects]);
 
   const currentSubjectData = subjects.find(s => s.name === activeSubject);
 
@@ -70,70 +82,52 @@ const Home = () => {
         <SubjectNav activeSubject={activeSubject} onSelect={handleSelectSubject} />
       </div>
 
-      {/* Seasonal Event Banner */}
-      <div className="season-banner" style={{borderColor: season.color}}>
+      {/* Professional Academic Banner */}
+      <div className="season-banner" style={{borderColor: season.color, minHeight: '120px', padding: '24px'}}>
         <div style={styles.electricBirdContainer}>
-           <img src="/funny-parrot.png" className="electric-bird" style={styles.electricBirdImg} alt="Funny Pico" />
-           <div style={styles.logoText}>PICO ELITE</div>
+           <div style={styles.logoText}>PICO ELITE ACADEMY</div>
         </div>
         <div style={{...styles.seasonBadge, backgroundColor: season.color}}>
-          {season.icon} {season.name} EVENT ACTIVE
+          {season.icon} {season.name} QUARTER
         </div>
         <div className="season-content">
           <div className="season-header-left">
-            <div style={styles.seasonTitle} className="season-title">{season.name} Phase I</div>
-            <div style={styles.seasonDesc} className="season-desc">{season.desc}</div>
-          </div>
-          <div style={styles.seasonBonus} className="season-bonus">
-            <div style={{fontSize: 10, color: 'rgba(255,255,255,0.6)', fontWeight: 800}} className="bonus-label">EVENT BONUS</div>
-            <div style={{fontSize: 20, color: season.color, fontWeight: 900}}>+5 XP</div>
+            <div style={styles.seasonTitle} className="season-title">{activeSubject} Research Phase</div>
+            <div style={styles.seasonDesc} className="season-desc">Advanced theoretical exploration of {activeSubject} structures.</div>
           </div>
         </div>
       </div>
       
       <div style={styles.curriculumContainer} className="curriculum-container">
-        {currentSubjectData ? (
-          currentSubjectData.sections.length > 0 ? (
-            currentSubjectData.sections.map((section, index) => (
-              <div key={index} className={`extreme-card ${isVibrating ? 'vibrate-active' : ''}`} style={styles.sectionCard}>
-                <div style={styles.sectionHeader}>
-                  <div style={styles.badgeWrapper}>
-                    <div style={styles.sectionNum}>STAGE {index + 1}</div>
-                  </div>
-                  <h2 style={styles.sectionTitle}>{section.title}</h2>
+        {stages.length > 0 ? (
+          stages.map((stage, index) => (
+            <div key={index} className={`extreme-card ${isVibrating ? 'vibrate-active' : ''}`} style={styles.sectionCard}>
+              <div style={styles.sectionHeader}>
+                <div style={styles.badgeWrapper}>
+                  <div style={styles.sectionNum}>STAGE {index + 1}</div>
                 </div>
-                
-                <div style={styles.progressContainer}>
-                  <div style={styles.progressBarWrapper}>
-                    <div style={{
-                      ...styles.progressBar,
-                      width: section.units.length > 0
-                        ? `${Math.round((section.units.filter(u => u.isCompleted).length / section.units.length) * 100)}%`
-                        : '0%'
-                    }} />
-                  </div>
-                  <span style={styles.unitCount}>
-                    {section.units.filter(u => u.isCompleted).length}/{section.units.length} DONE
-                  </span>
-                </div>
-                
-                {section.units.length > 0 && (
-                 <button 
-                   style={styles.openPathBtn}
-                   onClick={() => navigate(`/map/${currentSubjectData._id}/${section._id}`)}
-                 >
-                   💥 INITIALIZE
-                 </button>
-                )}
+                <h2 style={styles.sectionTitle}>{stage.title}</h2>
               </div>
-            ))
-          ) : (
-            <div style={{color: 'var(--text-muted)', textAlign: 'center', marginTop: 40, fontWeight: 800, letterSpacing: 2}}>
-              CLASSIFIED CONTENT ENCRYPTED...
+              
+              <div style={styles.progressContainer}>
+                <div style={styles.progressBarWrapper}>
+                  <div style={{ ...styles.progressBar, width: '0%' }} />
+                </div>
+                <span style={styles.unitCount}>0/200 ANALYZED</span>
+              </div>
+              
+              <button 
+                style={styles.openPathBtn}
+                onClick={() => navigate(`/map/${subjects.find(s => s.name === activeSubject)._id}/${stage._id}`)}
+              >
+                INITIALIZE MODULE
+              </button>
             </div>
-          )
+          ))
         ) : (
-          <EmptyState subjectName={activeSubject} />
+          <div style={{color: 'var(--text-muted)', textAlign: 'center', marginTop: 40, fontWeight: 800, letterSpacing: 2}}>
+            INITIALIZING CORE DATA...
+          </div>
         )}
       </div>
     </div>
