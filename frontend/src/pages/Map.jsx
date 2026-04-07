@@ -119,6 +119,8 @@ const Map = () => {
           {units.map((unit, index) => {
             // Zig-Zag Logic: Shift nodes left/right based on index
             const shift = index % 2 === 0 ? '40px' : '-40px';
+            const isDone = completedIds.includes(unit._id.toString());
+            const isUnlocked = unit.isUnlocked ?? true;
             
             return (
               <div key={index} style={{ ...styles.nodeWrapper, transform: `translateX(${shift})` }}>
@@ -136,33 +138,33 @@ const Map = () => {
                 )}
 
                 <div
-                  className={(unit.isUnlocked && !unit.isCompleted) ? 'animate-pulse' : ''}
+                  className={(isUnlocked && !isDone) ? 'animate-pulse' : ''}
                   style={{
                     ...styles.nodeCircle,
-                    borderColor: unit.isUnlocked ? 'var(--theme-primary)' : 'var(--divider)',
-                    backgroundColor: isDone ? '#1DD28B' : (unit.isUnlocked ? '#1E293B' : '#0F172A'),
-                    opacity: unit.isUnlocked ? 1 : 0.5,
-                    boxShadow: isDone ? '0 0 20px #1DD28Baa' : (unit.isUnlocked ? '0 0 15px rgba(29, 210, 139, 0.2)' : 'none')
+                    borderColor: isUnlocked ? 'var(--theme-primary)' : 'var(--divider)',
+                    backgroundColor: isDone ? '#1DD28B' : (isUnlocked ? '#1E293B' : '#0F172A'),
+                    opacity: isUnlocked ? 1 : 0.5,
+                    boxShadow: isDone ? '0 0 20px #1DD28Baa' : (isUnlocked ? '0 0 15px rgba(29, 210, 139, 0.2)' : 'none')
                   }}
                   onClick={() => handleUnitClick(unit)}
                 >
                   <span style={{ fontSize: isDone ? '28px' : '32px', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' }}>
-                    {isDone ? '⭐' : (unit.isUnlocked ? '💠' : '🔒')}
+                    {isDone ? '⭐' : (isUnlocked ? '💠' : '🔒')}
                   </span>
                   
                   {/* Double XP Indicator */}
-                  {index === 1 && unit.isUnlocked && (
+                  {index === 1 && isUnlocked && (
                     <div style={styles.doubleXPBadge}>X2 XP</div>
                   )}
                 </div>
 
                 {/* XP Badge for completed units */}
-                {unit.isCompleted && (
+                {isDone && (
                   <div style={styles.xpBadge}>+{index === 1 ? '20' : '10'} XP CLAIMED</div>
                 )}
 
                 <div style={{ 
-                  color: unit.isUnlocked ? '#fff' : '#718096', 
+                  color: isUnlocked ? '#fff' : '#718096', 
                   marginTop: 12, 
                   fontWeight: 900, 
                   textAlign: 'center', 
@@ -178,7 +180,7 @@ const Map = () => {
                 {index < units.length - 1 && (
                   <div style={{
                     ...styles.pathLine,
-                    backgroundColor: units[index + 1]?.isUnlocked ? 'var(--theme-primary)' : '#2D3748',
+                    backgroundColor: (units[index + 1]?.isUnlocked ?? true) ? 'var(--theme-primary)' : '#2D3748',
                     height: '60px',
                     transform: `rotate(${index % 2 === 0 ? '-15deg' : '15deg'}) translateY(-10px)`,
                     opacity: 0.6
