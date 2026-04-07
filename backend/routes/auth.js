@@ -163,9 +163,10 @@ router.put('/last-subject', async (req, res) => {
     if (!user) return res.status(404).json({ error: 'User not found' });
 
     user.lastVisitedSubject = subjectName;
+    user.onboardingCompleted = true;
     await user.save();
     
-    res.json({ success: true, lastVisitedSubject: subjectName });
+    res.json({ success: true, lastVisitedSubject: subjectName, onboardingCompleted: true });
   } catch (err) {
     console.error('Update Last Subject Error:', err);
     res.status(500).json({ error: 'Failed to update subject preference' });

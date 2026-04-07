@@ -47,7 +47,7 @@ const Onboarding = () => {
       
       if (res.data.success) {
          // Update local auth state
-         setAuthUser({ ...authUser, lastVisitedSubject: subjectName });
+         setAuthUser({ ...authUser, lastVisitedSubject: subjectName, onboardingCompleted: true });
          // Give a small delay for the "vibe" before navigating
          setTimeout(() => navigate('/'), 800);
       }
@@ -57,7 +57,15 @@ const Onboarding = () => {
     }
   };
 
-  if (!subjects || subjects.length === 0) return null;
+  if (!subjects || subjects.length === 0) {
+     return (
+       <div className="onboarding-page">
+         <div className="onboarding-content">
+            <h2 style={{color: 'var(--theme-primary)', fontWeight: 900}}>SCANNING ELITE CURRICULUM...</h2>
+         </div>
+       </div>
+     );
+  }
 
   return (
     <div className="onboarding-page">

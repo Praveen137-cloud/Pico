@@ -30,12 +30,10 @@ const ProtectedRoute = ({ children }) => {
   if (loading) return <div style={{color: 'white', padding: 40, textAlign: 'center'}}>Authenticating...</div>;
   if (!token) return <Navigate to="/auth" replace />;
 
-  // Force onboarding if subject isn't set yet (new users)
-  // We check if lastVisitedSubject is default 'Arrays' or null 
-  // and we're not already on the onboarding page
-  const hasNoSubjectData = !authUser || !authUser.lastVisitedSubject || authUser.lastVisitedSubject === 'Arrays';
+  // Force onboarding for first-time users
+  const isNewUser = authUser && !authUser.onboardingCompleted && (authUser.lessonsCompleted || 0) === 0;
   
-  if (hasNoSubjectData && location.pathname !== '/onboarding') {
+  if (isNewUser && location.pathname !== '/onboarding') {
     return <Navigate to="/onboarding" replace />;
   }
 
