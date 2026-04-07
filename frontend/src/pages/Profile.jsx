@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import api from '../api';
-import { Palette } from 'lucide-react';
+import { Palette, Share2 } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
 import './Profile.css';
 
@@ -35,6 +35,7 @@ const Profile = () => {
   const [editName, setEditName] = useState(authUser?.name || '');
   const [activeTheme, setActiveTheme] = useState('Gold');
   const [prefLang, setPrefLang] = useState(authUser?.preferredLanguage || 'c');
+  const [shareFeedback, setShareFeedback] = useState(false);
 
   useEffect(() => {
     if (authUser) {
@@ -79,6 +80,28 @@ const Profile = () => {
     document.documentElement.style.setProperty('--theme-secondary', nextTheme.secondary);
   };
 
+  const handleShare = async () => {
+    if (!user) return;
+    
+    const shareMessage = `Check out my Pico DSA Level! 🦜\n\n👤 Agent: ${user.name}\n⚡ XP: ${user.xp}\n🔥 Streak: ${user.streak}\n🏆 Problems Solved: ${user.submissions?.length || 0}\n\nJoin the elite at: ${window.location.origin}`;
+    
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: 'Pico DSA Profile',
+          text: shareMessage,
+          url: window.location.origin
+        });
+      } else {
+        await navigator.clipboard.writeText(shareMessage);
+        setShareFeedback(true);
+        setTimeout(() => setShareFeedback(false), 2000);
+      }
+    } catch (err) {
+      console.error('Error sharing profile:', err);
+    }
+  };
+
   if (loading) return <div style={{padding: 40, textAlign: 'center', color: 'white'}}>Initializing Profile...</div>;
   if (!user && !authUser) return <div style={{padding: 40, textAlign: 'center', color: 'white'}}>User Profile Not Found. Please Login Again.</div>;
 
@@ -99,11 +122,18 @@ const Profile = () => {
             onKeyDown={(e) => e.key === 'Enter' && handleNameSave()}
           />
         ) : (
-          <div className="profile-name-container" onClick={() => setIsEditing(true)}>
             <h2 className="profile-name">{user.name}</h2>
             <span className="profile-edit-hint">Tap to edit username</span>
           </div>
         )}
+        
+        <button 
+          className={`profile-share-btn ${shareFeedback ? 'copied' : ''}`}
+          onClick={handleShare}
+        >
+          <Share2 size={18} />
+          {shareFeedback ? 'COPIED!' : 'SHARE PROFILE'}
+        </button>
       </div>
 
       <div className="profile-stats-grid">

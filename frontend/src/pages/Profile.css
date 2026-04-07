@@ -22,10 +22,46 @@
 @media (min-width: 768px) {
   .profile-header {
     flex-direction: row;
+    position: relative;
     justify-content: flex-start;
     gap: 32px;
     padding: 40px;
   }
+}
+
+.profile-share-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--divider);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 16px;
+}
+
+@media (min-width: 768px) {
+  .profile-share-btn {
+    margin-top: 0;
+    margin-left: auto;
+  }
+}
+
+.profile-share-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--theme-primary);
+  color: var(--theme-primary);
+}
+
+.profile-share-btn.copied {
+  background: var(--theme-primary);
+  color: #000;
+  border-color: var(--theme-primary);
 }
 
 .profile-avatar-circle {
