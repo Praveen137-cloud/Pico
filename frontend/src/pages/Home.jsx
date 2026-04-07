@@ -59,9 +59,25 @@ const Home = () => {
     setActiveSubject(subj);
     localStorage.setItem('lastActiveSubject', subj);
     
-    // Trigger "Extreme Gaming" vibration effect
+    // Professional Haptic Feedback Simulation
     setIsVibrating(true);
-    setTimeout(() => setIsVibrating(false), 400); // Vibrate duration
+    setTimeout(() => setIsVibrating(false), 200); 
+  };
+
+  const getSubjectIcon = (name) => {
+    const icons = {
+      'Arrays': '🐘',
+      'Linked Lists': '🦒',
+      'Stacks & Queues': '🦓',
+      'Recursion': '🦁',
+      'Hashing': '🐆',
+      'Trees': '🦅',
+      'Graphs': '🐺',
+      'Sorting': '🦌',
+      'Dynamic Programming': '🐢',
+      'Backtracking': '🦉'
+    };
+    return icons[name] || '📚';
   };
 
   if (isLoading) return <PreLoader />;
@@ -83,18 +99,15 @@ const Home = () => {
       </div>
 
       {/* Professional Academic Banner */}
-      <div className="season-banner" style={{borderColor: season.color, minHeight: '120px', padding: '24px'}}>
-        <div style={styles.electricBirdContainer}>
-           <div style={styles.logoText}>PICO ELITE ACADEMY</div>
-        </div>
-        <div style={{...styles.seasonBadge, backgroundColor: season.color}}>
+      <div className="season-banner" style={{borderColor: season.color, minHeight: '130px', padding: '32px 24px 24px 24px', display: 'flex', flexDirection: 'column', gap: '16px'}}>
+        <div style={{...styles.seasonBadge, backgroundColor: season.color, position: 'absolute', top: 0, left: 0, borderBottomRightRadius: '12px'}}>
           {season.icon} {season.name} QUARTER
         </div>
-        <div className="season-content">
-          <div className="season-header-left">
-            <div style={styles.seasonTitle} className="season-title">{activeSubject} Research Phase</div>
-            <div style={styles.seasonDesc} className="season-desc">Advanced theoretical exploration of {activeSubject} structures.</div>
-          </div>
+        
+        <div style={{...styles.bannerHeader, marginTop: '12px'}}>
+           <div style={styles.logoText}>PICO ELITE ACADEMY</div>
+           <div style={styles.seasonTitle} className="season-title">{getSubjectIcon(activeSubject)} {activeSubject} Research Phase</div>
+           <div style={styles.seasonDesc} className="season-desc">Advanced theoretical exploration of {activeSubject} structures.</div>
         </div>
       </div>
       
@@ -158,7 +171,7 @@ const styles = {
   },
   seasonBanner: {
     margin: '16px',
-    padding: '60px 16px 16px 16px',
+    padding: '24px',
     backgroundColor: 'rgba(15, 18, 30, 0.8)',
     backdropFilter: 'blur(10px)',
     border: '1px solid',
@@ -168,38 +181,27 @@ const styles = {
     boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
     minHeight: '160px'
   },
-  electricBirdContainer: {
-    position: 'absolute',
-    top: '10px',
-    left: '20px',
+  bannerHeader: {
     display: 'flex',
-    alignItems: 'center',
-    gap: '12px',
+    flexDirection: 'column',
+    gap: '4px',
     zIndex: 10
   },
-  electricBirdImg: {
-    width: '50px',
-    height: '50px',
-    objectFit: 'contain',
-    filter: 'drop-shadow(0 0 15px rgba(0, 242, 255, 0.8))'
-  },
   logoText: {
-    fontSize: '18px',
+    fontSize: '14px',
     fontWeight: '900',
-    color: '#fff',
-    letterSpacing: '3px',
-    textShadow: '0 0 10px rgba(0,242,255,0.5)'
+    color: 'var(--theme-primary)',
+    letterSpacing: '2px',
+    textTransform: 'uppercase',
+    opacity: 0.8
   },
   seasonBadge: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    padding: '2px 10px',
-    fontSize: '9px',
+    padding: '4px 12px',
+    fontSize: '10px',
     fontWeight: '900',
     letterSpacing: '1px',
     color: '#000',
-    borderRadius: '0 0 8px 0',
+    borderRadius: '8px',
     textTransform: 'uppercase'
   },
   seasonContent: {
@@ -208,12 +210,12 @@ const styles = {
     gap: '16px'
   },
   seasonTitle: {
-    fontSize: '22px',
+    fontSize: 'calc(18px + 1vw)',
     fontWeight: '900',
     color: '#fff',
-    letterSpacing: '1px',
+    letterSpacing: '0.5px',
     textTransform: 'uppercase',
-    marginTop: '4px'
+    lineHeight: '1.2'
   },
   seasonDesc: {
     fontSize: '12px',

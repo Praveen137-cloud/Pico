@@ -40,11 +40,29 @@ const Map = () => {
       .catch(err => console.error(err));
   }, [sectionId]);
 
+  const getSubjectIcon = (name) => {
+    const icons = {
+      'Arrays': '🐘',
+      'Linked Lists': '🦒',
+      'Stacks & Queues': '🦓',
+      'Recursion': '🦁',
+      'Hashing': '🐆',
+      'Trees': '🦅',
+      'Graphs': '🐺',
+      'Sorting': '🦌',
+      'Dynamic Programming': '🐢',
+      'Backtracking': '🦉'
+    };
+    return icons[name] || '📚';
+  };
+
   if (!stage) return <div style={{ padding: 24, color: '#fff' }}>Initializing academic path...</div>;
 
   const totalUnits = units.length;
-  const completedCount = 0; // Temporarily reset for new architecture
-  const progressPct = 0;
+  // Progress Restore: Check authUser.completedUnits against fetched units
+  const completedIds = authUser?.completedUnits?.map(id => id.toString()) || [];
+  const completedCount = units.filter(u => completedIds.includes(u._id.toString())).length;
+  const progressPct = totalUnits > 0 ? Math.round((completedCount / totalUnits) * 100) : 0;
 
   const handleUnitClick = (unit) => {
     navigate(`/lesson/${subjectId}/${sectionId}/${unit._id}`);
@@ -65,10 +83,10 @@ const Map = () => {
       <header style={styles.header}>
         <button style={styles.backBtn} onClick={() => navigate('/')}>←</button>
         <div style={{ flex: 1 }}>
-          <div style={styles.subjectName}>{subjectName} ACADEMY</div>
+          <div style={styles.subjectName}>{getSubjectIcon(subjectName)} {subjectName} ACADEMY</div>
           <div style={styles.sectionTitle}>{stage.title}</div>
         </div>
-        <div style={styles.xpChip}>SCORE: {(authUser?.xp ?? 0)}</div>
+        <div style={styles.xpChip}>XP: {(authUser?.xp ?? 0)}</div>
       </header>
 
       {/* Section Progress Bar */}
@@ -121,23 +139,15 @@ const Map = () => {
                   className={(unit.isUnlocked && !unit.isCompleted) ? 'animate-pulse' : ''}
                   style={{
                     ...styles.nodeCircle,
-                    backgroundColor: unit.isUnlocked ? 'var(--theme-primary)' : '#1A202C',
-                    width: unit.isUnlocked ? '90px' : '70px',
-                    height: unit.isUnlocked ? '90px' : '70px',
-                    boxShadow: unit.isUnlocked 
-                      ? `0 0 30px ${unit.isCompleted ? '#10B981' : 'var(--theme-primary)'}66, inset 0 0 15px rgba(255,255,255,0.2)` 
-                      : '0 8px 16px rgba(0,0,0,0.4)',
-                    cursor: unit.isUnlocked ? 'pointer' : 'not-allowed',
-                    border: unit.isUnlocked ? `3px solid ${unit.isCompleted ? '#10B981' : '#fff'}` : '3px solid transparent',
-                    position: 'relative',
-                    background: unit.isUnlocked 
-                      ? `radial-gradient(circle at 30% 30%, ${unit.isCompleted ? '#34D399' : 'var(--theme-primary)'}, ${unit.isCompleted ? '#059669' : '#107c58'})`
-                      : '#2D3748'
+                    borderColor: unit.isUnlocked ? 'var(--theme-primary)' : 'var(--divider)',
+                    backgroundColor: isDone ? '#1DD28B' : (unit.isUnlocked ? '#1E293B' : '#0F172A'),
+                    opacity: unit.isUnlocked ? 1 : 0.5,
+                    boxShadow: isDone ? '0 0 20px #1DD28Baa' : (unit.isUnlocked ? '0 0 15px rgba(29, 210, 139, 0.2)' : 'none')
                   }}
-                  onClick={() => handleUnitClick(unit, index)}
+                  onClick={() => handleUnitClick(unit)}
                 >
-                  <span style={{ fontSize: unit.isUnlocked ? '32px' : '24px', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' }}>
-                    {unit.isCompleted ? '⭐' : (unit.isUnlocked ? '💠' : '🔒')}
+                  <span style={{ fontSize: isDone ? '28px' : '32px', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' }}>
+                    {isDone ? '⭐' : (unit.isUnlocked ? '💠' : '🔒')}
                   </span>
                   
                   {/* Double XP Indicator */}

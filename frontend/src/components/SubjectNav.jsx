@@ -9,20 +9,18 @@ const SubjectNav = ({ activeSubject, onSelect }) => {
   // Helper to get consistent icons/colors for subjects
   const getSubjectMeta = (name) => {
     const meta = {
-      'Arrays': { icon: '🗄️', color: '#6366F1' },
-      'Strings': { icon: '🧬', color: '#A855F7' },
-      'Two Pointers': { icon: '🎯', color: '#EC4899' },
-      'Hash Maps': { icon: '💎', color: '#10B981' },
-      'Recursion': { icon: '🌀', color: '#F59E0B' },
-      'Sorting': { icon: '⚔️', color: '#3B82F6' },
-      'Math': { icon: '🔢', color: '#8B5CF6' },
-      'Stacks & Queues': { icon: '🥞', color: '#EF4444' },
-      'Linked Lists': { icon: '🔗', color: '#06B6D4' },
-      'Dynamic Programming': { icon: '🧠', color: '#F43F5E' },
-      'Basics': { icon: '⚙️', color: '#94A3B8' },
-      'Zoho Elite': { icon: '👑', color: '#FBBF24' }
+      'Arrays': { icon: '🐘', color: '#6366F1' },
+      'Linked Lists': { icon: '🦒', color: '#06B6D4' },
+      'Stacks & Queues': { icon: '🦓', color: '#EF4444' },
+      'Recursion': { icon: '🦁', color: '#F59E0B' },
+      'Hashing': { icon: '🐆', color: '#10B981' },
+      'Trees': { icon: '🦅', color: '#A855F7' },
+      'Graphs': { icon: '🐺', color: '#3B82F6' },
+      'Sorting': { icon: '🦌', color: '#FB923C' },
+      'Dynamic Programming': { icon: '🐢', color: '#F43F5E' },
+      'Backtracking': { icon: '🦉', color: '#8B5CF6' }
     };
-    return meta[name] || { icon: '📚', color: '#6366F1' };
+    return meta[name] || { icon: '📚', color: '#94A3B8' };
   };
 
   const handleSubjectClick = async (subjectName) => {
