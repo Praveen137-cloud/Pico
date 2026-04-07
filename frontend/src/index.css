@@ -169,3 +169,24 @@ body {
   box-shadow: 0 0 35px var(--theme-primary)55, inset 0 0 20px var(--theme-primary)33 !important;
   border-color: #fff !important;
 }
+
+/* 📳 Haptic Vibration Animation */
+@keyframes stageVibrate {
+  0% { transform: translate(0) scale(1); }
+  10% { transform: translate(-2px, 2px) scale(1.02); }
+  20% { transform: translate(2px, -2px) scale(1.02); }
+  30% { transform: translate(-2px, -2px) scale(1.02); }
+  40% { transform: translate(2px, 2px) scale(1.02); }
+  50% { transform: translate(-2px, 2px) scale(1.02); }
+  60% { transform: translate(2px, -2px) scale(1.02); }
+  70% { transform: translate(-2px, -2px) scale(1.02); }
+  80% { transform: translate(2px, 2px) scale(1.02); }
+  90% { transform: translate(-2px, 2px) scale(1.02); }
+  100% { transform: translate(0) scale(1); }
+}
+
+.vibrate-active {
+  animation: stageVibrate 0.3s ease-in-out;
+  border-color: #fff !important;
+  box-shadow: 0 0 40px var(--theme-primary) !important;
+}

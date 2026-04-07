@@ -10,6 +10,7 @@ const Home = () => {
   const { subjects, setSubjects, user, setUser } = useContext(AuthContext);
   const [activeSubject, setActiveSubject] = useState(localStorage.getItem('lastActiveSubject') || 'Arrays');
   const [isLoading, setIsLoading] = useState(subjects.length === 0);
+  const [isVibrating, setIsVibrating] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -44,6 +45,10 @@ const Home = () => {
   const handleSelectSubject = (subj) => {
     setActiveSubject(subj);
     localStorage.setItem('lastActiveSubject', subj);
+    
+    // Trigger "Extreme Gaming" vibration effect
+    setIsVibrating(true);
+    setTimeout(() => setIsVibrating(false), 400); // Vibrate duration
   };
 
   if (isLoading) return <PreLoader />;
@@ -89,7 +94,7 @@ const Home = () => {
         {currentSubjectData ? (
           currentSubjectData.sections.length > 0 ? (
             currentSubjectData.sections.map((section, index) => (
-              <div key={index} className="extreme-card" style={styles.sectionCard}>
+              <div key={index} className={`extreme-card ${isVibrating ? 'vibrate-active' : ''}`} style={styles.sectionCard}>
                 <div style={styles.sectionHeader}>
                   <div style={styles.badgeWrapper}>
                     <div style={styles.sectionNum}>STAGE {index + 1}</div>
