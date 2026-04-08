@@ -26,14 +26,14 @@ export const Onboarding = lazy(() => import('./pages/Onboarding'));
 export const AudioContext = React.createContext();
 
 const ProtectedRoute = ({ children }) => {
-  const { authUser, token, loading } = useContext(AuthContext);
+  const { user, token, loading } = useContext(AuthContext);
   const location = useLocation();
 
   if (loading) return <div style={{color: 'white', padding: 40, textAlign: 'center'}}>Authenticating...</div>;
   if (!token) return <Navigate to="/auth" replace />;
 
   // Force onboarding for first-time users
-  const isNewUser = authUser && !authUser.onboardingCompleted && (authUser.lessonsCompleted || 0) === 0;
+  const isNewUser = user && !user.onboardingCompleted && (user.lessonsCompleted || 0) === 0;
   
   if (isNewUser && location.pathname !== '/onboarding') {
     return <Navigate to="/onboarding" replace />;

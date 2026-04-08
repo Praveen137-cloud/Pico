@@ -154,6 +154,13 @@
   background: var(--divider);
 }
 
+.auth-social-login {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+  width: 100%;
+}
+
 .auth-google-btn {
   background-color: #10131C;
   border: 1px solid var(--divider);

@@ -132,7 +132,7 @@ const Auth = () => {
 
         <div className="auth-divider">Or</div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '10px' }}>
+        <div className="auth-social-login">
           <GoogleLogin
             onSuccess={handleGoogleSuccess}
             onError={() => setErrorMsg('Google login failed')}
@@ -140,7 +140,7 @@ const Auth = () => {
             text="continue_with"
             shape="pill"
             size="large"
-            width="100%"
+            width="250px"
           />
         </div>
 

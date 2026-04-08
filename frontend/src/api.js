@@ -2,12 +2,18 @@ import axios from 'axios';
 
 // Create a dedicated axios instance that ALWAYS attaches the latest token from localStorage
 // Smart URL Detection: Automatically points to production Render or Localhost
-export const baseURL = window.location.hostname === 'localhost' 
-  ? 'http://localhost:5000' 
-  : 'https://pico-3haq.onrender.com';
+const PICO_PRIMARY_BACKEND = 'https://pico-3haq.onrender.com';
+
+export const baseURL = import.meta.env.VITE_API_URL || 
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:5000' 
+    : PICO_PRIMARY_BACKEND);
+
+console.log(`[Pico API] Base URL: ${baseURL}`);
 
 const api = axios.create({
-  baseURL
+  baseURL,
+  timeout: 10000 // 10s timeout to prevent infinite loading
 });
 
 api.interceptors.request.use((config) => {
