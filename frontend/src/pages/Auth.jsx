@@ -20,7 +20,7 @@ const Auth = () => {
     setLoading(true);
     try {
       const res = await api.post('/api/auth/google', { credential: response.credential });
-      localStorage.setItem('token', res.data.token);
+      sessionStorage.setItem('token', res.data.token);
       setUser(res.data.user);
       navigate('/');
     } catch (err) {

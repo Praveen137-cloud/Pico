@@ -13,6 +13,7 @@ const Home = () => {
   const [stages, setStages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isVibrating, setIsVibrating] = useState(false);
+  const [isHoveringDonate, setIsHoveringDonate] = useState(false);
   const navigate = useNavigate();
 
   // 1. Fetch Subject List
@@ -85,15 +86,28 @@ const Home = () => {
   return (
     <div style={styles.page}>
       <div style={styles.topSticky}>
-        <div style={styles.topStatsBar}>
-          <div style={{display: 'flex', alignItems: 'center', gap: 6}}>
-             <span style={{fontSize: 18}}>🔥</span>
-             <span style={{fontWeight: 800, fontSize: 13, letterSpacing: 1}}>{user?.streak || 0} DAY STREAK</span>
+        <div className="top-stats-bar">
+          <div className="stats-group">
+            <div style={{display: 'flex', alignItems: 'center', gap: 6}}>
+               <span style={{fontSize: 18}}>🔥</span>
+               <span style={{fontWeight: 800, fontSize: 13, letterSpacing: 1}}>{user?.streak || 0} DAY STREAK</span>
+            </div>
+            <div style={{display: 'flex', alignItems: 'center', gap: 6}}>
+               <span style={{fontSize: 18}}>⚡</span>
+               <span style={{fontWeight: 800, fontSize: 13, letterSpacing: 1}}>{user?.xp || 0} XP</span>
+            </div>
           </div>
-          <div style={{display: 'flex', alignItems: 'center', gap: 6}}>
-             <span style={{fontSize: 18}}>⚡</span>
-             <span style={{fontWeight: 800, fontSize: 13, letterSpacing: 1}}>{user?.xp || 0} XP</span>
-          </div>
+          <button 
+            className="donate-btn-header"
+            style={{
+              transform: isHoveringDonate ? 'scale(1.05)' : 'scale(1)',
+            }}
+            onMouseEnter={() => setIsHoveringDonate(true)}
+            onMouseLeave={() => setIsHoveringDonate(false)}
+            onClick={() => window.open('https://buy.stripe.com/test_placeholder', '_blank')}
+          >
+            <span style={{fontSize: 16}}>💝</span> DONATE
+          </button>
         </div>
         <SubjectNav activeSubject={activeSubject} onSelect={handleSelectSubject} />
       </div>
@@ -319,6 +333,23 @@ const styles = {
     transition: 'all 0.3s ease',
     textTransform: 'uppercase',
     animation: 'buttonGlow 3s infinite',
+  },
+  donateBtn: {
+    background: 'linear-gradient(135deg, #FF4E50, #FC913A)',
+    color: '#fff',
+    border: 'none',
+    padding: '6px 14px',
+    borderRadius: '20px',
+    fontWeight: '900',
+    fontSize: '11px',
+    letterSpacing: '1px',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    boxShadow: '0 4px 15px rgba(255, 78, 80, 0.3)',
+    transition: 'all 0.3s ease',
+    textTransform: 'uppercase',
   }
 };
 

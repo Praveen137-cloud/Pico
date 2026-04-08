@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext, Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import { AuthProvider, AuthContext } from './context/AuthContext';
+import RioBot from './components/RioBot';
+import DigitalBackground from './components/DigitalBackground';
 
 // Lazy load pages for performance
 const Home = lazy(() => import('./pages/Home'));
@@ -58,7 +60,7 @@ const MainLayout = ({ children }) => {
   );
 };
 
-import DigitalBackground from './components/DigitalBackground';
+
 
 function App() {
   const [bgmMuted, setBgmMuted] = useState(false);
@@ -163,6 +165,7 @@ function App() {
                 } />
               </Routes>
             </Suspense>
+            <RioBot />
           </Router>
         </div>
       </AuthProvider>

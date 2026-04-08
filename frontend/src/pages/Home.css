@@ -67,3 +67,64 @@
     gap: 24px !important;
   }
 }
+
+/* 💎 Top Stats Bar Responsiveness */
+.top-stats-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+.stats-group {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.donate-btn-header {
+  background: linear-gradient(135deg, #FF4E50, #FC913A) !important;
+  color: #fff !important;
+  border: none !important;
+  padding: 6px 14px !important;
+  border-radius: 20px !important;
+  font-weight: 900 !important;
+  font-size: 11px !important;
+  letter-spacing: 1px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  box-shadow: 0 4px 15px rgba(255, 78, 80, 0.3) !important;
+  transition: all 0.3s ease !important;
+  text-transform: uppercase !important;
+}
+
+@media (max-width: 480px) {
+  .top-stats-bar {
+    padding: 8px 12px;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .stats-group {
+    gap: 10px;
+  }
+
+  .stats-group span {
+    font-size: 11px !important;
+  }
+
+  .stats-group div span:first-child {
+    font-size: 16px !important;
+  }
+
+  .donate-btn-header {
+    padding: 5px 10px !important;
+    font-size: 10px !important;
+    gap: 4px !important;
+  }
+}
