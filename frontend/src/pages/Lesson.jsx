@@ -155,6 +155,26 @@ const Lesson = () => {
         setFeedback('wrong');
         playSound(false);
       }
+    } else if (currentLesson.type === 'programming_board') {
+      // Flexible validation: ignore case and whitespace for each gap
+      const answers = Object.values(boardAnswers).map(a => a.trim().toLowerCase());
+      const expected = currentLesson.correctAnswer.split(',').map(e => e.trim().toLowerCase());
+      
+      let isCorrect = true;
+      if (expected.length !== answers.length) isCorrect = false;
+      else {
+        for(let i=0; i<expected.length; i++) {
+          if (expected[i] !== answers[i]) { isCorrect = false; break; }
+        }
+      }
+
+      if (isCorrect) {
+        setFeedback('correct');
+        playSound(true);
+      } else {
+        setFeedback('wrong');
+        playSound(false);
+      }
     }
   };
 
@@ -303,8 +323,17 @@ const Lesson = () => {
       <div style={styles.content}>
         <h2 style={styles.unitTitle}>{unit.title}</h2>
         <div style={styles.mascotArea}>
-          <div style={styles.speechBubble} className={shake ? 'animate-shake' : ''}>
+          <div style={styles.speechBubble}>
             <TypingEffect text={currentLesson.questionText} />
+            {currentLesson.type !== 'teaching' && (
+              <button 
+                className="tts-btn-mini"
+                onClick={() => playTTS(currentLesson.questionText)}
+                title="Pico Read Aloud"
+              >
+                🔊 Read Aloud
+              </button>
+            )}
           </div>
           {feedback === 'wrong' && currentLesson.explanation && (
             <div style={styles.explanationBox}>
@@ -315,11 +344,30 @@ const Lesson = () => {
         </div>
 
         {currentLesson.type === 'teaching' && (
-          <div style={styles.teachingContainer}>
+          <div style={styles.technicalArticle}>
+            <div className="article-header">
+              <span className="article-badge">TECHNICAL BRIEF</span>
+              <button 
+                className="read-aloud-banner"
+                onClick={() => playTTS(currentLesson.questionText)}
+              >
+                🔊 READ ALOUD
+              </button>
+            </div>
+            
+            <div className="article-body">
+              <TypingEffect text={currentLesson.questionText} />
+            </div>
+
             {currentLesson.codeSnippet && (
-              <pre style={styles.codeSnippet}>{currentLesson.codeSnippet}</pre>
+              <div className="article-code-preview">
+                <div style={styles.codeHeader}>Upcoming Protocol Challenge</div>
+                <pre style={styles.codeSnippet}>{currentLesson.codeSnippet}</pre>
+                <div className="code-hint">💡 Study this logic! It forms the core of your next task.</div>
+              </div>
             )}
-            <button style={styles.btnPrimary} onClick={handleNext}>CONCEPT ACKNOWLEDGED →</button>
+            
+            <button style={{...styles.btnPrimary, marginTop: 40}} onClick={handleNext}>CONCENT ACKNOWLEDGED & SYNCED →</button>
           </div>
         )}
 
