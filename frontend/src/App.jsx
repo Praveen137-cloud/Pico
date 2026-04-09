@@ -155,6 +155,7 @@ function App() {
                           <Route path="/puzzles" element={<Puzzles />} />
                           <Route path="/missions" element={<Missions />} />
                           <Route path="/pyqs" element={<Pyqs />} />
+                          <Route path="/onboarding" element={<Onboarding />} />
                           <Route path="/map/:subjectId/:sectionId" element={<Map />} />
                           <Route path="/lesson/:subjectId/:sectionId/:unitId" element={<Lesson />} />
                           <Route path="/celebration" element={<Celebration />} />
