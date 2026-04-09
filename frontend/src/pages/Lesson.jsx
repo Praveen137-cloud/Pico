@@ -322,10 +322,10 @@ const Lesson = () => {
 
       <div style={styles.content}>
         <h2 style={styles.unitTitle}>{unit.title}</h2>
-        <div style={styles.mascotArea}>
-          <div style={styles.speechBubble}>
-            <TypingEffect text={currentLesson.questionText} />
-            {currentLesson.type !== 'teaching' && (
+        {currentLesson.type !== 'teaching' && (
+          <div style={styles.mascotArea}>
+            <div style={styles.speechBubble}>
+              <TypingEffect text={currentLesson.questionText} />
               <button 
                 className="tts-btn-mini"
                 onClick={() => playTTS(currentLesson.questionText)}
@@ -333,15 +333,15 @@ const Lesson = () => {
               >
                 🔊 Read Aloud
               </button>
+            </div>
+            {feedback === 'wrong' && currentLesson.explanation && (
+              <div style={styles.explanationBox}>
+                <span style={{marginRight: 8}}>📖</span>
+                {currentLesson.explanation}
+              </div>
             )}
           </div>
-          {feedback === 'wrong' && currentLesson.explanation && (
-            <div style={styles.explanationBox}>
-              <span style={{marginRight: 8}}>📖</span>
-              {currentLesson.explanation}
-            </div>
-          )}
-        </div>
+        )}
 
         {currentLesson.type === 'teaching' && (
           <div style={styles.technicalArticle}>
