@@ -14,15 +14,15 @@ async function applyIndexes() {
 
     console.log('Applying indexes...');
 
-    // Problems: tag (for filtering) and title (unique lookup)
-    await Problem.collection.createIndex({ tag: 1 });
-    await Problem.collection.createIndex({ title: 1 }, { unique: true });
-
-    // Subjects: name (unique)
-    await Subject.collection.createIndex({ name: 1 }, { unique: true });
-
-    // Users: xp (for leaderboard), email (already unique)
-    await User.collection.createIndex({ xp: -1 });
+    // Curriculum Hierarchy Indexes
+    console.log('Indexing Stage collection...');
+    await mongoose.connection.db.collection('stages').createIndex({ subjectId: 1, order: 1 });
+    
+    console.log('Indexing Unit collection...');
+    await mongoose.connection.db.collection('units').createIndex({ stageId: 1, order: 1 });
+    
+    console.log('Indexing Lesson collection...');
+    await mongoose.connection.db.collection('lessons').createIndex({ unitId: 1, order: 1 });
 
     console.log('Database indexing complete!');
     process.exit(0);
