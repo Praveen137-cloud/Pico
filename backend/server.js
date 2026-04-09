@@ -60,6 +60,9 @@ app.use(cors({
 }));
 app.use(express.json());
 
+// Basic Heartbeat for Render Load Balancer
+app.get('/', (req, res) => res.status(200).send('Pico Engine Online'));
+
 // Admin Seeding Routes
 app.get('/api/admin/seed', async (req, res) => {
   try {
@@ -412,8 +415,8 @@ setInterval(() => {
   });
 }, 8000); // Emits every 8 seconds
 
-httpServer.listen(PORT, () => {
-  console.log(`Pico Server is LIVE on port ${PORT}`);
+httpServer.listen(PORT, '0.0.0.0', () => {
+  console.log(`Pico Server is LIVE on port ${PORT} (0.0.0.0)`);
 }).on('error', (err) => {
   if (err.code === 'EADDRINUSE') {
     console.error(`\n⚠️  PORT ${PORT} IS BUSY!`);

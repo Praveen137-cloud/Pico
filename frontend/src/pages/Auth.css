@@ -155,10 +155,12 @@
 }
 
 .auth-social-login {
-  display: flex;
-  justify-content: center;
-  margin: 10px 0;
-  width: 100%;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  margin: 20px auto !important;
+  width: 100% !important;
+  text-align: center;
 }
 
 .auth-google-btn {
