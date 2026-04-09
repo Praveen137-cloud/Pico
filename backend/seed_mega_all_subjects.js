@@ -18,28 +18,28 @@ const picoQuotes = [
 ];
 
 const subjectsToSeed = [
-  { name: 'Basics', icon: '🐣', prefix: 'Basics' },
-  { name: 'Zoho Elite', icon: '🦁', prefix: 'Zoho Elite' },
-  { name: 'Arrays', icon: '🗄️', prefix: 'Array' },
-  { name: 'Strings', icon: '🧵', prefix: 'String' },
-  { name: 'Math', icon: '🧮', prefix: 'Math' },
-  { name: 'Sorting', icon: '📶', prefix: 'Sorting' },
-  { name: 'Recursion', icon: '🔄', prefix: 'Recursion' },
-  { name: 'Two Pointers', icon: '✌️', prefix: 'Pointer' },
+  { name: 'Basics', icon: '💻', prefix: 'Basics' },
+  { name: 'Zoho Elite', icon: '💎', prefix: 'Zoho Elite' },
+  { name: 'Arrays', icon: '💾', prefix: 'Array' },
+  { name: 'Strings', icon: '🔡', prefix: 'String' },
+  { name: 'Math', icon: '🔢', prefix: 'Math' },
+  { name: 'Sorting', icon: '📊', prefix: 'Sorting' },
+  { name: 'Recursion', icon: '🌀', prefix: 'Recursion' },
+  { name: 'Two Pointers', icon: '🔛', prefix: 'Pointer' },
   { name: 'Hash Maps', icon: '🗺️', prefix: 'Hash' },
   { name: 'Stacks & Queues', icon: '🥞', prefix: 'Stack/Queue' },
-  { name: 'Linked Lists', icon: '🔗', prefix: 'Linked List' },
+  { name: 'Linked Lists', icon: '⛓️', prefix: 'Linked List' },
   { name: 'Dynamic Programming', icon: '🏗️', prefix: 'DP' }
 ];
 
 const stages = [
-  { title: "Stage 1: Foundation Flight", theme: "Basics" },
-  { title: "Stage 2: The Two-Pointer Waltz", theme: "Intermediate" },
-  { title: "Stage 3: Sliding Window Skies", theme: "Techniques" },
-  { title: "Stage 4: Prefix Sum Peaks", theme: "Patterns" },
-  { title: "Stage 5: The Hashing Nest", theme: "Optimization" },
-  { title: "Stage 6: Matrix Maneuvers", theme: "Advanced" },
-  { title: "Stage 7: The Grand Challenge", theme: "Mastery" }
+  { title: "Stage 1: Core Initialization", theme: "Fundamentals" },
+  { title: "Stage 2: Logic Flow Optimization", theme: "Efficiency" },
+  { title: "Stage 3: Pattern Recognition Skies", theme: "Architectures" },
+  { title: "Stage 4: Structural Integrity", theme: "Advanced Logic" },
+  { title: "Stage 5: Data Persistence Phase", theme: "Storage Hubs" },
+  { title: "Stage 6: Complexity Compression", theme: "Scaling" },
+  { title: "Stage 7: System Mastery", theme: "The Final Breach" }
 ];
 
 function generateLessons(unitIdx, stageIdx, subjectPrefix) {
@@ -50,9 +50,9 @@ function generateLessons(unitIdx, stageIdx, subjectPrefix) {
     const quote = picoQuotes[Math.floor(Math.random() * picoQuotes.length)];
     lessons.push({
       type: 'teaching',
-      questionText: `${quote} (Subject: ${subjectPrefix}, Unit ${unitIdx + 1}, Slide ${i})\nLet's master the ${stages[stageIdx].theme} part of ${subjectPrefix}!`,
-      explanation: "Pay attention, fledgling! The quiz is coming and it has sharper claws than I do!",
-      codeSnippet: i === 1 ? `// Foundation for ${subjectPrefix}\nvoid start_${subjectPrefix.toLowerCase()}() {\n  // Logic\n}` : null
+      questionText: `[MISSION LOG ${unitIdx + 1}.${i}]\n${quote}\n\nAnalyzing ${subjectPrefix} ${stages[stageIdx].theme} protocols. Ensure your logic buffers are clear.`,
+      explanation: "Knowledge is the only variable that decreases entropy, fledgling!",
+      codeSnippet: i === 1 ? `// Elite ${subjectPrefix} Protocol\nvoid init_${subjectPrefix.toLowerCase()}_mod() {\n  // Initializing ${stages[stageIdx].theme}...\n}` : null
     });
   }
 
@@ -61,32 +61,33 @@ function generateLessons(unitIdx, stageIdx, subjectPrefix) {
   for (let i = 6; i <= 7; i++) {
     lessons.push({
       type: 'programming_board',
-      questionText: `🦜 Pico: "Challenge ${i-5}! Complete this ${subjectPrefix} snippet. Show me those fingers aren't just for eating seeds!"`,
-      codeSnippet: `for(int i=0; i < n; ___) {\n  // Processing ${subjectPrefix}...\n}`,
-      correctAnswer: 'i++',
-      explanation: 'Incrementing correctly is the first step to flying high!'
+      questionText: `SYNERGY CHECK: Complete the ${subjectPrefix} logic gate. Failure is not an option for an Elite Agent.`,
+      codeSnippet: i === 6 ? `for(int i=0; i < n; ___) {\n  // Iterating through ${subjectPrefix}...\n}` : `if(data != ___) {\n  // Validation logic\n}`,
+      correctAnswer: i === 6 ? 'i++' : 'null',
+      explanation: 'Correct syntax is the heartbeat of the algorithm.'
     });
   }
 
   // 8: Mental Match
   lessons.push({
     type: 'match_following',
-    questionText: `🦜 Pico: "Connect the ${subjectPrefix} dots! Use your brain, not your beak!"`,
+    questionText: `SYNC PROTOCOL: Match the ${subjectPrefix} performance metrics.`,
     pairs: [
-      { key: 'Best Complexity', value: 'O(N)' },
-      { key: 'Worst Complexity', value: 'O(N^2)' },
-      { key: 'Space Efficiency', value: 'O(1)' }
+      { key: 'Optimal Time', value: 'O(log N)' },
+      { key: 'Linear Scan', value: 'O(N)' },
+      { key: 'Space Overhead', value: 'O(N)' }
     ]
   });
 
   // 9 & 10: Rapid MCQ
   for (let i = 9; i <= 10; i++) {
+    const isNine = i === 9;
     lessons.push({
       type: 'multiple_choice',
-      questionText: `🦜 Pico: "Final check! For ${subjectPrefix}, what happens if the input is empty?"`,
-      options: ['System Crash', 'Edge Case Found', 'Ignore it', 'Free Sunflower Seeds'],
-      correctAnswer: 'Edge Case Found',
-      explanation: 'Always check your boundaries, fledgling!'
+      questionText: isNine ? `What is the primary objective of ${subjectPrefix} ${stages[stageIdx].theme}?` : `A critical ${subjectPrefix} overflow occurred. What is step one?`,
+      options: isNine ? ['Data Compression', 'Efficient Retrieval', 'Memory Fragmentation', 'Thermal Throttling'] : ['Buffer Reset', 'Stack Trace', 'Re-initialize', 'Coffee Break'],
+      correctAnswer: isNine ? 'Efficient Retrieval' : 'Stack Trace',
+      explanation: 'Precision beats brute force, every single time.'
     });
   }
 

@@ -3,7 +3,7 @@ import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
 import TypingEffect from '../components/TypingEffect';
-import { Layout, Rocket, Brain, Code, Target, Trophy, Disc, Layers, BookOpen } from 'lucide-react';
+import { Layout, Rocket, Brain, Code, Target, Trophy, Disc, Layers, BookOpen, Terminal, Database, Cpu, Link, Zap, RefreshCw, BarChart3, MousePointer2, Gem } from 'lucide-react';
 import './Onboarding.css';
 
 const Onboarding = () => {
@@ -22,19 +22,19 @@ const Onboarding = () => {
   const getSubjectIcon = (name) => {
     const icons = {
       'Arrays': <Layers />,
-      'Strings': <Disc />,
-      'Two Pointers': <Target />,
-      'Hash Maps': <Brain />,
-      'Recursion': <Rocket />,
-      'Sorting': <Trophy />,
-      'Math': <Code />,
+      'Strings': <Code />,
+      'Two Pointers': <MousePointer2 />,
+      'Hash Maps': <Database />,
+      'Recursion': <RefreshCw />,
+      'Sorting': <BarChart3 />,
+      'Math': <Cpu />,
       'Stacks & Queues': <Layers />,
-      'Linked Lists': <Layout />,
-      'Dynamic Programming': <Brain />,
-      'Basics': <BookOpen />,
-      'Zoho Elite': <Trophy />
+      'Linked Lists': <Link />,
+      'Dynamic Programming': <Zap />,
+      'Basics': <Terminal />,
+      'Zoho Elite': <Gem />
     };
-    return icons[name] || <BookOpen />;
+    return icons[name] || <Terminal />;
   };
 
   const handleSelect = async (subjectName) => {

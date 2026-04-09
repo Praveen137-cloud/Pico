@@ -9,12 +9,19 @@ import './Home.css';
 
 const Home = () => {
   const { subjects, setSubjects, user, setUser } = useContext(AuthContext);
-  const [activeSubject, setActiveSubject] = useState(localStorage.getItem('lastActiveSubject') || 'Arrays');
+  const [activeSubject, setActiveSubject] = useState('Arrays');
   const [stages, setStages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isVibrating, setIsVibrating] = useState(false);
   const [isHoveringDonate, setIsHoveringDonate] = useState(false);
   const navigate = useNavigate();
+
+  // 0. Sync Active Subject with User Profile
+  useEffect(() => {
+    if (user && user.lastVisitedSubject) {
+      setActiveSubject(user.lastVisitedSubject);
+    }
+  }, [user]);
 
   // 1. Fetch Subject List
   useEffect(() => {
@@ -67,18 +74,18 @@ const Home = () => {
 
   const getSubjectIcon = (name) => {
     const icons = {
-      'Arrays': '🐘',
-      'Linked Lists': '🦒',
-      'Stacks & Queues': '🦓',
-      'Recursion': '🦁',
-      'Hashing': '🐆',
-      'Trees': '🦅',
-      'Graphs': '🐺',
-      'Sorting': '🦌',
-      'Dynamic Programming': '🐢',
-      'Backtracking': '🦉'
+      'Arrays': '💾',
+      'Linked Lists': '🔗',
+      'Stacks & Queues': '🥞',
+      'Recursion': '🌀',
+      'Hashing': '🗄️',
+      'Trees': '🌳',
+      'Graphs': '🕸️',
+      'Sorting': '📊',
+      'Dynamic Programming': '🏗️',
+      'Backtracking': '🧭'
     };
-    return icons[name] || '📚';
+    return icons[name] || '💻';
   };
 
   if (isLoading) return <PreLoader />;
@@ -97,17 +104,21 @@ const Home = () => {
                <span style={{fontWeight: 800, fontSize: 13, letterSpacing: 1}}>{user?.xp || 0} XP</span>
             </div>
           </div>
-          <button 
+          <a 
+            href="upi://pay?pa=praveenkumar63811@oksbi&pn=Praveen%20Kumar&cu=INR&tn=Supporting%20Pico"
             className="donate-btn-header"
             style={{
               transform: isHoveringDonate ? 'scale(1.05)' : 'scale(1)',
+              textDecoration: 'none',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
             }}
             onMouseEnter={() => setIsHoveringDonate(true)}
             onMouseLeave={() => setIsHoveringDonate(false)}
-            onClick={() => window.open('https://buy.stripe.com/test_placeholder', '_blank')}
           >
-            <span style={{fontSize: 16}}>💝</span> DONATE
-          </button>
+            <span style={{fontSize: 16}}>💝</span> SUPPORT PICO
+          </a>
         </div>
         <SubjectNav activeSubject={activeSubject} onSelect={handleSelectSubject} />
       </div>
