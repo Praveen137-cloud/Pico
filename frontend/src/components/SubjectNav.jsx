@@ -4,37 +4,42 @@ import api from '../api';
 import './SubjectNav.css';
 
 const SubjectNav = ({ activeSubject, onSelect }) => {
-  const { subjects, authUser, setAuthUser } = useContext(AuthContext);
+  const { subjects, user, setUser } = useContext(AuthContext);
 
-  // Helper to get consistent icons/colors for subjects
+  // Helper to get consistent icons/colors for subjects (Tech-Focused)
   const getSubjectMeta = (name) => {
     const meta = {
-      'Arrays': { icon: '🐘', color: '#6366F1' },
-      'Linked Lists': { icon: '🦒', color: '#06B6D4' },
-      'Stacks & Queues': { icon: '🦓', color: '#EF4444' },
-      'Recursion': { icon: '🦁', color: '#F59E0B' },
-      'Hashing': { icon: '🐆', color: '#10B981' },
-      'Trees': { icon: '🦅', color: '#A855F7' },
-      'Graphs': { icon: '🐺', color: '#3B82F6' },
-      'Sorting': { icon: '🦌', color: '#FB923C' },
-      'Dynamic Programming': { icon: '🐢', color: '#F43F5E' },
-      'Backtracking': { icon: '🦉', color: '#8B5CF6' }
+      'Basics': { icon: '💻', color: '#94A3B8' },
+      'Arrays': { icon: '💾', color: '#6366F1' },
+      'Strings': { icon: '🔡', color: '#C084FC' },
+      'Math': { icon: '🔢', color: '#10B981' },
+      'Sorting': { icon: '📊', color: '#F59E0B' },
+      'Recursion': { icon: '🌀', color: '#3B82F6' },
+      'Two Pointers': { icon: '🔛', color: '#F43F5E' },
+      'Hash Maps': { icon: '🗄️', color: '#06B6D4' },
+      'Stacks & Queues': { icon: '🥞', color: '#EF4444' },
+      'Linked Lists': { icon: '⛓️', color: '#FB923C' },
+      'Trees': { icon: '🌲', color: '#A855F7' },
+      'Graphs': { icon: '🕸️', color: '#2DD4BF' },
+      'Dynamic Programming': { icon: '🏗️', color: '#ED40AF' },
+      'Algorithm Design': { icon: '🧠', color: '#F97316' },
+      'Zoho Elite': { icon: '💎', color: '#FBBF24' }
     };
-    return meta[name] || { icon: '📚', color: '#94A3B8' };
+    return meta[name] || { icon: '⚡', color: '#94A3B8' };
   };
 
   const handleSubjectClick = async (subjectName) => {
     onSelect(subjectName);
     
-    // Most Recent First Logic: Update Preference in DB
+    // Update Preference in DB
     try {
-      if (authUser) {
+      if (user) {
         await api.put('/api/auth/last-subject', {
-          userId: authUser._id,
+          userId: user._id,
           subjectName: subjectName
         });
-        // Update local state to trigger re-sort
-        setAuthUser({ ...authUser, lastVisitedSubject: subjectName });
+        // Update local state
+        setUser({ ...user, lastVisitedSubject: subjectName });
       }
     } catch (err) {
       console.error('Failed to update last visited subject', err);
@@ -43,8 +48,8 @@ const SubjectNav = ({ activeSubject, onSelect }) => {
 
   // DUOLINGO SORTING: Put last visited subject FIRST
   const sortedSubjects = [...subjects].sort((a, b) => {
-     if (a.name === authUser?.lastVisitedSubject) return -1;
-     if (b.name === authUser?.lastVisitedSubject) return 1;
+     if (a.name === user?.lastVisitedSubject) return -1;
+     if (b.name === user?.lastVisitedSubject) return 1;
      return 0;
   });
 

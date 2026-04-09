@@ -19,30 +19,41 @@ const picoQuotes = [
 
 const subjectsToSeed = [
   { name: 'Basics', icon: '💻', prefix: 'Basics' },
-  { name: 'Zoho Elite', icon: '💎', prefix: 'Zoho Elite' },
   { name: 'Arrays', icon: '💾', prefix: 'Array' },
   { name: 'Strings', icon: '🔡', prefix: 'String' },
   { name: 'Math', icon: '🔢', prefix: 'Math' },
   { name: 'Sorting', icon: '📊', prefix: 'Sorting' },
   { name: 'Recursion', icon: '🌀', prefix: 'Recursion' },
   { name: 'Two Pointers', icon: '🔛', prefix: 'Pointer' },
-  { name: 'Hash Maps', icon: '🗺️', prefix: 'Hash' },
+  { name: 'Hash Maps', icon: '🗄️', prefix: 'Hash' },
   { name: 'Stacks & Queues', icon: '🥞', prefix: 'Stack/Queue' },
   { name: 'Linked Lists', icon: '⛓️', prefix: 'Linked List' },
-  { name: 'Dynamic Programming', icon: '🏗️', prefix: 'DP' }
+  { name: 'Trees', icon: '🌲', prefix: 'Tree' },
+  { name: 'Graphs', icon: '🕸️', prefix: 'Graph' },
+  { name: 'Dynamic Programming', icon: '🏗️', prefix: 'DP' },
+  { name: 'Algorithm Design', icon: '🧠', prefix: 'Algo' },
+  { name: 'Zoho Elite', icon: '💎', prefix: 'Zoho Elite' }
 ];
 
-const stages = [
-  { title: "Stage 1: Core Initialization", theme: "Fundamentals" },
-  { title: "Stage 2: Logic Flow Optimization", theme: "Efficiency" },
-  { title: "Stage 3: Pattern Recognition Skies", theme: "Architectures" },
-  { title: "Stage 4: Structural Integrity", theme: "Advanced Logic" },
-  { title: "Stage 5: Data Persistence Phase", theme: "Storage Hubs" },
-  { title: "Stage 6: Complexity Compression", theme: "Scaling" },
-  { title: "Stage 7: System Mastery", theme: "The Final Breach" }
-];
+const subjectThemes = {
+  'Basics': ["Environment Setup", "Control Structures", "Functional Logic", "Memory Management", "Input/Output Pro", "Debugging Skills", "Elite Graduation"],
+  'Arrays': ["Core Traversals", "Search Optimization", "Two-Pointers Phase", "Sliding Window", "Sorting Patterns", "Matrix Operations", "Subarray Mastery"],
+  'Strings': ["Manipulations", "Pattern Scanning", "Hashing Hubs", "Dynamic Palindromes", "Subsequences", "Trie Integration", "Lexicographical Ops"],
+  'Math': ["Number Theory", "Primality Testing", "Modular Arithmetic", "Combinatorics", "Geometry Base", "Game Theory", "Mastery Theorems"],
+  'Sorting': ["Bubble & Selection", "Insertion Sort", "Merge Sort Lab", "Quick Sort Peak", "Heap Sort Phase", "Non-Comparison", "Hybrid Sorting"],
+  'Recursion': ["Base Case Logic", "Recurrence Relations", "Backtracking Intro", "Tree Recursion", "DP Overlap", "Memoization Intro", "Recursion Mastery"],
+  'Two Pointers': ["Opposite Directions", "Fast & Slow", "Merging Hubs", "Partition Logic", "Three Pointers", "Sliding Window Sync", "Optimization Wall"],
+  'Hash Maps': ["Collision Control", "Frequency Counting", "Pair Finding", "Subarray Mapping", "Ordered Maps", "Complex State", "Database Hashing"],
+  'Stacks & Queues': ["Implementation", "Expression Parsing", "Monotonic Stacks", "Circular Queues", "LRU Cache Logic", "Deque Patterns", "System Mastery"],
+  'Linked Lists': ["SLL Operations", "DLL & Circular", "Fast & Slow Point", "Reversal Phase", "Flattening Logic", "Merge Sort LL", "Linked Mastery"],
+  'Trees': ["DFS Traversals", "BFS Level Order", "BST Operations", "Tree Views", "Balanced Trees", "Path Sum Lab", "LCA & Serial"],
+  'Graphs': ["Reprs & BFS/DFS", "Topological Sort", "Shortest Path I", "Minimum Spanning", "Disjoint Sets", "Bridges & Artic", "Network Flow"],
+  'Dynamic Programming': ["1D Intro (Fib)", "Grid Pathways", "Knapsack Basics", "Longest Subseq", "Matrix Chain", "Bitmask DP", "Tree DP Fusion"],
+  'Algorithm Design': ["Divide & Conquer", "Greedy Algorithms", "Backtracking Pro", "Transform & Conquer", "Dynamic Strategy", "Complexity Bounds", "Elite Architect"],
+  'Zoho Elite': ["Office Suite Logic", "CRM Optimization", "Recruit Sync", "Books Engineering", "Inventory Hub", "Creator Patterns", "Elite Certification"]
+};
 
-function generateLessons(unitIdx, stageIdx, subjectPrefix) {
+function generateLessons(unitIdx, stageIdx, subjectPrefix, stageName) {
   const lessons = [];
   
   // First 5: Humorous Teaching
@@ -50,9 +61,9 @@ function generateLessons(unitIdx, stageIdx, subjectPrefix) {
     const quote = picoQuotes[Math.floor(Math.random() * picoQuotes.length)];
     lessons.push({
       type: 'teaching',
-      questionText: `[MISSION LOG ${unitIdx + 1}.${i}]\n${quote}\n\nAnalyzing ${subjectPrefix} ${stages[stageIdx].theme} protocols. Ensure your logic buffers are clear.`,
+      questionText: `[MISSION LOG ${unitIdx + 1}.${i}]\n${quote}\n\nAnalyzing **${stageName}** within **${subjectPrefix}** protocols. Focus your logic buffers on this core concept.`,
       explanation: "Knowledge is the only variable that decreases entropy, fledgling!",
-      codeSnippet: i === 1 ? `// Elite ${subjectPrefix} Protocol\nvoid init_${subjectPrefix.toLowerCase()}_mod() {\n  // Initializing ${stages[stageIdx].theme}...\n}` : null
+      codeSnippet: i === 1 ? `// Elite ${subjectPrefix} Protocol\nvoid init_${subjectPrefix.toLowerCase()}_mod() {\n  // Phase: ${stageName}\n  setup_logic();\n}` : null
     });
   }
 
@@ -61,8 +72,8 @@ function generateLessons(unitIdx, stageIdx, subjectPrefix) {
   for (let i = 6; i <= 7; i++) {
     lessons.push({
       type: 'programming_board',
-      questionText: `SYNERGY CHECK: Complete the ${subjectPrefix} logic gate. Failure is not an option for an Elite Agent.`,
-      codeSnippet: i === 6 ? `for(int i=0; i < n; ___) {\n  // Iterating through ${subjectPrefix}...\n}` : `if(data != ___) {\n  // Validation logic\n}`,
+      questionText: `SYNERGY CHECK: Complete the ${stageName} logic gate for ${subjectPrefix}. Failure is not an option for an Elite Agent.`,
+      codeSnippet: i === 6 ? `for(int i=0; i < n; ___) {\n  // Processing ${stageName} logic...\n}` : `if(buffer != ___) {\n  // Validation gate\n}`,
       correctAnswer: i === 6 ? 'i++' : 'null',
       explanation: 'Correct syntax is the heartbeat of the algorithm.'
     });
@@ -71,11 +82,11 @@ function generateLessons(unitIdx, stageIdx, subjectPrefix) {
   // 8: Mental Match
   lessons.push({
     type: 'match_following',
-    questionText: `SYNC PROTOCOL: Match the ${subjectPrefix} performance metrics.`,
+    questionText: `SYNC PROTOCOL: Match the ${stageName} metrics.`,
     pairs: [
-      { key: 'Optimal Time', value: 'O(log N)' },
-      { key: 'Linear Scan', value: 'O(N)' },
-      { key: 'Space Overhead', value: 'O(N)' }
+      { key: 'Target Accuracy', value: 'High' },
+      { key: 'Processing Latency', value: 'Low' },
+      { key: 'Memory Overhead', value: 'Minimal' }
     ]
   });
 
@@ -84,9 +95,9 @@ function generateLessons(unitIdx, stageIdx, subjectPrefix) {
     const isNine = i === 9;
     lessons.push({
       type: 'multiple_choice',
-      questionText: isNine ? `What is the primary objective of ${subjectPrefix} ${stages[stageIdx].theme}?` : `A critical ${subjectPrefix} overflow occurred. What is step one?`,
-      options: isNine ? ['Data Compression', 'Efficient Retrieval', 'Memory Fragmentation', 'Thermal Throttling'] : ['Buffer Reset', 'Stack Trace', 'Re-initialize', 'Coffee Break'],
-      correctAnswer: isNine ? 'Efficient Retrieval' : 'Stack Trace',
+      questionText: isNine ? `What is the primary constraint of ${stageName} in ${subjectPrefix}?` : `A critical ${subjectPrefix} overflow occurred during ${stageName}. Recovery protocol?`,
+      options: isNine ? ['Time Complexity', 'Space Overhead', 'Network Lag', 'Power Consumption'] : ['Buffer Flush', 'Stack Resync', 'Hard Reset', 'Manual Patch'],
+      correctAnswer: isNine ? 'Time Complexity' : 'Stack Resync',
       explanation: 'Precision beats brute force, every single time.'
     });
   }
@@ -100,21 +111,23 @@ async function seed() {
     console.log('Connected to MongoDB');
 
     for (const subjectData of subjectsToSeed) {
-      console.log(`Seeding Subject: ${subjectData.name}...`);
+      console.log(`Seeding Professional Track: ${subjectData.name}...`);
       
-      const megaSections = stages.map((stage, sIdx) => {
+      const themes = subjectThemes[subjectData.name] || ["Intro", "Core", "Mid", "High", "Deep", "Full", "Mastery"];
+
+      const megaSections = themes.map((stageName, sIdx) => {
         const units = [];
         for (let uIdx = 1; uIdx <= 20; uIdx++) {
           units.push({
-            title: `Unit ${uIdx}: ${subjectData.prefix} ${stage.theme}`,
-            desc: `Master ${subjectData.name} in ${stage.title}.`,
+            title: `Unit ${uIdx}: ${stageName}`,
+            desc: `Elite certification in ${subjectData.name} - ${stageName}.`,
             isUnlocked: sIdx === 0 && uIdx === 1,
             xp: 25,
-            lessons: generateLessons(uIdx, sIdx, subjectData.prefix)
+            lessons: generateLessons(uIdx, sIdx, subjectData.prefix, stageName)
           });
         }
         return {
-          title: stage.title,
+          title: `Stage ${sIdx + 1}: ${stageName}`,
           units: units
         };
       });
@@ -134,10 +147,10 @@ async function seed() {
       console.log(`Successfully seeded ${subjectData.name} (7 stages, 1400 lessons).`);
     }
 
-    console.log('TOTAL MEGA EXPANSION COMPLETE: 14,000+ lessons seeded!');
+    console.log('INDUSTRY-STANDARD MEGA EXPANSION COMPLETE: All Elite Tracks Operational!');
     process.exit(0);
   } catch (err) {
-    console.error('Seeding error:', err);
+    console.error('Expansion error:', err);
     process.exit(1);
   }
 }
