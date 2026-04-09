@@ -7,17 +7,17 @@ import { Layout, Rocket, Brain, Code, Target, Trophy, Disc, Layers, BookOpen } f
 import './Onboarding.css';
 
 const Onboarding = () => {
-  const { authUser, subjects, setAuthUser } = useContext(AuthContext);
+  const { user, subjects, setUser } = useContext(AuthContext);
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [showOptions, setShowOptions] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
      // If user already has a preference, skip onboarding
-     if (authUser && authUser.lastVisitedSubject && authUser.lastVisitedSubject !== 'Arrays') {
+     if (user && user.lastVisitedSubject && user.lastVisitedSubject !== 'Arrays') {
         // navigate('/'); // Uncomment if we want strict skip, but user might want to re-select
      }
-  }, [authUser, navigate]);
+  }, [user, navigate]);
 
   const getSubjectIcon = (name) => {
     const icons = {
@@ -41,13 +41,13 @@ const Onboarding = () => {
     setSelectedSubject(subjectName);
     try {
       const res = await api.put('/api/auth/last-subject', {
-        userId: authUser._id,
+        userId: user._id,
         subjectName: subjectName
       });
       
       if (res.data.success) {
          // Update local auth state
-         setAuthUser({ ...authUser, lastVisitedSubject: subjectName, onboardingCompleted: true });
+         setUser({ ...user, lastVisitedSubject: subjectName, onboardingCompleted: true });
          // Give a small delay for the "vibe" before navigating
          setTimeout(() => navigate('/'), 800);
       }
