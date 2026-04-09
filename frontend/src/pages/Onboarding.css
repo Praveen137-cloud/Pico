@@ -26,8 +26,8 @@
 }
 
 .mascot-animation {
-  width: 120px;
-  height: 120px;
+  width: min(120px, 40vw);
+  height: auto;
   animation: float 3s ease-in-out infinite;
   filter: drop-shadow(0 0 20px var(--theme-primary));
 }
@@ -39,7 +39,7 @@
 
 .onboarding-title {
   color: #fff;
-  font-size: 32px;
+  font-size: clamp(20px, 6vw, 32px);
   font-weight: 900;
   margin-bottom: 40px;
   text-align: center;

@@ -41,6 +41,7 @@ const Lesson = () => {
 
   // For programming_board
   const [boardAnswers, setBoardAnswers] = useState({}); // { index: value }
+  const [lastTestResult, setLastTestResult] = useState(null); // { expected, actual }
 
   // Core Gamification State
   const [lives, setLives] = useState(3);
@@ -102,6 +103,7 @@ const Lesson = () => {
       setSelectedOption(null);
       setFeedback(null);
       setShowHint(false);
+      setLastTestResult(null);
       setSelectedKey(null);
       setSelectedValue(null);
     }
@@ -156,23 +158,33 @@ const Lesson = () => {
         playSound(false);
       }
     } else if (currentLesson.type === 'programming_board') {
-      // Flexible validation: ignore case and whitespace for each gap
-      const answers = Object.values(boardAnswers).map(a => a.trim().toLowerCase());
-      const expected = currentLesson.correctAnswer.split(',').map(e => e.trim().toLowerCase());
+      // STRICT validation: no case folding or trimming
+      const answers = Object.values(boardAnswers);
+      const expected = currentLesson.correctAnswer.split(',');
       
       let isCorrect = true;
-      if (expected.length !== answers.length) isCorrect = false;
-      else {
+      let firstMismatch = null;
+
+      if (expected.length !== answers.length) {
+        isCorrect = false;
+        firstMismatch = { expected: expected[0], actual: answers[0] || "[MISSING]" };
+      } else {
         for(let i=0; i<expected.length; i++) {
-          if (expected[i] !== answers[i]) { isCorrect = false; break; }
+          if (expected[i] !== answers[i]) { 
+            isCorrect = false; 
+            firstMismatch = { expected: expected[i], actual: answers[i] || "[EMPTY]" };
+            break; 
+          }
         }
       }
 
       if (isCorrect) {
         setFeedback('correct');
+        setLastTestResult(null);
         playSound(true);
       } else {
         setFeedback('wrong');
+        setLastTestResult(firstMismatch);
         playSound(false);
       }
     }
@@ -494,10 +506,28 @@ const Lesson = () => {
         {feedback === 'wrong' && (
           <div style={{display: 'flex', flexDirection: 'column', gap: '12px', width: '100%'}}>
             <h3 style={{color: '#EC4899', margin: 0, fontSize: '14px', fontWeight: 900}}>{getErrorMsg()}</h3>
-            <div style={{backgroundColor: '#EC489922', padding: '12px', borderRadius: '8px', border: '1px solid #EC4899'}}>
-              <span style={{color: '#EC4899', fontWeight: '900', fontSize: 10}}>EXPECTED ANALYSIS: </span>
-              <span style={{color: '#fff', fontFamily: 'monospace', fontSize: 13}}>{currentLesson.correctAnswer}</span>
-            </div>
+            
+            {lastTestResult && (
+              <div className="protocol-evaluation-report">
+                <div className="report-header">PROTOCOL EVALUATION REPORT</div>
+                <div className="report-row">
+                  <span className="report-label">EXPECTED CODE:</span>
+                  <span className="report-value expected">{lastTestResult.expected}</span>
+                </div>
+                <div className="report-row">
+                  <span className="report-label">ACTUAL INPUT:</span>
+                  <span className="report-value actual">{lastTestResult.actual}</span>
+                </div>
+                <div className="report-hint">MISALIGNMENT DETECTED. ENSURE EXACT SYNTAX.</div>
+              </div>
+            )}
+
+            {!lastTestResult && (
+              <div style={{backgroundColor: '#EC489922', padding: '12px', borderRadius: '8px', border: '1px solid #EC4899'}}>
+                <span style={{color: '#EC4899', fontWeight: '900', fontSize: 10}}>EXPECTED ANALYSIS: </span>
+                <span style={{color: '#fff', fontFamily: 'monospace', fontSize: 13}}>{currentLesson.correctAnswer}</span>
+              </div>
+            )}
             <button style={{...styles.btnPrimary, width: '100%', backgroundColor: 'var(--divider)', color: '#fff', padding: '12px 32px', borderRadius: '12px', border: 'none', fontWeight: 900, marginTop: 8}} onClick={handleNext}>SYNC & CONTINUE</button>
           </div>
         )}

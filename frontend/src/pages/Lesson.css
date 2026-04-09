@@ -196,3 +196,59 @@
   margin-top: 15px;
   align-self: center;
 }
+
+/* Protocol Evaluation Report Styles */
+.protocol-evaluation-report {
+  background: rgba(236, 72, 153, 0.1);
+  border: 1px solid #EC4899;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.report-header {
+  color: #EC4899;
+  font-weight: 900;
+  font-size: 10px;
+  letter-spacing: 2px;
+  border-bottom: 1px solid rgba(236, 72, 153, 0.3);
+  padding-bottom: 8px;
+}
+
+.report-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.report-label {
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.report-value {
+  font-family: 'Fira Code', monospace;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.report-value.expected {
+  color: var(--theme-primary);
+}
+
+.report-value.actual {
+  color: #EC4899;
+}
+
+.report-hint {
+  font-size: 9px;
+  color: #EC4899;
+  font-weight: 900;
+  text-align: center;
+  opacity: 0.8;
+}
+
