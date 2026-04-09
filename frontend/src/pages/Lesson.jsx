@@ -16,6 +16,32 @@ import './Lesson.css';
 const correctSfx = 'https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3';
 const wrongSfx = 'https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3';
 
+const Lesson = () => {
+  const { subjectId, sectionId, unitId } = useParams();
+  const navigate = useNavigate();
+
+  const [unit, setUnit] = useState(null);
+  const [currentLessonIndex, setCurrentLessonIndex] = useState(0);
+  const [isImpact, setIsImpact] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [feedback, setFeedback] = useState(null);
+  const [showHint, setShowHint] = useState(false);
+  const [muted, setMuted] = useState(false);
+  const [shake, setShake] = useState(false);
+
+  // For code running questions
+  const [userCode, setUserCode] = useState('');
+  const [codeOutput, setCodeOutput] = useState('');
+  const [isCompiling, setIsCompiling] = useState(false);
+  
+  // For match_following
+  const [matchPairs, setMatchPairs] = useState(null); // {keys, values}
+  const [selectedKey, setSelectedKey] = useState(null);
+  const [selectedValue, setSelectedValue] = useState(null);
+
+  // For programming_board
+  const [boardAnswers, setBoardAnswers] = useState({}); // { index: value }
+
   // Core Gamification State
   const [lives, setLives] = useState(3);
   const [combo, setCombo] = useState(0);
