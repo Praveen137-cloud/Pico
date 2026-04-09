@@ -15,12 +15,16 @@ export const AuthProvider = ({ children }) => {
         if (token) {
           const res = await api.get('/api/user');
           setUser(res.data);
+          
+          // Also fetch subjects globally if we are logged in
+          const subRes = await api.get('/api/curriculum/subjects');
+          setSubjects(subRes.data);
         } else {
           setUser(null);
         }
       } catch (err) {
         console.error('Invalid token or failed to fetch user:', err);
-        logout(); // Clear invalid token
+        logout(); 
       } finally {
         setLoading(false);
       }
