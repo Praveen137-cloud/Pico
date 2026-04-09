@@ -11,37 +11,36 @@ import { highlight, languages } from 'prismjs/components/prism-core';
 import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-c';
 import 'prismjs/themes/prism-twilight.css';
+import './Lesson.css';
 
 const correctSfx = 'https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3';
 const wrongSfx = 'https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3';
 
-const Lesson = () => {
-  const { subjectId, sectionId, unitId } = useParams();
-  const navigate = useNavigate();
-
-  const [unit, setUnit] = useState(null);
-  const [currentLessonIndex, setCurrentLessonIndex] = useState(0);
-  const [isImpact, setIsImpact] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [feedback, setFeedback] = useState(null);
-  const [showHint, setShowHint] = useState(false);
-  const [muted, setMuted] = useState(false);
-  const [shake, setShake] = useState(false);
-
-  // For code running questions
-  const [userCode, setUserCode] = useState('');
-  const [codeOutput, setCodeOutput] = useState('');
-  const [isCompiling, setIsCompiling] = useState(false);
-  
-  // For match_following
-  const [matchPairs, setMatchPairs] = useState(null); // {keys, values}
-  const [selectedKey, setSelectedKey] = useState(null);
-  const [selectedValue, setSelectedValue] = useState(null);
-
-  // For programming_board
-  const [boardAnswers, setBoardAnswers] = useState({}); // { index: value }
+  // Core Gamification State
+  const [lives, setLives] = useState(3);
+  const [combo, setCombo] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(15);
+  const [isSpeedBonus, setIsSpeedBonus] = useState(false);
+  const [showXpBurst, setShowXpBurst] = useState(false);
+  const [isGameOver, setIsGameOver] = useState(false);
 
   const audioRef = useRef(new Audio());
+
+  // Timer logic for Speed Bonus
+  useEffect(() => {
+    if (!unit || feedback || isGameOver) return;
+    
+    if (timeLeft > 0) {
+      const timer = setTimeout(() => setTimeLeft(prev => prev - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [timeLeft, feedback, unit, isGameOver]);
+
+  // Reset timer on question change
+  useEffect(() => {
+    setTimeLeft(15);
+    setIsSpeedBonus(false);
+  }, [currentLessonIndex]);
 
   // 1. Fetch Lessons for Unit
   useEffect(() => {
@@ -92,12 +91,33 @@ const Lesson = () => {
   const { playSuccess, playError, playFanfare } = useContext(AudioContext);
 
   const playSound = (isCorrect) => {
-    if (isCorrect) playSuccess();
-    else {
+    if (isCorrect) {
+      playSuccess();
+      setCombo(prev => prev + 1);
+      setShowXpBurst(true);
+      setTimeout(() => setShowXpBurst(false), 800);
+      if (timeLeft > 10) setIsSpeedBonus(true);
+    } else {
       playError();
+      setCombo(0);
+      setLives(prev => {
+        const next = prev - 1;
+        if (next <= 0) setIsGameOver(true);
+        return next;
+      });
       setShake(true);
       setTimeout(() => setShake(false), 500);
     }
+  };
+
+  const getSuccessMsg = () => {
+    const msgs = ["SYSTEM BREACHED", "ACCESS GRANTED", "DATA SYNCED", "CRITICAL HIT"];
+    return msgs[Math.floor(Math.random() * msgs.length)];
+  };
+
+  const getErrorMsg = () => {
+    const msgs = ["SHIELDS DOWN", "LOGICAL MISALIGNMENT", "BRUTE FORCE FAILED"];
+    return msgs[Math.floor(Math.random() * msgs.length)];
   };
 
   const checkAnswer = () => {
@@ -212,16 +232,45 @@ const Lesson = () => {
   const currentLesson = unit.lessons[currentLessonIndex];
 
   return (
-    <div style={styles.page} className={isImpact ? 'animate-shake' : ''}>
+    <div style={styles.page} className={shake ? 'animate-shake' : ''}>
+      {/* Gamification Overlays */}
+      {showXpBurst && <div className="xp-burst">+10 XP</div>}
+      {shake && <div className="impact-flash" />}
+      
+      {isGameOver && (
+        <div className="failure-screen">
+          <div style={{fontSize: 80, marginBottom: 24}}>💀</div>
+          <h1 style={{color: '#fff', fontWeight: 900, letterSpacing: 2}}>SYSTEM COLLAPSE</h1>
+          <p style={{color: 'var(--text-muted)', marginBottom: 40}}>The elite firewall has detected your misalignment. Re-syncing is required.</p>
+          <button style={styles.btnPrimary} onClick={() => window.location.reload()}>RE-SYNC CORE</button>
+        </div>
+      )}
+
       <header style={styles.header}>
         <button style={styles.closeBtn} onClick={() => navigate(-1)}>✕</button>
-        <div style={styles.progressBarWrapper}>
-          <div style={{...styles.progressBarFill, width: `${(currentLessonIndex / unit.lessons.length) * 100}%`}}></div>
+        
+        <div style={{display: 'flex', alignItems: 'center', gap: '8px', flex: 1}}>
+          <div style={{display: 'flex', gap: '4px'}}>
+             {[1,2,3].map(h => (
+               <span key={h} className={`heart-icon ${lives < h ? 'broken' : ''}`}>
+                 {lives < h ? '🖤' : '❤️'}
+               </span>
+             ))}
+          </div>
+          <div className="battle-bar">
+            <div className="battle-bar-fill" style={{width: `${(currentLessonIndex / unit.lessons.length) * 100}%`}}></div>
+          </div>
         </div>
+
+        <div style={{display: 'flex', alignItems: 'center', gap: '12px'}}>
+          {combo > 1 && <div className="combo-badge">🔥 x{combo}</div>}
+          {isSpeedBonus && <div className="speed-badge">⚡ SPEED</div>}
+          <div style={{color: 'var(--theme-primary)', fontWeight: 900, fontSize: 13}}>{timeLeft}s</div>
+        </div>
+
         <button
           onClick={() => { setMuted(m => !m); window.speechSynthesis.cancel(); }}
           style={{ background: 'none', border: 'none', color: muted ? '#EF4444' : 'var(--text-muted)', fontSize: 18, cursor: 'pointer', padding: '4px 8px' }}
-          title={muted ? 'Unmute TTS' : 'Mute TTS'}
         >{muted ? '🔇' : '🔊'}</button>
       </header>
 
@@ -363,14 +412,14 @@ const Lesson = () => {
 
         {feedback === 'correct' && (
           <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%'}}>
-            <h3 style={{color: '#1DD28B', margin: 0, fontSize: '14px', fontWeight: 900}}>ALIGNMENT CONFIRMED</h3>
+            <h3 style={{color: '#1DD28B', margin: 0, fontSize: '14px', fontWeight: 900}}>{getSuccessMsg()}</h3>
             <button style={{...styles.btnPrimary, width: 'auto', backgroundColor: '#1DD28B', padding: '12px 32px', borderRadius: '12px', border: 'none', fontWeight: 900}} onClick={handleNext}>NEXT PHASE</button>
           </div>
         )}
 
         {feedback === 'wrong' && (
           <div style={{display: 'flex', flexDirection: 'column', gap: '12px', width: '100%'}}>
-            <h3 style={{color: '#EC4899', margin: 0, fontSize: '14px', fontWeight: 900}}>LOGICAL MISALIGNMENT</h3>
+            <h3 style={{color: '#EC4899', margin: 0, fontSize: '14px', fontWeight: 900}}>{getErrorMsg()}</h3>
             <div style={{backgroundColor: '#EC489922', padding: '12px', borderRadius: '8px', border: '1px solid #EC4899'}}>
               <span style={{color: '#EC4899', fontWeight: '900', fontSize: 10}}>EXPECTED ANALYSIS: </span>
               <span style={{color: '#fff', fontFamily: 'monospace', fontSize: 13}}>{currentLesson.correctAnswer}</span>

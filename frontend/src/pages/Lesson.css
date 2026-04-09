@@ -1,0 +1,122 @@
+/* Lesson Gamification Styles */
+
+@keyframes burstScale {
+  0% { transform: scale(0.5); opacity: 0; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 0; transform: translateY(-50px); }
+}
+
+@keyframes glitch {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0); }
+}
+
+@keyframes heartBreak {
+  0% { transform: scale(1); filter: grayscale(0); }
+  50% { transform: scale(1.5); filter: grayscale(0.5); }
+  100% { transform: scale(0.8); filter: grayscale(1); opacity: 0.3; }
+}
+
+@keyframes pulseBorder {
+  0% { box-shadow: 0 0 0 0 rgba(29, 210, 139, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(29, 210, 139, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(29, 210, 139, 0); }
+}
+
+.xp-burst {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--theme-primary);
+  font-weight: 900;
+  font-size: 24px;
+  pointer-events: none;
+  animation: burstScale 0.8s ease-out forwards;
+  z-index: 1000;
+  text-shadow: 0 0 10px var(--theme-primary);
+}
+
+.heart-icon {
+  font-size: 20px;
+  transition: all 0.3s ease;
+}
+
+.heart-icon.broken {
+  animation: heartBreak 0.5s ease forwards;
+}
+
+.combo-badge {
+  background: linear-gradient(135deg, #F59E0B, #EF4444);
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 900;
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
+  animation: glitch 2s infinite;
+}
+
+.speed-badge {
+  background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 900;
+  margin-left: 8px;
+}
+
+.battle-bar {
+  flex: 1;
+  height: 8px;
+  background: rgba(0,0,0,0.5);
+  border: 1px solid var(--divider);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.battle-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10B981, #3B82F6);
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+}
+
+.failure-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(11, 15, 25, 0.95);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 24px;
+  text-align: center;
+}
+
+.impact-flash {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(236, 72, 153, 0.2);
+  pointer-events: none;
+  z-index: 1500;
+  animation: fadeOut 0.4s forwards;
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
