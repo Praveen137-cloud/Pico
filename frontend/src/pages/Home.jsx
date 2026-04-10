@@ -108,6 +108,19 @@ const Home = () => {
                <span style={{fontSize: 18}}>⚡</span>
                <span style={{fontWeight: 800, fontSize: 13, letterSpacing: 1}}>{user?.xp || 0} XP</span>
             </div>
+            {/* Version Badge for verification */}
+            <div style={{
+              backgroundColor: 'var(--theme-primary)', 
+              color: '#000', 
+              padding: '2px 8px', 
+              borderRadius: '4px', 
+              fontSize: '10px', 
+              fontWeight: '900',
+              marginLeft: '12px',
+              animation: 'pulse 2s infinite'
+            }}>
+              BUILD v2.1: ELITE READY
+            </div>
           </div>
           <a 
             href="upi://pay?pa=praveenkumar63811@oksbi&pn=Praveen%20Kumar&cu=INR&tn=Supporting%20Pico"
