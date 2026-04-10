@@ -1,115 +1,95 @@
 const axios = require('axios');
 require('dotenv').config();
 
+let workingModelCache = null;
+
 /**
- * Core function to call Gemini API with multi-version fallback strategy.
- * Tries stable v1 first, then fallback to v1beta.
- * Tries gemini-1.5-flash then gemini-pro.
+ * Scans for a working model-version combination for the user's key.
  */
-async function callGeminiShotgun(prompt) {
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) throw new Error("GEMINI_API_KEY is missing from environment.");
+async function scanForWorkingModel(apiKey) {
+  if (workingModelCache) return workingModelCache;
 
-  // Strategies to try in order
-  const strategies = [
-    { version: 'v1', model: 'gemini-1.5-flash' },
-    { version: 'v1beta', model: 'gemini-1.5-flash' },
-    { version: 'v1', model: 'gemini-pro' },
-    { version: 'v1beta', model: 'gemini-pro' }
+  console.log("🔍 STARTING AI MODEL SCAN...");
+  
+  const models = [
+    'gemini-1.5-flash',
+    'gemini-1.5-pro',
+    'gemini-pro',
+    'gemini-1.0-pro',
+    'gemini-1.5-flash-8b'
   ];
+  const versions = ['v1', 'v1beta'];
 
-  let lastError = null;
-
-  for (const strategy of strategies) {
-    try {
-      const url = `https://generativelanguage.googleapis.com/${strategy.version}/models/${strategy.model}:generateContent?key=${apiKey}`;
-      
-      const payload = {
-        contents: [{
-          parts: [{ text: prompt }]
-        }]
-      };
-
-      const response = await axios.post(url, payload, {
-        headers: { 'Content-Type': 'application/json' },
-        timeout: 10000 // 10s timeout per attempt
-      });
-
-      if (response.data && response.data.candidates && response.data.candidates[0].content) {
-        console.log(`✅ SUCCESS using ${strategy.version}/${strategy.model}`);
-        return response.data.candidates[0].content.parts[0].text;
+  for (const model of models) {
+    for (const version of versions) {
+      try {
+        const url = `https://generativelanguage.googleapis.com/${version}/models/${model}:generateContent?key=${apiKey}`;
+        const res = await axios.post(url, { contents: [{ parts: [{ text: 'hi' }] }] }, { timeout: 5000 });
+        
+        if (res.data && res.data.candidates) {
+          console.log(`✅ FOUND WORKING AI PATH: ${version}/${model}`);
+          workingModelCache = { version, model };
+          return workingModelCache;
+        }
+      } catch (err) {
+        // Skip and try next
       }
-    } catch (error) {
-      console.warn(`⚠️ Attempt failed: ${strategy.version}/${strategy.model} - ${error.message}`);
-      lastError = error;
-      // Continue to next strategy...
     }
   }
 
-  console.error("❌ ALL GEMINI STRATEGIES EXHAUSTED.");
-  throw lastError || new Error("All AI models failed to respond.");
+  console.error("❌ AI MODEL SCAN FAILED: NO WORKING PATHS FOUND.");
+  throw new Error("Pico Matrix is offline. Please check your API key activation.");
 }
 
 /**
- * Generates a personalized hint for a student based on their current problem and attempt.
+ * Core function to call Gemini API with self-healing scanner.
  */
-async function generateHint(context) {
-  const { problemTitle, problemDesc, userCode, lastError } = context;
-
-  const prompt = `
-    You are Pico, a witty and expert parrot DSA tutor. 
-    The student is stuck on a programming problem. 
-    
-    PROBLEM: ${problemTitle}
-    DESCRIPTION: ${problemDesc}
-    
-    USER'S CURRENT ATTEMPT / CODE:
-    ${userCode || "[No code yet]"}
-    
-    LAST ERROR / FEEDBACK:
-    ${lastError || "None"}
-
-    PICO'S GOAL:
-    Provide a concise, witty, and personalized hint. 
-    DO NOT give away the direct answer or the full code. 
-    Nudge them in the right direction using logic or conceptual advice.
-    Keep the tone cheeky but helpful (Pico the Parrot).
-    Use a few emojis like 🦜, 🌻, 💠.
-  `;
+async function callGemini(prompt) {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) throw new Error("GEMINI_API_KEY missing");
 
   try {
-    return await callGeminiShotgun(prompt);
+    const config = await scanForWorkingModel(apiKey);
+    const url = `https://generativelanguage.googleapis.com/${config.version}/models/${config.model}:generateContent?key=${apiKey}`;
+    
+    const response = await axios.post(url, {
+      contents: [{ parts: [{ text: prompt }] }]
+    }, { timeout: 15000 });
+
+    return response.data.candidates[0].content.parts[0].text;
   } catch (error) {
-    return "🦜 Pico: 'My logic buffers are a bit scrambled! Try re-checking your loops while I snack on some seeds.'";
+    console.error("Gemini Call Error:", error.message);
+    // Clear cache to force rescan on next attempt if it was a transient error
+    if (error.response && error.response.status === 404) workingModelCache = null;
+    throw error;
   }
 }
 
 /**
- * Generates engineering career guidance based on user input.
+ * Generates a personalized hint.
+ */
+async function generateHint(context) {
+  const { problemTitle, problemDesc, userCode, lastError } = context;
+  const prompt = `PARROT TUTOR HINT:\nProblem: ${problemTitle}\nDesc: ${problemDesc}\nCode: ${userCode}\nError: ${lastError}\nKeep it witty and helpful as Pico the Parrot.`;
+  
+  try {
+    return await callGemini(prompt);
+  } catch (error) {
+    return "🦜 Pico: 'My logic buffers are a bit scrambled! Check your loops while I snack on seeds.'";
+  }
+}
+
+/**
+ * Generates career guidance.
  */
 async function generateCareerAdvice(input) {
   const { branch, interests, goal } = input;
-
-  const prompt = `
-    You are the Elite Engineering Career Advisor for Pico Academy.
-    Provide a professional, visionary, and highly detailed career roadmap for an engineering student.
-    
-    STUDENT BRANCH: ${branch}
-    INTERESTS/SKILLS: ${interests}
-    LONG-TERM GOAL: ${goal}
-    
-    REQUIREMENTS:
-    1. Structure the response with clear phases (Phase 1: Foundations, Phase 2: Specialization, Phase 3: Market Readiness).
-    2. Suggest specific technologies, certifications, and project ideas.
-    3. Keep the tone inspiring and elite.
-    4. Use professional formatting with Markdown (bolding, lists, etc.).
-    5. Add a signature from "The Pico Career Matrix".
-  `;
+  const prompt = `ENGINEERING CAREER ROADMAP:\nBranch: ${branch}\nInterests: ${interests}\nGoal: ${goal}\nProvide a detailed 3-phase roadmap in professional Markdown.`;
 
   try {
-    return await callGeminiShotgun(prompt);
+    return await callGemini(prompt);
   } catch (error) {
-    console.error("Gemini Career Advice Error:", error);
+    console.error("Career Advice Error:", error);
     return "The Career Matrix is currently recalibrating. Please try again shortly.";
   }
 }
