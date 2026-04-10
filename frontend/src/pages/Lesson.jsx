@@ -291,6 +291,19 @@ const Lesson = () => {
     }
   };
 
+  const resetLesson = () => {
+    setLives(3);
+    setCurrentLessonIndex(0);
+    setIsGameOver(false);
+    setCombo(0);
+    setFeedback(null);
+    setSelectedOption(null);
+    setUserCode(unit.lessons[0].type === 'code_fill_in' ? unit.lessons[0].codeSnippet : '');
+    setCodeOutput('');
+    setLastTestResult(null);
+    setTimeLeft(15);
+  };
+
   if (!unit) return <div style={{padding: 24, color: '#fff'}}>Loading lesson...</div>;
   if (unit.lessons.length === 0) {
     return (
@@ -321,7 +334,7 @@ const Lesson = () => {
           <div style={{fontSize: 80, marginBottom: 24}}>💀</div>
           <h1 style={{color: '#fff', fontWeight: 900, letterSpacing: 2}}>SYSTEM COLLAPSE</h1>
           <p style={{color: 'var(--text-muted)', marginBottom: 40}}>The elite firewall has detected your misalignment. Re-syncing is required.</p>
-          <button style={styles.btnPrimary} onClick={() => window.location.reload()}>RE-SYNC CORE</button>
+          <button style={styles.btnPrimary} onClick={resetLesson}>RE-SYNC CORE</button>
         </div>
       )}
 
