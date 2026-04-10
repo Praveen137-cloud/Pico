@@ -155,8 +155,12 @@ const Profile = () => {
           <div className="profile-stat-label">Total XP</div>
         </div>
         <div className="profile-stat-box">
-          <div className="profile-stat-value">{user.lessonsCompleted}</div>
-          <div className="profile-stat-label">Modules</div>
+          <div className="profile-stat-value">{user.followers?.length || 0}</div>
+          <div className="profile-stat-label">Followers</div>
+        </div>
+        <div className="profile-stat-box">
+          <div className="profile-stat-value">{user.following?.length || 0}</div>
+          <div className="profile-stat-label">Following</div>
         </div>
         <div className="profile-stat-box">
           <div className="profile-stat-value">{user.streak} 🔥</div>

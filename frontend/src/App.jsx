@@ -22,6 +22,7 @@ const Missions = lazy(() => import('./pages/Missions'));
 const Pyqs = lazy(() => import('./pages/Pyqs'));
 const Admin = lazy(() => import('./pages/Admin'));
 const CareerGuidance = lazy(() => import('./pages/CareerGuidance'));
+const Social = lazy(() => import('./pages/Social'));
 
 export const Onboarding = lazy(() => import('./pages/Onboarding'));
 
@@ -163,6 +164,7 @@ function App() {
                           <Route path="/celebration" element={<Celebration />} />
                           <Route path="/admin" element={<Admin />} />
                           <Route path="/career-guidance" element={<CareerGuidance />} />
+                          <Route path="/social" element={<Social />} />
                         </Routes>
                       </Suspense>
                     </MainLayout>

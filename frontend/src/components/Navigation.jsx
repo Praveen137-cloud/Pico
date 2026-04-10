@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import { Home, Code2, Trophy, Target, Menu, X, User, Award, BookOpen, Brain, Laptop, ShieldCheck, Compass } from 'lucide-react';
+import { Home, Code2, Trophy, Target, Menu, X, User, Award, BookOpen, Brain, Laptop, ShieldCheck, Compass, Users } from 'lucide-react';
 import './Navigation.css';
 
 const Navigation = () => {
@@ -10,6 +10,7 @@ const Navigation = () => {
 
   const menuItems = [
     { to: '/profile', icon: <User size={24}/>, label: 'Avatar / Profile' },
+    { to: '/social', icon: <Users size={24}/>, label: 'Social Matrix' },
     { to: '/career-guidance', icon: <Compass size={24}/>, label: 'Career Guidance' },
     { to: '/pyqs', icon: <Award size={24}/>, label: 'PYQs (Interview)' },
     { to: '/feed', icon: <BookOpen size={24}/>, label: 'Lore (Feed)' },

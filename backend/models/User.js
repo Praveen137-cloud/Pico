@@ -8,6 +8,8 @@ const userSchema = new mongoose.Schema({
   googleId: { type: String, sparse: true }, // For Google OAuth
   isGuest: { type: Boolean, default: false },
   role: { type: String, enum: ['user', 'admin'], default: 'user' },
+  followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   preferredLanguage: { type: String, default: 'c', enum: ['c', 'python', 'java'] },
   
   avatar: { type: String, default: 'Parrot' },
