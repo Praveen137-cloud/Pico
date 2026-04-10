@@ -50,6 +50,8 @@ const Lesson = () => {
   const [isSpeedBonus, setIsSpeedBonus] = useState(false);
   const [showXpBurst, setShowXpBurst] = useState(false);
   const [isGameOver, setIsGameOver] = useState(false);
+  const [aiHint, setAiHint] = useState(null);
+  const [isAiLoading, setIsAiLoading] = useState(false);
 
   const audioRef = useRef(new Audio());
 
@@ -106,6 +108,7 @@ const Lesson = () => {
       setLastTestResult(null);
       setSelectedKey(null);
       setSelectedValue(null);
+      setAiHint(null);
     }
   }, [currentLessonIndex, unit]);
 
@@ -259,6 +262,24 @@ const Lesson = () => {
     setIsCompiling(false);
   };
 
+  const getAiHint = async () => {
+    setIsAiLoading(true);
+    try {
+      const currentLesson = unit.lessons[currentLessonIndex];
+      const res = await api.post('/api/ai/hint', {
+        problemTitle: unit.title,
+        problemDesc: currentLesson.questionText,
+        userCode: userCode,
+        lastError: lastTestResult ? `Expected ${lastTestResult.expected}, but got ${lastTestResult.actual}` : (codeOutput || null),
+        currentLesson: currentLesson
+      });
+      setAiHint(res.data.hint);
+    } catch (err) {
+      setAiHint("🦜 Pico: 'My logic buffers are a bit scrambled! Just focus on the basics.'");
+    }
+    setIsAiLoading(false);
+  };
+
   const { setUser, setSubjects } = useContext(AuthContext);
 
   const handleNext = async () => {
@@ -350,6 +371,12 @@ const Lesson = () => {
               <div style={styles.explanationBox}>
                 <span style={{marginRight: 8}}>📖</span>
                 {currentLesson.explanation}
+              </div>
+            )}
+            {aiHint && (
+              <div style={styles.aiHintBox}>
+                <div style={styles.aiHintLabel}>PICO'S SECRET HINT 🦜</div>
+                <TypingEffect text={aiHint} />
               </div>
             )}
           </div>
@@ -483,6 +510,18 @@ const Lesson = () => {
         boxShadow: feedback === 'correct' ? '0 -10px 40px rgba(29, 210, 139, 0.3)' : feedback === 'wrong' ? '0 -10px 40px rgba(236, 72, 153, 0.2)' : 'none',
         transition: 'all 0.4s ease'
       }}>
+        <div style={{ display: 'flex', gap: '8px', marginBottom: feedback ? 12 : 0 }}>
+          {!feedback && !aiHint && (
+            <button 
+              style={styles.btnSecondary} 
+              onClick={getAiHint} 
+              disabled={isAiLoading}
+            >
+              {isAiLoading ? 'CONSULTING PICO...' : '💡 ASK PICO FOR A HINT'}
+            </button>
+          )}
+        </div>
+
         {/* Footer actions depending on state and type */}
         {!feedback && (currentLesson.type === 'multiple_choice') && (
           <button style={{...styles.btnPrimary, opacity: selectedOption ? 1 : 0.5}} onClick={checkAnswer} disabled={!selectedOption}>
@@ -563,7 +602,10 @@ const styles = {
   matchBtn: { padding: '14px', borderRadius: '12px', border: '2px solid var(--divider)', backgroundColor: 'var(--bg-card)', color: '#fff', fontWeight: '600', cursor: 'pointer', transition: '0.2s', fontSize: 14 },
   boardContainer: { width: '100%', maxWidth: '700px', backgroundColor: '#10131C', padding: '24px', borderRadius: '16px', border: '1px solid var(--divider)' },
   boardCode: { fontFamily: 'monospace', fontSize: '18px', lineHeight: '2', color: '#3B82F6', whiteSpace: 'pre-wrap' },
-  boardInput: { backgroundColor: 'transparent', border: 'none', borderBottom: '2px solid var(--theme-primary)', color: '#FFD700', width: '100px', fontSize: '18px', textAlign: 'center', outline: 'none', margin: '0 8px', fontWeight: 900 }
+  boardInput: { backgroundColor: 'transparent', border: 'none', borderBottom: '2px solid var(--theme-primary)', color: '#FFD700', width: '100px', fontSize: '18px', textAlign: 'center', outline: 'none', margin: '0 8px', fontWeight: 900 },
+  btnSecondary: { backgroundColor: 'transparent', border: '2px solid var(--theme-primary)', color: 'var(--theme-primary)', padding: '12px 20px', borderRadius: '12px', fontWeight: '900', fontSize: '12px', cursor: 'pointer', flex: 1, letterSpacing: 1 },
+  aiHintBox: { backgroundColor: '#1E293B', border: '1px solid #3B82F6', padding: '16px', borderRadius: '12px', color: '#E2E8F0', fontSize: '15px', width: '100%', marginTop: '16px', textAlign: 'left', position: 'relative', overflow: 'hidden' },
+  aiHintLabel: { color: '#3B82F6', fontSize: '10px', fontWeight: '900', marginBottom: '8px', letterSpacing: 1.5 }
 };
 
 export default Lesson;

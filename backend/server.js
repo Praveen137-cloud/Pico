@@ -9,6 +9,7 @@ const executionRoutes = require('./routes/execute');
 const authRoutes = require('./routes/auth');
 const problemsRoutes = require('./routes/problems');
 const curriculumRoutes = require('./routes/curriculum');
+const aiRoutes = require('./routes/ai');
 const authMiddleware = require('./middleware/auth');
 
 const Subject = require('./models/Subject');
@@ -98,6 +99,7 @@ app.use('/api/execute', (req, res, next) => { req.io = io; next(); }, executionR
 app.use('/api/auth', authRoutes);
 app.use('/api/problems', problemsRoutes);
 app.use('/api/curriculum', curriculumRoutes);
+app.use('/api/ai', aiRoutes);
 
 // Free-play code runner for the Code Playground (no test cases, just raw execution)
 const { exec } = require('child_process');
@@ -163,32 +165,16 @@ app.post('/api/run', async (req, res) => {
 app.get('/api/subjects', authMiddleware, async (req, res) => {
   try {
     const subjects = await Subject.find({}).lean();
-    const user = await User.findById(req.user.id);
-    if (!user) return res.json(subjects);
+    if (!subjects) return res.json([]);
 
     // 🔥 CACHE BUSTING: Prevent 304 Not Modified for progress data
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
     res.setHeader('Pragma', 'no-cache');
     res.setHeader('Expires', '0');
-    res.setHeader('X-Pico-Status', '2.1.0-EXPANDED'); // Version check for browser
+    res.setHeader('X-Pico-Status', '3.0.0-MODULAR');
 
-    const completedIds = user.completedUnits.map(id => id.toString());
-
-    // Merge progress
-    const processed = subjects.map(subject => {
-      subject.sections.forEach((section, sIdx) => {
-        section.units.forEach((unit, uIdx) => {
-          const isDone = completedIds.includes(unit._id.toString());
-          unit.isCompleted = isDone;
-          
-          // 🔥 USER REQUEST: Unlock ALL lessons for free exploration
-          unit.isUnlocked = true;
-        });
-      });
-      return subject;
-    });
-
-    res.json(processed);
+    // Return subjects. Frontend now uses /api/curriculum/... routes for stages/units
+    res.json(subjects);
   } catch(err) {
     res.status(500).json({error: err.message});
   }
