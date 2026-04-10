@@ -7,8 +7,8 @@ require('dotenv').config();
 const path = require('path');
 const fs = require('fs');
 
-async function ingestSubject(subjectName) {
-  const subjectDir = path.join(__dirname, '..', 'curriculum', subjectName.toLowerCase());
+async function ingestSubject(dirName, subjectName) {
+  const subjectDir = path.join(__dirname, '..', 'curriculum', dirName);
   if (!fs.existsSync(subjectDir)) {
     console.error(`Directory not found: ${subjectDir}`);
     return;
@@ -77,14 +77,36 @@ async function run() {
     await mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/pico_dsa');
     console.log('CONNECTED TO PICO DB');
 
-    const curriculumDir = path.join(__dirname, '..', 'curriculum');
-    const subjects = fs.readdirSync(curriculumDir).filter(f => fs.statSync(path.join(curriculumDir, f)).isDirectory());
+    const subjectMap = {
+      'basics': 'Basics',
+      'arrays': 'Arrays',
+      'strings': 'Strings',
+      'linkedlists': 'Linked Lists',
+      'stacksqueues': 'Stacks & Queues',
+      'trees': 'Trees',
+      'graphs': 'Graphs',
+      'dynamicprogramming': 'Dynamic Programming',
+      'algorithmdesign': 'Algorithm Design',
+      'mathbits': 'Math & Bit Manipulation',
+      'searchingsorting': 'Sorting & Searching',
+      'recursion': 'Recursion & Backtracking',
+      'hashing': 'Hashing & Sets',
+      'advancedds': 'Advanced Data Structures',
+      'zohoelite': 'Zoho Elite'
+    };
 
-    for (const subject of subjects) {
-      // Capitalize for display/lookup
-      const subjectName = subject.charAt(0).toUpperCase() + subject.slice(1);
-      await ingestSubject(subjectName);
+    const curriculumDir = path.join(__dirname, '..', 'curriculum');
+    const directories = fs.readdirSync(curriculumDir).filter(f => fs.statSync(path.join(curriculumDir, f)).isDirectory());
+
+    for (const dirName of directories) {
+      const subjectName = subjectMap[dirName.toLowerCase()];
+      if (subjectName) {
+        await ingestSubject(dirName, subjectName);
+      } else {
+        console.warn(`⚠️ No mapping found for directory: ${dirName}. Skipping...`);
+      }
     }
+
 
     console.log('--- MODULAR INGESTION COMPLETE ---');
     process.exit(0);
