@@ -7,7 +7,7 @@ const celebrationSfx = 'https://assets.mixkit.co/active_storage/sfx/2018/2018-pr
 const Celebration = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { subjectId, sectionId, type, subjectName, xpReward } = location.state || {};
+  const { subjectId, sectionId, type, subjectName, xpReward, score, totalQuestions, timeSpent } = location.state || {};
   const [showConfetti, setShowConfetti] = useState(true);
 
   const isMastery = type === 'subject';
@@ -54,12 +54,12 @@ const Celebration = () => {
         {!isMastery && (
           <div style={styles.statsRow}>
             <div style={styles.statBox}>
-              <div style={{color: 'var(--text-muted)'}}>Score</div>
-              <div style={{color: '#fff', fontSize: '24px', fontWeight: '700'}}>3/3</div>
+              <div style={{color: 'var(--text-muted)', fontSize: '11px', fontWeight: '900', letterSpacing: '1px'}}>SCORE</div>
+              <div style={{color: '#fff', fontSize: '24px', fontWeight: '900'}}>{score || 0}/{totalQuestions || 0}</div>
             </div>
             <div style={styles.statBox}>
-              <div style={{color: 'var(--text-muted)'}}>Time</div>
-              <div style={{color: '#fff', fontSize: '24px', fontWeight: '700'}}>45s</div>
+              <div style={{color: 'var(--text-muted)', fontSize: '11px', fontWeight: '900', letterSpacing: '1px'}}>TIME</div>
+              <div style={{color: '#fff', fontSize: '24px', fontWeight: '900'}}>{timeSpent || 0}s</div>
             </div>
           </div>
         )}

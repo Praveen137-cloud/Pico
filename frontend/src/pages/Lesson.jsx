@@ -125,6 +125,7 @@ const Lesson = () => {
     if (isCorrect) {
       playSuccess();
       setCombo(prev => prev + 1);
+      setCorrectAnswersCount(prev => prev + 1);
       setShowXpBurst(true);
       setTimeout(() => setShowXpBurst(false), 800);
       if (timeLeft > 10) setIsSpeedBonus(true);
@@ -282,12 +283,25 @@ const Lesson = () => {
 
   const { setUser, setSubjects } = useContext(AuthContext);
 
+  const [correctAnswersCount, setCorrectAnswersCount] = useState(0);
+  const [startTime] = useState(Date.now());
+
   const handleNext = async () => {
     if (currentLessonIndex + 1 < unit.lessons.length) {
       setCurrentLessonIndex(prev => prev + 1);
     } else {
-      // Completed unit! Call API to mark progress if needed
-      navigate(`/celebration`, { state: { subjectId, sectionId, xpGained: 50 } });
+      // Completed unit! 
+      const timeSpent = Math.floor((Date.now() - startTime) / 1000);
+      navigate(`/celebration`, { 
+        state: { 
+          subjectId, 
+          sectionId, 
+          xpReward: 50,
+          score: correctAnswersCount,
+          totalQuestions: unit.lessons.length,
+          timeSpent: timeSpent
+        } 
+      });
     }
   };
 
