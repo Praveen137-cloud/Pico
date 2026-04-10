@@ -1,3 +1,5 @@
+import React, { useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { Home, Code2, Trophy, Target, Menu, X, User, Award, BookOpen, Brain, Laptop, ShieldCheck, Compass } from 'lucide-react';
 import './Navigation.css';
