@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { generateHint } = require('../utils/gemini');
+const { generateHint, generateCareerAdvice } = require('../utils/gemini');
 const auth = require('../middleware/auth');
 
 // @route   POST /api/ai/hint
@@ -26,6 +26,23 @@ router.post('/hint', auth, async (req, res) => {
   } catch (err) {
     console.error("AI Route Error:", err);
     res.status(500).json({ error: 'Failed to generate hint' });
+  }
+});
+
+// @route   POST /api/ai/career-guidance
+// @desc    Get engineering career guidance
+// @access  Private
+router.post('/career-guidance', auth, async (req, res) => {
+  try {
+    const { branch, interests, goal } = req.body;
+    if (!branch || !interests || !goal) {
+      return res.status(400).json({ error: 'All fields are required' });
+    }
+    const advice = await generateCareerAdvice({ branch, interests, goal });
+    res.json({ advice });
+  } catch (err) {
+    console.error("Career Guidance Error:", err);
+    res.status(500).json({ error: 'Failed to generate career guidance' });
   }
 });
 

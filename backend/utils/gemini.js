@@ -43,4 +43,38 @@ async function generateHint(context) {
   }
 }
 
-module.exports = { generateHint };
+/**
+ * Generates engineering career guidance based on user input.
+ * @param {Object} input - { branch, interests, goal }
+ * @returns {Promise<string>}
+ */
+async function generateCareerAdvice(input) {
+  const { branch, interests, goal } = input;
+
+  const prompt = `
+    You are the Elite Engineering Career Advisor for Pico Academy.
+    Provide a professional, visionary, and highly detailed career roadmap for an engineering student.
+    
+    STUDENT BRANCH: ${branch}
+    INTERESTS/SKILLS: ${interests}
+    LONG-TERM GOAL: ${goal}
+    
+    REQUIREMENTS:
+    1. Structure the response with clear phases (Phase 1: Foundations, Phase 2: Specialization, Phase 3: Market Readiness).
+    2. Suggest specific technologies, certifications, and project ideas.
+    3. Keep the tone inspiring and elite.
+    4. Use professional formatting with Markdown (bolding, lists, etc.).
+    5. Add a signature from "The Pico Career Matrix".
+  `;
+
+  try {
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    return response.text();
+  } catch (error) {
+    console.error("Gemini Career Guidance Error:", error);
+    return "The Career Matrix is currently recalibrating. Please try again shortly.";
+  }
+}
+
+module.exports = { generateHint, generateCareerAdvice };

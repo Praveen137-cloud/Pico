@@ -20,6 +20,8 @@ const Auth = lazy(() => import('./pages/Auth'));
 const Puzzles = lazy(() => import('./pages/Puzzles'));
 const Missions = lazy(() => import('./pages/Missions'));
 const Pyqs = lazy(() => import('./pages/Pyqs'));
+const Admin = lazy(() => import('./pages/Admin'));
+const CareerGuidance = lazy(() => import('./pages/CareerGuidance'));
 
 export const Onboarding = lazy(() => import('./pages/Onboarding'));
 
@@ -159,6 +161,8 @@ function App() {
                           <Route path="/map/:subjectId/:sectionId" element={<Map />} />
                           <Route path="/lesson/:subjectId/:sectionId/:unitId" element={<Lesson />} />
                           <Route path="/celebration" element={<Celebration />} />
+                          <Route path="/admin" element={<Admin />} />
+                          <Route path="/career-guidance" element={<CareerGuidance />} />
                         </Routes>
                       </Suspense>
                     </MainLayout>

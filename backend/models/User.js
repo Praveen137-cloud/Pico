@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
   password: { type: String }, // Optional to allow future OAuth where passwords aren't present
   googleId: { type: String, sparse: true }, // For Google OAuth
   isGuest: { type: Boolean, default: false },
+  role: { type: String, enum: ['user', 'admin'], default: 'user' },
   preferredLanguage: { type: String, default: 'c', enum: ['c', 'python', 'java'] },
   
   avatar: { type: String, default: 'Parrot' },

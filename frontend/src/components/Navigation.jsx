@@ -1,18 +1,23 @@
-import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import { Home, Code2, Trophy, Target, Menu, X, User, Award, BookOpen, Brain, Laptop } from 'lucide-react';
+import { AuthContext } from '../context/AuthContext';
+import { Home, Code2, Trophy, Target, Menu, X, User, Award, BookOpen, Brain, Laptop, ShieldCheck, Compass } from 'lucide-react';
 import './Navigation.css';
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user } = React.useContext(AuthContext);
 
   const menuItems = [
     { to: '/profile', icon: <User size={24}/>, label: 'Avatar / Profile' },
+    { to: '/career-guidance', icon: <Compass size={24}/>, label: 'Career Guidance' },
     { to: '/pyqs', icon: <Award size={24}/>, label: 'PYQs (Interview)' },
     { to: '/feed', icon: <BookOpen size={24}/>, label: 'Lore (Feed)' },
     { to: '/puzzles', icon: <Brain size={24}/>, label: 'Puzzles' },
     { to: '/basics', icon: <Laptop size={24}/>, label: 'Training (Basics)' },
   ];
+
+  if (user && user.role === 'admin') {
+    menuItems.unshift({ to: '/admin', icon: <ShieldCheck size={24} color="#FFD700" />, label: 'Admin Terminal' });
+  }
 
   return (
     <>
