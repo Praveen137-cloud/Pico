@@ -21,8 +21,22 @@ router.get('/subjects', auth, async (req, res) => {
 // @desc    Get stages for a subject
 router.get('/subjects/:id/stages', auth, async (req, res) => {
   try {
-    const stages = await Stage.find({ subjectId: req.params.id }).sort('order');
-    res.json(stages);
+    const stages = await Stage.find({ subjectId: req.params.id }).sort('order').lean();
+    const user = await require('../models/User').findById(req.user.id);
+    const completedUnitIds = user.completedUnits.map(id => id.toString());
+
+    // Join unit counts and progress for each stage
+    const stagesWithCounts = await Promise.all(stages.map(async (stage) => {
+      const units = await Unit.find({ stageId: stage._id }).select('_id').lean();
+      const unitIds = units.map(u => u._id.toString());
+      
+      const unitCount = unitIds.length;
+      const completedCount = unitIds.filter(id => completedUnitIds.includes(id)).length;
+      
+      return { ...stage, unitCount, completedCount };
+    }));
+
+    res.json(stagesWithCounts);
   } catch (err) {
     res.status(500).json({ error: 'Failed to load stages' });
   }

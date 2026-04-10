@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema({
   streak: { type: Number, default: 0 },
   lastStreakUpdate: { type: Date, default: null },
   completedSubjects: [{ type: String }],
-  completedUnits: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Subject' }], 
+  completedUnits: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Unit' }], 
   questsClaimed: [{ type: String }], // e.g. "quest_c_compile", "quest_login"
   progress: {
     subjectProgress: {

@@ -74,16 +74,21 @@ const Home = () => {
 
   const getSubjectIcon = (name) => {
     const icons = {
-      'Arrays': '💾',
-      'Linked Lists': '🔗',
-      'Stacks & Queues': '🥞',
-      'Recursion': '🌀',
-      'Hashing': '🗄️',
-      'Trees': '🌳',
-      'Graphs': '🕸️',
-      'Sorting': '📊',
+      'Basics': '🥚',
+      'Arrays': '🍫',
+      'Strings': '🔡',
+      'Linked Lists': '🍭',
+      'Stacks & Queues': '🍬',
+      'Trees': '🥨',
+      'Graphs': '🍦',
       'Dynamic Programming': '🏗️',
-      'Backtracking': '🧭'
+      'Algorithm Design': '🎨',
+      'Math & Bit Manipulation': '🔢',
+      'Sorting & Searching': '🔍',
+      'Recursion & Backtracking': '🌀',
+      'Hashing & Sets': '🗄️',
+      'Advanced Data Structures': '💎',
+      'Zoho Elite': '🦁'
     };
     return icons[name] || '💻';
   };
@@ -138,35 +143,40 @@ const Home = () => {
       
       <div style={styles.curriculumContainer} className="curriculum-container">
         {stages.length > 0 ? (
-          stages.map((stage, index) => (
-            <div key={index} className={`extreme-card ${isVibrating ? 'vibrate-active' : ''}`} style={styles.sectionCard}>
-              <div style={styles.sectionHeader}>
-                <div style={styles.badgeWrapper}>
-                  <div style={styles.sectionNum}>STAGE {index + 1}</div>
+          stages.map((stage, index) => {
+            const total = stage.unitCount || 0;
+            const completed = stage.completedCount || 0;
+            const progress = total > 0 ? (completed / total) * 100 : 0;
+
+            return (
+              <div key={index} className={`extreme-card ${isVibrating ? 'vibrate-active' : ''}`} style={styles.sectionCard}>
+                <div style={styles.sectionHeader}>
+                  <div style={styles.badgeWrapper}>
+                    <div style={styles.sectionNum}>STAGE {index + 1}</div>
+                  </div>
+                  <h2 style={styles.sectionTitle}>{stage.title}</h2>
                 </div>
-                <h2 style={styles.sectionTitle}>{stage.title}</h2>
-              </div>
-              
-              <div style={styles.progressContainer}>
-                <div style={styles.progressBarWrapper}>
-                  <div style={{ ...styles.progressBar, width: '0%' }} />
+                
+                <div style={styles.progressContainer}>
+                  <div style={styles.progressBarWrapper}>
+                    <div style={{ ...styles.progressBar, width: `${progress}%` }} />
+                  </div>
+                  <span style={styles.unitCount}>{completed}/{total} MISSIONS</span>
                 </div>
-                <span style={styles.unitCount}>0/200 ANALYZED</span>
+                
+                <button 
+                  style={styles.openPathBtn}
+                  onClick={() => navigate(`/map/${subjects.find(s => s.name === activeSubject)._id}/${stage._id}`)}
+                >
+                  INITIALIZE MODULE
+                </button>
               </div>
-              
-              <button 
-                style={styles.openPathBtn}
-                onClick={() => navigate(`/map/${subjects.find(s => s.name === activeSubject)._id}/${stage._id}`)}
-              >
-                INITIALIZE MODULE
-              </button>
-            </div>
-          ))
+            );
+          })
         ) : (
           <div style={{color: 'var(--text-muted)', textAlign: 'center', marginTop: 40, fontWeight: 800, letterSpacing: 2}}>
             INITIALIZING CORE DATA...
           </div>
-        )}
       </div>
     </div>
   );
