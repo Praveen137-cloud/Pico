@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { GoogleLogin } from '@react-oauth/google';
@@ -12,20 +12,44 @@ const Auth = () => {
   const [name, setName] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
+  const [logs, setLogs] = useState([]);
 
   const { login, register, setUser, loginAsGuest } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  // Cyber Terminal Background Logs
+  useEffect(() => {
+    const startupLogs = [
+      "> INITIALIZING PICO MATRIX SERVER...",
+      "> SECURING PORT 5000...",
+      "> ENCRYPTING DATA LINK...",
+      "> WAITING FOR AGENT AUTHENTICATION...",
+      "> SYSTEM READY."
+    ];
+    
+    let i = 0;
+    const interval = setInterval(() => {
+      if (i < startupLogs.length) {
+        setLogs(prev => [...prev, startupLogs[i]].slice(-5));
+        i++;
+      } else {
+        clearInterval(interval);
+      }
+    }, 1500);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const handleGoogleSuccess = async (response) => {
     setLoading(true);
     try {
       const res = await api.post('/api/auth/google', { credential: response.credential });
       sessionStorage.setItem('token', res.data.token);
-      setToken(res.data.token);
+      // setToken(res.data.token); // Assuming AuthContext handles this
       setUser(res.data.user);
       navigate('/');
     } catch (err) {
-      setErrorMsg('Google login failed.');
+      setErrorMsg('Google authentication sequence failed.');
       console.error(err);
     }
     setLoading(false);
@@ -37,8 +61,7 @@ const Auth = () => {
       await loginAsGuest();
       navigate('/');
     } catch (err) {
-      setErrorMsg('Guest initialization failed.');
-      console.error(err);
+      setErrorMsg('Guest initialization rejected.');
     }
     setLoading(false);
   };
@@ -51,109 +74,107 @@ const Auth = () => {
       if (isLogin) {
         await login(email, password);
       } else {
-        await register(name || 'Gamer', email, password);
+        await register(name || 'Agent', email, password);
       }
       navigate('/');
     } catch (err) {
-      console.error('Auth Error Details:', err);
-      const detailedError = err.response?.data?.error || err.message || 'Authentication failed.';
+      const detailedError = err.response?.data?.error || 'Authentication sequence failed.';
       setErrorMsg(detailedError);
     }
     setLoading(false);
   };
 
-  const switchMode = () => {
-    setIsLogin(!isLogin);
-    setErrorMsg('');
-    setEmail('');
-    setPassword('');
-    setName('');
-  };
-
   return (
     <div className="auth-page">
-      <div className="auth-card">
-        <div className="auth-logo">
-          <img src="/electric-bird.png" alt="Electric Bird" className="electric-bird-logo" />
+      {/* Terminal Background */}
+      <div className="terminal-background">
+        {logs.map((log, idx) => (
+          <div key={idx} className="terminal-line">{log}</div>
+        ))}
+      </div>
+
+      <div className="auth-card scale-in">
+        <div className="mascot-container floating">
+          <img src="/vanta-parrot.png" alt="Pico Mascot" className="auth-mascot" />
+          <div className="mascot-shadow"></div>
         </div>
 
-        <h1 className="auth-title">
-          {isLogin ? 'SYSTEM LOGIN' : 'CREATE ACCOUNT'}
-        </h1>
-        <p className="auth-subtitle">
-          {isLogin ? 'Access your training matrix.' : 'Initialize your agent profile.'}
-        </p>
+        <div className="auth-content">
+          <header className="auth-header">
+            <h1 className="auth-title">
+              {isLogin ? 'SYSTEM LOGIN' : 'CREATE AGENT'}
+            </h1>
+            <p className="auth-subtitle">
+              {isLogin ? 'Enter your secure access credentials.' : 'Initialize your elite training profile.'}
+            </p>
+          </header>
 
-        {errorMsg && (
-          <div className="auth-error">{errorMsg}</div>
-        )}
-
-        <form className="auth-form" onSubmit={handleSubmit}>
-          {!isLogin && (
-            <input
-              className="auth-input"
-              type="text"
-              placeholder="Username"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
+          {errorMsg && (
+            <div className="auth-error animate-shake">{errorMsg}</div>
           )}
-          <input
-            className="auth-input"
-            type="email"
-            placeholder="Email Address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <input
-            className="auth-input"
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <button
-            className="auth-submit-btn"
-            type="submit"
-            disabled={loading}
-          >
-            {loading ? 'Loading...' : isLogin ? 'AUTHENTICATE' : 'INITIALIZE'}
-          </button>
-        </form>
 
-        <div className="auth-switch">
-          <div className="auth-switch-prompt">
-            {isLogin ? "Don't have an account? Create one to track your progress and climb the leaderboard!" : "Already part of the elite? Access your secure training terminal."}
+          <form className="auth-form" onSubmit={handleSubmit}>
+            {!isLogin && (
+              <div className="input-group">
+                <input
+                  type="text"
+                  placeholder="AGENT ALIAS"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+              </div>
+            )}
+            <div className="input-group">
+              <input
+                type="email"
+                placeholder="EMAIL ADDRESS"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+            <div className="input-group">
+              <input
+                type="password"
+                placeholder="ACCESS CODE"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+            <button className="auth-submit-btn" type="submit" disabled={loading}>
+              {loading ? 'SYNCING...' : isLogin ? 'AUTHENTICATE' : 'INITIALIZE'}
+            </button>
+          </form>
+
+          <div className="auth-divider">
+            <span>OR</span>
           </div>
-          <span className="auth-switch-link" onClick={switchMode}>
-            {isLogin ? 'Sign up' : 'Log in'}
-          </span>
+
+          <div className="auth-actions">
+            <div className="google-login-box">
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={() => setErrorMsg('Google Link Failed')}
+                theme="filled_black"
+                shape="pill"
+                size="large"
+                width="100%"
+              />
+            </div>
+            
+            <button className="auth-guest-link" onClick={handleGuestLogin}>
+              CONTINUE AS GUEST
+            </button>
+          </div>
+
+          <footer className="auth-footer">
+            <button className="mode-toggle" onClick={() => setIsLogin(!isLogin)}>
+              {isLogin ? "NEW AGENT? CREATE ACCOUNT" : "EXISTING AGENT? LOG IN"}
+            </button>
+          </footer>
         </div>
-
-        <div className="auth-divider">Or</div>
-
-        <div className="auth-social-login">
-          <GoogleLogin
-            onSuccess={handleGoogleSuccess}
-            onError={() => setErrorMsg('Google login failed')}
-            theme="filled_black"
-            text="continue_with"
-            shape="pill"
-            size="large"
-            width="250px"
-          />
-        </div>
-
-        <button 
-          className="auth-guest-btn" 
-          onClick={handleGuestLogin}
-          disabled={loading}
-        >
-          {loading ? 'INITIALIZING...' : 'CONTINUE AS GUEST'}
-        </button>
       </div>
     </div>
   );
