@@ -2,35 +2,52 @@ const axios = require('axios');
 require('dotenv').config();
 
 /**
- * Core function to call Gemini API via raw HTTPS to ensure stable v1 version.
+ * Core function to call Gemini API with multi-version fallback strategy.
+ * Tries stable v1 first, then fallback to v1beta.
+ * Tries gemini-1.5-flash then gemini-pro.
  */
-async function callGeminiRaw(prompt, modelName = "gemini-1.5-flash") {
+async function callGeminiShotgun(prompt) {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error("GEMINI_API_KEY is missing from environment.");
 
-  const url = `https://generativelanguage.googleapis.com/v1/models/${modelName}:generateContent?key=${apiKey}`;
-  
-  const payload = {
-    contents: [{
-      parts: [{ text: prompt }]
-    }]
-  };
+  // Strategies to try in order
+  const strategies = [
+    { version: 'v1', model: 'gemini-1.5-flash' },
+    { version: 'v1beta', model: 'gemini-1.5-flash' },
+    { version: 'v1', model: 'gemini-pro' },
+    { version: 'v1beta', model: 'gemini-pro' }
+  ];
 
-  try {
-    const response = await axios.post(url, payload, {
-      headers: { 'Content-Type': 'application/json' }
-    });
+  let lastError = null;
 
-    if (response.data && response.data.candidates && response.data.candidates[0].content) {
-      return response.data.candidates[0].content.parts[0].text;
-    } else {
-      console.error("Unexpected Gemini Response Structure:", JSON.stringify(response.data));
-      throw new Error("Invalid response from Gemini API");
+  for (const strategy of strategies) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/${strategy.version}/models/${strategy.model}:generateContent?key=${apiKey}`;
+      
+      const payload = {
+        contents: [{
+          parts: [{ text: prompt }]
+        }]
+      };
+
+      const response = await axios.post(url, payload, {
+        headers: { 'Content-Type': 'application/json' },
+        timeout: 10000 // 10s timeout per attempt
+      });
+
+      if (response.data && response.data.candidates && response.data.candidates[0].content) {
+        console.log(`✅ SUCCESS using ${strategy.version}/${strategy.model}`);
+        return response.data.candidates[0].content.parts[0].text;
+      }
+    } catch (error) {
+      console.warn(`⚠️ Attempt failed: ${strategy.version}/${strategy.model} - ${error.message}`);
+      lastError = error;
+      // Continue to next strategy...
     }
-  } catch (error) {
-    console.error("Gemini API Raw Call Error:", error.response?.data || error.message);
-    throw error;
   }
+
+  console.error("❌ ALL GEMINI STRATEGIES EXHAUSTED.");
+  throw lastError || new Error("All AI models failed to respond.");
 }
 
 /**
@@ -61,7 +78,7 @@ async function generateHint(context) {
   `;
 
   try {
-    return await callGeminiRaw(prompt);
+    return await callGeminiShotgun(prompt);
   } catch (error) {
     return "🦜 Pico: 'My logic buffers are a bit scrambled! Try re-checking your loops while I snack on some seeds.'";
   }
@@ -90,7 +107,7 @@ async function generateCareerAdvice(input) {
   `;
 
   try {
-    return await callGeminiRaw(prompt);
+    return await callGeminiShotgun(prompt);
   } catch (error) {
     console.error("Gemini Career Advice Error:", error);
     return "The Career Matrix is currently recalibrating. Please try again shortly.";
