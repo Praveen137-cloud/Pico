@@ -119,7 +119,7 @@ const Home = () => {
               marginLeft: '12px',
               animation: 'pulse 2s infinite'
             }}>
-              BUILD v2.1: ELITE READY
+              DEPLOY v2.2: BUILD STABLE
             </div>
           </div>
           <a 
@@ -190,6 +190,7 @@ const Home = () => {
           <div style={{color: 'var(--text-muted)', textAlign: 'center', marginTop: 40, fontWeight: 800, letterSpacing: 2}}>
             INITIALIZING CORE DATA...
           </div>
+        )}
       </div>
     </div>
   );

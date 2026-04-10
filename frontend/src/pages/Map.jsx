@@ -268,5 +268,3 @@ const styles = {
 };
 
 export default Map;
-
-export default Map;
