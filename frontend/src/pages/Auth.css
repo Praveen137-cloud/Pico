@@ -41,12 +41,12 @@
 
 .auth-card {
   width: 100%;
-  max-width: 440px;
+  max-width: 420px;
   background: rgba(10, 10, 10, 0.7);
   backdrop-filter: blur(40px);
   border: 1px solid var(--glass-border);
   border-radius: 32px;
-  padding: 40px;
+  padding: 30px 40px;
   box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8), 
               inset 0 0 40px rgba(0, 242, 255, 0.05);
   position: relative;
@@ -54,15 +54,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 100px; /* Give space for the floating mascot */
+  /* Removal of external margins to focus on flex-center */
 }
 
 /* Mascot & Floating Animation */
 .mascot-container {
-  width: 200px;
-  height: 200px;
-  margin-top: -160px; /* Adjusted to keep head from clipping */
-  margin-bottom: 20px;
+  width: 140px; /* Reduced Size */
+  height: 140px; /* Reduced Size */
+  margin-top: -100px;
+  margin-bottom: 10px;
   position: relative;
   display: flex;
   justify-content: center;
@@ -73,7 +73,8 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 0 20px rgba(0, 242, 255, 0.4));
+  filter: drop-shadow(0 0 15px rgba(0, 242, 255, 0.3));
+  border-radius: 50%; /* Helps if any edge cases exist, but solid black should match */
 }
 
 .floating {
