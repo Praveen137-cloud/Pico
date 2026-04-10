@@ -4,65 +4,56 @@ require('dotenv').config();
 let workingModelCache = null;
 
 /**
- * Scans for a working model-version combination for the user's key.
+ * Advanced AI Discovery and Sanitization Engine (Deep Forge)
+ * Removes hidden spaces and ensures safe URL transmission.
  */
-async function scanForWorkingModel(apiKey) {
-  if (workingModelCache) return workingModelCache;
-
-  console.log("🔍 STARTING AI MODEL SCAN...");
+async function callGeminiDeepForge(prompt) {
+  // 1. Sanitize the API Key (Crucial for Render environment variables)
+  const rawKey = process.env.GEMINI_API_KEY;
+  if (!rawKey) throw new Error("GEMINI_API_KEY is missing from environment.");
+  const apiKey = rawKey.trim(); // Remove leading/trailing newlines or spaces
   
-  const models = [
-    'gemini-1.5-flash',
-    'gemini-1.5-pro',
-    'gemini-pro',
-    'gemini-1.0-pro',
-    'gemini-1.5-flash-8b'
+  // 2. Multi-Path Strategy with Verified Identifiers
+  const strategies = [
+    { version: 'v1', model: 'gemini-1.5-flash-latest' },
+    { version: 'v1', model: 'gemini-1.5-flash' },
+    { version: 'v1', model: 'gemini-pro' },
+    { version: 'v1beta', model: 'gemini-1.5-flash' }
   ];
-  const versions = ['v1', 'v1beta'];
 
-  for (const model of models) {
-    for (const version of versions) {
-      try {
-        const url = `https://generativelanguage.googleapis.com/${version}/models/${model}:generateContent?key=${apiKey}`;
-        const res = await axios.post(url, { contents: [{ parts: [{ text: 'hi' }] }] }, { timeout: 5000 });
-        
-        if (res.data && res.data.candidates) {
-          console.log(`✅ FOUND WORKING AI PATH: ${version}/${model}`);
-          workingModelCache = { version, model };
-          return workingModelCache;
-        }
-      } catch (err) {
-        // Skip and try next
+  let lastError = null;
+
+  for (const strategy of strategies) {
+    try {
+      // Use encodeURIComponent to safe-pass key symbols like - and _
+      const url = `https://generativelanguage.googleapis.com/${strategy.version}/models/${strategy.model}:generateContent?key=${encodeURIComponent(apiKey)}`;
+      
+      const response = await axios.post(url, {
+        contents: [{ parts: [{ text: prompt }] }]
+      }, { 
+        headers: { 'Content-Type': 'application/json' },
+        timeout: 12000 
+      });
+
+      if (response.data && response.data.candidates && response.data.candidates[0].content) {
+        return response.data.candidates[0].content.parts[0].text;
       }
+    } catch (error) {
+      console.warn(`Deep Forge Attempt failed: ${strategy.version}/${strategy.model}`);
+      lastError = error;
     }
   }
 
-  console.error("❌ AI MODEL SCAN FAILED: NO WORKING PATHS FOUND.");
-  throw new Error("Pico Matrix is offline. Please check your API key activation.");
-}
-
-/**
- * Core function to call Gemini API with self-healing scanner.
- */
-async function callGemini(prompt) {
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) throw new Error("GEMINI_API_KEY missing");
-
+  // If all logic fails, attempt a low-level diagnostic to logs
   try {
-    const config = await scanForWorkingModel(apiKey);
-    const url = `https://generativelanguage.googleapis.com/${config.version}/models/${config.model}:generateContent?key=${apiKey}`;
-    
-    const response = await axios.post(url, {
-      contents: [{ parts: [{ text: prompt }] }]
-    }, { timeout: 15000 });
-
-    return response.data.candidates[0].content.parts[0].text;
-  } catch (error) {
-    console.error("Gemini Call Error:", error.message);
-    // Clear cache to force rescan on next attempt if it was a transient error
-    if (error.response && error.response.status === 404) workingModelCache = null;
-    throw error;
+    const diagUrl = `https://generativelanguage.googleapis.com/v1/models?key=${encodeURIComponent(apiKey)}`;
+    const diagRes = await axios.get(diagUrl);
+    console.log("Diagnostic Success - Models List retrieved. Logic should have worked. Check model names.");
+  } catch (diagErr) {
+    console.error("Diagnostic Failure - API Key rejected at fundamental level:", diagErr.message);
   }
+
+  throw lastError || new Error("All AI strategies exhausted.");
 }
 
 /**
@@ -70,12 +61,12 @@ async function callGemini(prompt) {
  */
 async function generateHint(context) {
   const { problemTitle, problemDesc, userCode, lastError } = context;
-  const prompt = `PARROT TUTOR HINT:\nProblem: ${problemTitle}\nDesc: ${problemDesc}\nCode: ${userCode}\nError: ${lastError}\nKeep it witty and helpful as Pico the Parrot.`;
+  const prompt = `Pico Parrot DSA Hint:\nProblem: ${problemTitle}\nCode: ${userCode}\nError: ${lastError}\nRules: Be witty, use emojis, don't give answer.`;
   
   try {
-    return await callGemini(prompt);
+    return await callGeminiDeepForge(prompt);
   } catch (error) {
-    return "🦜 Pico: 'My logic buffers are a bit scrambled! Check your loops while I snack on seeds.'";
+    return "🦜 Pico: 'My logic buffers are a bit scrambled! Let's check your logic while I snack on some seeds.'";
   }
 }
 
@@ -84,13 +75,13 @@ async function generateHint(context) {
  */
 async function generateCareerAdvice(input) {
   const { branch, interests, goal } = input;
-  const prompt = `ENGINEERING CAREER ROADMAP:\nBranch: ${branch}\nInterests: ${interests}\nGoal: ${goal}\nProvide a detailed 3-phase roadmap in professional Markdown.`;
+  const prompt = `Elite Engineering Roadmap:\nBranch: ${branch}\nSkills: ${interests}\nGoal: ${goal}\nProvide a 3-phase professional Markdown roadmap. Signature: "The Pico Career Matrix".`;
 
   try {
-    return await callGemini(prompt);
+    return await callGeminiDeepForge(prompt);
   } catch (error) {
-    console.error("Career Advice Error:", error);
-    return "The Career Matrix is currently recalibrating. Please try again shortly.";
+    console.error("Deep Forge Career Advice Error:", error.message);
+    return "The Career Matrix is currently recalibrating systems. Please try again in 60 seconds.";
   }
 }
 
