@@ -382,29 +382,6 @@ app.get('/api/status', (req, res) => {
   res.json({ status: 'API is running' });
 });
 
-// ==== MOCK GAMER SOW FOR LORE FEED ====
-const randomGamers = ['ShadowCoder', 'AlgoKing', 'ByteNinja', 'ReactGod', 'PtrDestroyer', 'NullMaster', 'Turing20', 'HashSlayer'];
-const randomLore = [
-  'just hit Diamond Tier! 💎',
-  'compiled C code with 0 errors! 🔥',
-  'unlocked the Recursion stage! 🌀',
-  'is on a 15-day streak! ⭐',
-  'completed daily quests! 🎉',
-  'dropped into The Arena! ⚔️',
-  'finished the Two Pointers unit! 👉',
-  'maxed out their daily XP! ⚡'
-];
-
-setInterval(() => {
-  const player = randomGamers[Math.floor(Math.random() * randomGamers.length)];
-  const action = randomLore[Math.floor(Math.random() * randomLore.length)];
-  io.emit('loreFeed', {
-    id: Date.now(),
-    text: `${player} ${action}`,
-    timestamp: new Date().toISOString()
-  });
-}, 8000); // Emits every 8 seconds
-
 httpServer.listen(PORT, '0.0.0.0', () => {
   console.log(`Pico Server is LIVE on port ${PORT} (0.0.0.0)`);
 }).on('error', (err) => {

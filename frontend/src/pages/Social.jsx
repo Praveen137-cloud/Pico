@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api';
-import { Search, UserPlus, UserMinus, ShieldCheck, Heart } from 'lucide-react';
+import { Search, UserPlus, UserMinus, Heart, Users, UserCheck } from 'lucide-react';
 import './Social.css';
 
 const Social = () => {
+  const [activeTab, setActiveTab] = useState('search'); // search, following, followers
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
@@ -17,11 +18,8 @@ const Social = () => {
   const fetchMySocialStats = async () => {
     setLoading(true);
     try {
-      // We use 'me' or similar, but since we have user ID in context, 
-      // we'll use a specific stats endpoint or just the profile endpoint.
-      // For now, let's fetch current user profile to get connection list.
-      const res = await api.get('/api/user');
-      const statsRes = await api.get(`/api/social/stats/${res.data._id}`);
+      const userRes = await api.get('/api/user');
+      const statsRes = await api.get(`/api/social/stats/${userRes.data._id}`);
       setStats(statsRes.data);
     } catch (err) {
       console.error('Failed to fetch stats', err);
@@ -36,7 +34,8 @@ const Social = () => {
     setSearchLoading(true);
     try {
       const res = await api.get(`/api/social/search?query=${query}`);
-      setResults(res.data);
+      setSearchResults(res.data);
+      setActiveTab('search');
     } catch (err) {
       console.error('Search failed', err);
     } finally {
@@ -51,12 +50,46 @@ const Social = () => {
       } else {
         await api.post(`/api/social/follow/${targetUserId}`);
       }
-      // Refresh
-      handleSearch({ preventDefault: () => {} });
       fetchMySocialStats();
+      // If we are in search, refresh search results too
+      if (query) {
+        const res = await api.get(`/api/social/search?query=${query}`);
+        setSearchResults(res.data);
+      }
     } catch (err) {
       console.error('Action failed', err);
     }
+  };
+
+  const renderAgentRow = (targetUser) => {
+    const isFollowing = stats?.following.some(f => f._id === targetUser._id);
+    const isFollower = stats?.followers.some(f => f._id === targetUser._id);
+    const isMutual = isFollowing && isFollower;
+    const avatarEmoji = targetUser.avatar === 'Lion' ? '🦁' : targetUser.avatar === 'Tiger' ? '🐯' : targetUser.avatar === 'Parrot' ? '🦜' : '👤';
+
+    return (
+      <div key={targetUser._id} className="agent-row extreme-card animate-fade-in">
+        <div className="agent-info">
+          <span className="agent-avatar">{avatarEmoji}</span>
+          <div className="agent-details">
+            <div className="agent-name-row">
+              <span className="agent-name">{targetUser.name}</span>
+              {isMutual && <Heart className="mutual-heart" size={14} fill="currentColor" />}
+            </div>
+            <span className="agent-xp">{targetUser.xp} XP • {targetUser.streak || 0} 🔥</span>
+          </div>
+        </div>
+        <div className="agent-actions">
+           <button 
+            className={`follow-btn ${isFollowing ? 'unfollow' : ''}`}
+            onClick={() => toggleFollow(targetUser._id, isFollowing)}
+           >
+              {isFollowing ? <UserMinus size={16} /> : <UserPlus size={16} />}
+              <span>{isFollowing ? 'UNFOLLOW' : 'FOLLOW'}</span>
+           </button>
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -67,74 +100,61 @@ const Social = () => {
       </header>
 
       <div className="social-grid">
-        {/* Connection Stats */}
-        <div className="social-stats-card extreme-card">
-           <div className="stats-row">
-              <div className="stat-item">
-                 <span className="stat-value">{stats?.followerCount || 0}</span>
-                 <span className="stat-label">FOLLOWERS</span>
-              </div>
-              <div className="stat-divider"></div>
-              <div className="stat-item">
-                 <span className="stat-value">{stats?.followingCount || 0}</span>
-                 <span className="stat-label">FOLLOWING</span>
-              </div>
-           </div>
+        {/* Connection Stats Cards */}
+        <div className="social-tabs-container">
+           <button className={`social-tab ${activeTab === 'search' ? 'active' : ''}`} onClick={() => setActiveTab('search')}>
+              <Search size={18} /> RESEARCH
+           </button>
+           <button className={`social-tab ${activeTab === 'following' ? 'active' : ''}`} onClick={() => setActiveTab('following')}>
+              <UserCheck size={18} /> FOLLOWING ({stats?.followingCount || 0})
+           </button>
+           <button className={`social-tab ${activeTab === 'followers' ? 'active' : ''}`} onClick={() => setActiveTab('followers')}>
+              <Users size={18} /> FOLLOWERS ({stats?.followerCount || 0})
+           </button>
         </div>
 
-        {/* Search Matrix */}
-        <div className="social-search-container">
-           <form onSubmit={handleSearch} className="search-bar">
-              <Search className="search-icon" size={20} />
-              <input 
-                type="text" 
-                placeholder="Search Agent Code or Username..." 
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
-              <button type="submit" disabled={searchLoading}>
-                {searchLoading ? 'SYNCING...' : 'SEARCH'}
-              </button>
-           </form>
+        {activeTab === 'search' && (
+          <div className="social-search-container">
+             <form onSubmit={handleSearch} className="search-bar">
+                <Search className="search-icon" size={20} />
+                <input 
+                  type="text" 
+                  placeholder="Identify agent by code or name..." 
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                />
+                <button type="submit" disabled={searchLoading}>
+                  {searchLoading ? 'SYNC...' : 'IDENTIFY'}
+                </button>
+             </form>
+             <div className="search-results">
+                {searchResults.map(user => renderAgentRow(user))}
+                {query && searchResults.length === 0 && !searchLoading && (
+                  <div className="empty-state">No agents detected in this sector.</div>
+                )}
+             </div>
+          </div>
+        )}
 
-           <div className="search-results">
-              {results.length > 0 ? (
-                results.map(targetUser => {
-                   const isFollowing = stats?.following.some(f => f._id === targetUser._id);
-                   const isFollower = stats?.followers.some(f => f._id === targetUser._id);
-                   const isMutual = isFollowing && isFollower;
+        {activeTab === 'following' && (
+          <div className="connections-list">
+             {stats?.following.length > 0 ? (
+               stats.following.map(user => renderAgentRow(user))
+             ) : (
+               <div className="empty-state">You are not tracking any agents yet.</div>
+             )}
+          </div>
+        )}
 
-                   return (
-                    <div key={targetUser._id} className="agent-row extreme-card animate-fade-in">
-                       <div className="agent-info">
-                          <span className="agent-avatar">
-                            {targetUser.avatar === 'Lion' ? '🦁' : 
-                             targetUser.avatar === 'Tiger' ? '🐯' : 
-                             targetUser.avatar === 'Parrot' ? '🦜' : '👤'}
-                          </span>
-                          <div className="agent-details">
-                             <div className="agent-name-row">
-                                <span className="agent-name">{targetUser.name}</span>
-                                {isMutual && <Heart className="mutual-heart" size={14} fill="currentColor" />}
-                             </div>
-                             <span className="agent-xp">{targetUser.xp} XP • {targetUser.streak} 🔥</span>
-                          </div>
-                       </div>
-                       <button 
-                        className={`follow-btn ${isFollowing ? 'unfollow' : ''}`}
-                        onClick={() => toggleFollow(targetUser._id, isFollowing)}
-                       >
-                          {isFollowing ? <UserMinus size={18} /> : <UserPlus size={18} />}
-                          {isFollowing ? 'UNFOLLOW' : 'FOLLOW'}
-                       </button>
-                    </div>
-                   );
-                })
-              ) : query && !searchLoading ? (
-                <div className="empty-search">No agents found in this sector.</div>
-              ) : null}
-           </div>
-        </div>
+        {activeTab === 'followers' && (
+          <div className="connections-list">
+             {stats?.followers.length > 0 ? (
+               stats.followers.map(user => renderAgentRow(user))
+             ) : (
+               <div className="empty-state">No agents are tracking your progress yet.</div>
+             )}
+          </div>
+        )}
       </div>
     </div>
   );
