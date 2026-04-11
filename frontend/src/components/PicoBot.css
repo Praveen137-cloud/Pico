@@ -33,6 +33,11 @@
   margin-bottom: -2px;
 }
 
+.pico-avatar img {
+  mix-blend-mode: multiply;
+  filter: brightness(1.1);
+}
+
 .pico-badge {
   font-size: 10px;
   font-weight: 950;
