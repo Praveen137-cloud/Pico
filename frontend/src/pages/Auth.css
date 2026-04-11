@@ -80,12 +80,11 @@
 }
 
 .auth-mascot img {
-  width: 140px; /* Reduced from 250px to prevent 'Big Icon' issue */
-  height: 140px;
+  width: 100px; /* Reduced from 140px to ensure it doesn't cover text */
+  height: 100px;
   object-fit: contain;
-  mix-blend-mode: multiply;
-  filter: brightness(1.1) contrast(1.1);
-  background: transparent;
+  mix-blend-mode: screen; /* Switched to SCREEN for black-background reliability */
+  filter: brightness(1.2) contrast(1.1);
 }
 
 .floating {
@@ -186,6 +185,11 @@
   cursor: pointer;
   transition: all 0.3s;
   margin-top: 10px;
+}
+
+.pico-avatar img {
+  mix-blend-mode: screen;
+  filter: brightness(1.2);
 }
 
 .auth-submit-btn:hover {

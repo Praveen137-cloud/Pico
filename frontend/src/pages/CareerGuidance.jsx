@@ -61,8 +61,10 @@ const CareerGuidance = () => {
       <div className="career-container">
         <header className="career-header">
           <button onClick={() => navigate('/')} className="back-btn-elite">← BACK TO HQ</button>
-          <h1 className="career-title">ENGINEERING CAREER MATRIX</h1>
-          <p className="career-subtitle">Architect your future with Elite Curated Roadmaps</p>
+          <div className="career-header-text">
+            <h1 className="career-title">ENGINEERING CAREER MATRIX</h1>
+            <p className="career-subtitle">Architect your future with Elite Curated Roadmaps</p>
+          </div>
         </header>
 
         <section className="career-content">

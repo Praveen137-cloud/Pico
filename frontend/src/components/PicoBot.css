@@ -34,8 +34,8 @@
 }
 
 .pico-avatar img {
-  mix-blend-mode: multiply;
-  filter: brightness(1.1);
+  mix-blend-mode: screen;
+  filter: brightness(1.2);
 }
 
 .pico-badge {

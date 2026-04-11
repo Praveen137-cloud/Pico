@@ -11,15 +11,22 @@
 }
 
 .career-header {
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
   margin-bottom: 50px;
-  position: relative;
+  width: 100%;
+  gap: 30px;
+}
+
+.career-header-text {
+  flex: 1;
+  text-align: center;
+  padding-right: 120px; /* Offset to keep title centered despite the back button */
 }
 
 .back-btn-elite {
-  position: absolute;
-  top: 0;
-  left: 0;
+  flex-shrink: 0;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--divider);
   color: var(--primary-accent);
