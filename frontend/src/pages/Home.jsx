@@ -16,12 +16,19 @@ const Home = () => {
   const [isHoveringDonate, setIsHoveringDonate] = useState(false);
   const navigate = useNavigate();
 
-  // 0. Sync Active Subject with User Profile
+  // 0. Sync Active Subject with User Profile & AUTO-REDIRECT
   useEffect(() => {
-    if (user && user.lastVisitedSubject) {
-      setActiveSubject(user.lastVisitedSubject);
+    if (user) {
+      if (user.lastVisitedSubject) {
+        setActiveSubject(user.lastVisitedSubject);
+      }
+      
+      // 🔥 Session Persistence: Auto-jump to the last map point
+      if (user.lastSubjectId && user.lastSectionId) {
+        navigate(`/map/${user.lastSubjectId}/${user.lastSectionId}`);
+      }
     }
-  }, [user]);
+  }, [user, navigate]);
 
   // 1. Fetch Subject List
   useEffect(() => {
@@ -105,9 +112,10 @@ const Home = () => {
                <span style={{fontWeight: 800, fontSize: 13, letterSpacing: 1}}>{user?.streak || 0} DAY STREAK</span>
             </div>
             <div style={{display: 'flex', alignItems: 'center', gap: 6}}>
-               <span style={{fontSize: 18}}>⚡</span>
-               <span style={{fontWeight: 800, fontSize: 13, letterSpacing: 1}}>{user?.xp || 0} XP</span>
+               <span style={{fontSize: 18}}>🔥</span>
+               <span style={{fontWeight: 800, fontSize: 13, letterSpacing: 1}}>{user?.streak || 0} DAY STREAK</span>
             </div>
+            {/* XP and Score Hidden per User Request for a cleaner vibe */}
             {/* Version Badge for verification */}
             <div style={{
               backgroundColor: 'var(--theme-primary)', 

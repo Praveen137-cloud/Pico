@@ -38,7 +38,9 @@ const Celebration = () => {
         <h1 style={styles.title}>
           {isMastery ? `${subjectName} Mastered!` : 'Lesson Complete!'}
         </h1>
-        <div style={{fontSize: '64px', marginBottom: '24px'}}>🦜</div>
+        <div style={styles.birdHeroWrapper}>
+          <img src="/pico-bird.png" alt="Pico Hero" style={styles.picoBirdHero} />
+        </div>
         
         <div style={{...styles.messageBox, border: isMastery ? '2px solid gold' : '1px solid var(--theme-primary)', color: isMastery ? 'gold' : 'var(--theme-primary)'}}>
           {isMastery 
@@ -51,18 +53,7 @@ const Celebration = () => {
           <div style={{color: isMastery ? 'gold' : '#F59E0B', fontSize: '48px', fontWeight: '800'}}>+{xpReward || 10} XP</div>
         </div>
 
-        {!isMastery && (
-          <div style={styles.statsRow}>
-            <div style={styles.statBox}>
-              <div style={{color: 'var(--text-muted)', fontSize: '11px', fontWeight: '900', letterSpacing: '1px'}}>SCORE</div>
-              <div style={{color: '#fff', fontSize: '24px', fontWeight: '900'}}>{score || 0}/{totalQuestions || 0}</div>
-            </div>
-            <div style={styles.statBox}>
-              <div style={{color: 'var(--text-muted)', fontSize: '11px', fontWeight: '900', letterSpacing: '1px'}}>TIME</div>
-              <div style={{color: '#fff', fontSize: '24px', fontWeight: '900'}}>{timeSpent || 0}s</div>
-            </div>
-          </div>
-        )}
+        {/* Stats Row Hidden per User Request: scores were inaccurate */}
       </div>
 
       <div style={styles.footer}>
@@ -83,6 +74,12 @@ const Celebration = () => {
           </button>
         </div>
       </div>
+      <style>{`
+        @keyframes picoHeroBounce {
+          0%, 100% { transform: translateY(0) scale(1); }
+          50% { transform: translateY(-20px) scale(1.05); }
+        }
+      `}</style>
     </div>
   );
 };
@@ -99,7 +96,22 @@ const styles = {
   statsRow: { width: '100%', maxWidth: '500px', display: 'flex', gap: '16px', marginBottom: '32px' },
   statBox: { flex: 1, backgroundColor: 'var(--bg-card)', padding: '16px', borderRadius: '12px' },
   footer: { padding: '24px', display: 'flex', justifyContent: 'center' },
-  btnPrimary: { width: '100%', maxWidth: '500px', backgroundColor: 'var(--theme-primary)', color: '#0F172A', padding: '16px', borderRadius: '12px', border: 'none', fontWeight: '700', fontSize: '18px', cursor: 'pointer' }
+  btnPrimary: { width: '100%', maxWidth: '500px', backgroundColor: 'var(--theme-primary)', color: '#0F172A', padding: '16px', borderRadius: '12px', border: 'none', fontWeight: '700', fontSize: '18px', cursor: 'pointer' },
+  birdHeroWrapper: {
+    width: '180px',
+    height: '180px',
+    marginBottom: '24px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+    animation: 'picoHeroBounce 2s infinite ease-in-out'
+  },
+  picoBirdHero: {
+    width: '100%',
+    height: '100%',
+    objectFit: 'contain'
+  }
 };
 
 export default Celebration;

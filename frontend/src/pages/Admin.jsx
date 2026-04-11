@@ -100,15 +100,15 @@ const Admin = () => {
           <tbody>
             {users.map(user => (
               <tr key={user._id} className={user.isGuest ? 'row-guest' : ''}>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>{user.xp}</td>
-                <td>
+                <td data-label="AGENT NAME">{user.name}</td>
+                <td data-label="EMAIL INTERFACE">{user.email}</td>
+                <td data-label="XP">{user.xp}</td>
+                <td data-label="TYPE">
                   <span className={`role-badge ${user.isGuest ? 'guest' : 'regular'}`}>
                     {user.isGuest ? 'GUEST' : 'AGENT'}
                   </span>
                 </td>
-                <td>
+                <td data-label="ACTIONS">
                   <button 
                     className="user-delete-btn" 
                     onClick={() => handleDeleteUser(user._id)}

@@ -126,7 +126,7 @@ const Map = () => {
           <div style={styles.subjectName}>{getSubjectIcon(subjectName)} {subjectName.toUpperCase()} CONFECTIONERY</div>
           <div style={styles.sectionTitle}>{stage.title}</div>
         </div>
-        <div style={styles.xpChip}>🍬 {(authUser?.xp ?? 0)} SUGAR XP</div>
+        {/* XP Chip Hidden per User Request */}
       </header>
 
       {/* Progress Bar (Chocolate Filling style) */}
@@ -167,8 +167,13 @@ const Map = () => {
             return (
               <div 
                 key={unit._id} 
-                className="entrance-anim"
-                style={{ ...styles.nodeWrapper, transform: `translateX(${shift})`, marginBottom: '60px' }}
+                className="entrance-anim node-float-hover"
+                style={{ 
+                  ...styles.nodeWrapper, 
+                  transform: `translateX(${shift})`, 
+                  marginBottom: '60px',
+                  animationDelay: `${index * 0.1}s` 
+                }}
                 ref={isCurrent ? activeNodeRef : null}
               >
                 <div 

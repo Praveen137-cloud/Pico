@@ -5,7 +5,7 @@ const PreLoader = () => {
     <div style={styles.overlay}>
       <div style={styles.content}>
         <div style={styles.iconContainer}>
-          <div style={styles.picoBird}>🦜</div>
+          <img src="/pico-bird.png" alt="Pico" style={styles.picoBirdImg} />
           <div style={styles.theGoat}>🐐</div>
         </div>
         
@@ -65,9 +65,11 @@ const styles = {
     gap: '40px',
     fontSize: '80px',
   },
-  picoBird: {
+  picoBirdImg: {
+    width: '100px',
+    height: '100px',
+    objectFit: 'contain',
     animation: 'bounce 1s infinite ease-in-out',
-    filter: 'drop-shadow(0 0 15px #FF4444)',
   },
   theGoat: {
     animation: 'bounce 1s infinite ease-in-out 0.2s',

@@ -44,9 +44,7 @@ const Auth = () => {
     setLoading(true);
     try {
       const res = await api.post('/api/auth/google', { credential: response.credential });
-      sessionStorage.setItem('token', res.data.token);
-      // setToken(res.data.token); // Assuming AuthContext handles this
-      setUser(res.data.user);
+      loginSuccess(res.data);
       navigate('/');
     } catch (err) {
       setErrorMsg('Google authentication sequence failed.');
@@ -95,7 +93,7 @@ const Auth = () => {
 
       <div className="auth-card scale-in">
         <div className="mascot-container floating">
-          <img src="/vanta-parrot.png" alt="Pico Mascot" className="auth-mascot" />
+          <img src="/pico-bird.png" alt="Pico Mascot" className="auth-mascot" />
           <div className="mascot-shadow"></div>
         </div>
 

@@ -14,6 +14,8 @@ const userSchema = new mongoose.Schema({
   
   avatar: { type: String, default: 'Parrot' },
   lastVisitedSubject: { type: String, default: 'Arrays' },
+  lastSubjectId: { type: mongoose.Schema.Types.ObjectId, ref: 'Subject' },
+  lastSectionId: { type: mongoose.Schema.Types.ObjectId, ref: 'Stage' },
   onboardingCompleted: { type: Boolean, default: false },
   xp: { type: Number, default: 0 },
   xpBoostUntil: { type: Date, default: null }, // For Double XP boosters

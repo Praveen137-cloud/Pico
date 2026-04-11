@@ -104,6 +104,8 @@ app.use('/api/curriculum', curriculumRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/social', socialRoutes);
+const careerRoutes = require('./routes/career');
+app.use('/api/career', careerRoutes);
 
 // Free-play code runner for the Code Playground (no test cases, just raw execution)
 const { exec } = require('child_process');
@@ -271,6 +273,11 @@ app.post('/api/unlock', (req, _res, next) => { req.io = io; next(); }, authMiddl
 
     user.xp += xpEarned;
     user.lessonsCompleted += 1;
+    
+    // 🔥 Save last progress point for auto-redirect on login
+    if (subjectId) user.lastSubjectId = subjectId;
+    if (sectionId) user.lastSectionId = sectionId;
+    
     await user.save();
 
     // 4. Find the unit name for the lore feed

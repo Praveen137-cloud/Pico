@@ -1,43 +1,65 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '../api';
 import ReactMarkdown from 'react-markdown';
 import './CareerGuidance.css';
 
 const CareerGuidance = () => {
+  const [options, setOptions] = useState({ branches: [], interestsByBranch: {} });
   const [formData, setFormData] = useState({
     branch: '',
-    interests: '',
-    goal: ''
+    interest: ''
   });
-  const [result, setResult] = useState('');
+  const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  // 1. Fetch available options from DB
+  useEffect(() => {
+    const fetchOptions = async () => {
+      try {
+        const res = await api.get('/api/career/options');
+        setOptions(res.data);
+      } catch (err) {
+        console.error("Error fetching career options:", err);
+      }
+    };
+    fetchOptions();
+  }, []);
+
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    if (name === 'branch') {
+      setFormData({ branch: value, interest: '' }); // Reset interest when branch changes
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!formData.branch || !formData.interest) return;
+    
     setLoading(true);
     setError('');
-    setResult('');
+    setResult(null);
     try {
-      const res = await api.post('/api/ai/career-guidance', formData);
-      setResult(res.data.advice);
+      const res = await api.post('/api/career/guidance', formData);
+      setResult(res.data);
     } catch (err) {
-      setError('The Career Matrix encountered a synchronization error. Please try again.');
+      setError(err.response?.data?.error || 'The Career Matrix encountered an error. Please contact an Admin.');
     } finally {
       setLoading(false);
     }
   };
+
+  const availableInterests = options.interestsByBranch[formData.branch] || [];
 
   return (
     <div className="career-guidance-page">
       <div className="career-container">
         <header className="career-header">
           <h1 className="career-title">ENGINEERING CAREER MATRIX</h1>
-          <p className="career-subtitle">Architect your future with Elite AI Guidance</p>
+          <p className="career-subtitle">Architect your future with Elite Curated Roadmaps</p>
         </header>
 
         <section className="career-content">
@@ -47,49 +69,58 @@ const CareerGuidance = () => {
               <form onSubmit={handleSubmit} className="career-form">
                 <div className="form-group">
                   <label>ENGINEERING BRANCH</label>
-                  <input
-                    type="text"
+                  <select
                     name="branch"
-                    placeholder="e.g. Computer Science, Mechanical, EEE..."
                     value={formData.branch}
                     onChange={handleChange}
                     required
-                  />
+                    className="career-select"
+                  >
+                    <option value="">-- SELECT BRANCH --</option>
+                    {options.branches.map(b => (
+                      <option key={b} value={b}>{b}</option>
+                    ))}
+                  </select>
                 </div>
+                
                 <div className="form-group">
-                  <label>CORE INTERESTS / SKILLS</label>
-                  <textarea
-                    name="interests"
-                    placeholder="e.g. Web Dev, Robotics, Data Science, Problem Solving..."
-                    value={formData.interests}
+                  <label>CORE INTEREST</label>
+                  <select
+                    name="interest"
+                    value={formData.interest}
                     onChange={handleChange}
                     required
-                  />
+                    disabled={!formData.branch}
+                    className="career-select"
+                  >
+                    <option value="">-- SELECT FOCUS --</option>
+                    {availableInterests.map(i => (
+                      <option key={i} value={i}>{i}</option>
+                    ))}
+                  </select>
                 </div>
-                <div className="form-group">
-                  <label>LONG-TERM VISION / GOAL</label>
-                  <input
-                    type="text"
-                    name="goal"
-                    placeholder="e.g. SDE at FAANG, Entrepreneurship, Research..."
-                    value={formData.goal}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <button type="submit" className="career-submit-btn" disabled={loading}>
-                  {loading ? 'CALCULATING ROADMAP...' : 'GENERATE ELITE ROADMAP'}
+
+                <button type="submit" className="career-submit-btn" disabled={loading || !formData.interest}>
+                  {loading ? 'RETRIEVING ROADMAP...' : 'GENERATE ELITE ROADMAP'}
                 </button>
               </form>
             </div>
           ) : (
             <div className="career-result-card extreme-card animate-fade-in">
               <div className="result-header">
-                <h3>YOUR GENERATED DESTINY</h3>
-                <button onClick={() => setResult('')} className="reset-btn">NEW PROJECTION</button>
+                <div>
+                  <h3 className="result-title">{result.title}</h3>
+                  {result.estimatedTime && <span className="time-badge">⏳ {result.estimatedTime}</span>}
+                </div>
+                <button onClick={() => setResult(null)} className="reset-btn">NEW SELECTION</button>
               </div>
+              
+              <div className="skills-row">
+                {result.skills?.map(s => <span key={s} className="skill-tag">{s}</span>)}
+              </div>
+
               <div className="markdown-content">
-                <ReactMarkdown>{result}</ReactMarkdown>
+                <ReactMarkdown>{result.advice}</ReactMarkdown>
               </div>
             </div>
           )}

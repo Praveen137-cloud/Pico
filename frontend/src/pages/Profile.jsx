@@ -118,9 +118,13 @@ const Profile = () => {
         <div 
           className="profile-avatar-circle" 
           onClick={() => setIsAvatarModalOpen(true)}
-          style={{ cursor: 'pointer', position: 'relative' }}
+          style={{ cursor: 'pointer', position: 'relative', overflow: 'hidden' }}
         >
-          {currentAvatarEmoji}
+          {user.avatar === 'Parrot' ? (
+            <img src="/pico-bird.png" alt="Parrot" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+          ) : (
+            currentAvatarEmoji
+          )}
           <div className="avatar-edit-badge">✎</div>
         </div>
         

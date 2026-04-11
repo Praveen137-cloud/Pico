@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import { AuthProvider, AuthContext } from './context/AuthContext';
-import RioBot from './components/RioBot';
+import PicoBot from './components/PicoBot';
 import DigitalBackground from './components/DigitalBackground';
 
 // Lazy load pages for performance
@@ -172,7 +172,7 @@ function App() {
                 } />
               </Routes>
             </Suspense>
-            <RioBot />
+            <PicoBot />
           </Router>
         </div>
       </AuthProvider>

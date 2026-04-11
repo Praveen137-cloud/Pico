@@ -15,10 +15,11 @@ async function callGeminiDeepForge(prompt) {
   
   // 2. Multi-Path Strategy with Verified Identifiers
   const strategies = [
+    { version: 'v1beta', model: 'gemini-flash-latest' },
+    { version: 'v1', model: 'gemini-2.0-flash' },
     { version: 'v1', model: 'gemini-1.5-flash-latest' },
     { version: 'v1', model: 'gemini-1.5-flash' },
-    { version: 'v1', model: 'gemini-pro' },
-    { version: 'v1beta', model: 'gemini-1.5-flash' }
+    { version: 'v1', model: 'gemini-pro' }
   ];
 
   let lastError = null;

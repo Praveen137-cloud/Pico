@@ -32,25 +32,25 @@ export const AuthProvider = ({ children }) => {
     fetchUser();
   }, [token]);
 
+  const loginSuccess = (data) => {
+    sessionStorage.setItem('token', data.token);
+    setToken(data.token);
+    setUser(data.user);
+  };
+
   const login = async (email, password) => {
     const res = await api.post('/api/auth/login', { email, password });
-    sessionStorage.setItem('token', res.data.token);
-    setToken(res.data.token);
-    setUser(res.data.user);
+    loginSuccess(res.data);
   };
 
   const register = async (name, email, password) => {
     const res = await api.post('/api/auth/register', { name, email, password });
-    sessionStorage.setItem('token', res.data.token);
-    setToken(res.data.token);
-    setUser(res.data.user);
+    loginSuccess(res.data);
   };
 
   const loginAsGuest = async () => {
     const res = await api.post('/api/auth/guest');
-    sessionStorage.setItem('token', res.data.token);
-    setToken(res.data.token);
-    setUser(res.data.user);
+    loginSuccess(res.data);
   };
 
   const logout = () => {
@@ -60,7 +60,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, register, loginAsGuest, logout, setUser, subjects, setSubjects }}>
+    <AuthContext.Provider value={{ user, token, loading, login, register, loginAsGuest, logout, setUser, loginSuccess, subjects, setSubjects }}>
       {children}
     </AuthContext.Provider>
   );
