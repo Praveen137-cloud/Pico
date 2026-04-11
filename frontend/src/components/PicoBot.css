@@ -36,6 +36,9 @@
 .pico-avatar img {
   mix-blend-mode: screen;
   filter: brightness(1.2);
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
 }
 
 .pico-badge {

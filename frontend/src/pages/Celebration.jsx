@@ -108,8 +108,8 @@ const styles = {
     animation: 'picoHeroBounce 2s infinite ease-in-out'
   },
   picoBirdHero: {
-    width: '100%',
-    height: '100%',
+    width: '100px',
+    height: '100px',
     objectFit: 'contain',
     mixBlendMode: 'screen'
   }

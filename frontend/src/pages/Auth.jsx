@@ -142,7 +142,7 @@ const Auth = () => {
               />
             </div>
             <button className="auth-submit-btn" type="submit" disabled={loading}>
-              {loading ? 'SYNCING...' : isLogin ? 'VERIFIED AUTH' : 'INITIALIZE'}
+              {loading ? 'SYNCING...' : isLogin ? 'AUTHENTICATE' : 'INITIALIZE'}
             </button>
           </form>
 

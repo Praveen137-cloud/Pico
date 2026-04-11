@@ -70,21 +70,21 @@
 }
 
 .auth-mascot {
-  width: 250px;
-  height: 250px;
+  width: 80px; /* Matched to img size to prevent container-scaling issues */
+  height: 80px;
   margin: 0 auto 30px;
   animation: birdFloat 3s ease-in-out infinite;
   display: flex;
   justify-content: center;
   align-items: center;
+  mix-blend-mode: screen; /* Applied to the element directly */
+  filter: brightness(1.2) contrast(1.1);
 }
 
 .auth-mascot img {
-  width: 80px; /* Reduced from 100px for a more refined look */
-  height: 80px;
+  width: 100%; /* Fill the 80px container */
+  height: 100%;
   object-fit: contain;
-  mix-blend-mode: screen; /* Switched to SCREEN for black-background reliability */
-  filter: brightness(1.2) contrast(1.1);
 }
 
 .floating {
@@ -190,6 +190,9 @@
 .pico-avatar img {
   mix-blend-mode: screen;
   filter: brightness(1.2);
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
 }
 
 .auth-submit-btn:hover {
