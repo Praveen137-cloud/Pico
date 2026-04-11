@@ -80,8 +80,8 @@
 }
 
 .auth-mascot img {
-  width: 100px; /* Reduced from 140px to ensure it doesn't cover text */
-  height: 100px;
+  width: 80px; /* Reduced from 100px for a more refined look */
+  height: 80px;
   object-fit: contain;
   mix-blend-mode: screen; /* Switched to SCREEN for black-background reliability */
   filter: brightness(1.2) contrast(1.1);
