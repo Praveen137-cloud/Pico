@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../api';
 import ReactMarkdown from 'react-markdown';
 import './CareerGuidance.css';
 
 const CareerGuidance = () => {
+  const navigate = useNavigate();
   const [options, setOptions] = useState({ branches: [], interestsByBranch: {} });
   const [formData, setFormData] = useState({
     branch: '',
@@ -58,6 +60,7 @@ const CareerGuidance = () => {
     <div className="career-guidance-page">
       <div className="career-container">
         <header className="career-header">
+          <button onClick={() => navigate('/')} className="back-btn-elite">← BACK TO HQ</button>
           <h1 className="career-title">ENGINEERING CAREER MATRIX</h1>
           <p className="career-subtitle">Architect your future with Elite Curated Roadmaps</p>
         </header>

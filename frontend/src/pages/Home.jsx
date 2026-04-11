@@ -111,9 +111,9 @@ const Home = () => {
                <span style={{fontSize: 18}}>🔥</span>
                <span style={{fontWeight: 800, fontSize: 13, letterSpacing: 1}}>{user?.streak || 0} DAY STREAK</span>
             </div>
-            <div style={{display: 'flex', alignItems: 'center', gap: 6}}>
-               <span style={{fontSize: 18}}>🔥</span>
-               <span style={{fontWeight: 800, fontSize: 13, letterSpacing: 1}}>{user?.streak || 0} DAY STREAK</span>
+            <div style={{display: 'flex', alignItems: 'center', gap: 6, marginLeft: '12px'}}>
+               <span style={{fontSize: 18}}>⚡</span>
+               <span style={{fontWeight: 800, fontSize: 13, letterSpacing: 1}}>{user?.xp || 0} TOTAL XP</span>
             </div>
             {/* XP and Score Hidden per User Request for a cleaner vibe */}
             {/* Version Badge for verification */}

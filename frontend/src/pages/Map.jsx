@@ -121,12 +121,11 @@ const Map = () => {
       <div className="chocolate-city-bg" />
 
       <header style={styles.header}>
-        <button style={styles.backBtn} onClick={() => navigate('/')}>🏠</button>
+        <button style={styles.backBtn} onClick={() => navigate('/')}>← BACK TO HQ</button>
         <div style={{ flex: 1, paddingLeft: 10 }}>
-          <div style={styles.subjectName}>{getSubjectIcon(subjectName)} {subjectName.toUpperCase()} CONFECTIONERY</div>
+          <div style={styles.subjectName}>{getSubjectIcon(subjectName)} {subjectName.toUpperCase()} RESEARCH</div>
           <div style={styles.sectionTitle}>{stage.title}</div>
         </div>
-        {/* XP Chip Hidden per User Request */}
       </header>
 
       {/* Progress Bar (Chocolate Filling style) */}
@@ -237,7 +236,18 @@ const styles = {
     zIndex: 20,
     boxShadow: '0 4px 20px rgba(0,0,0,0.5)'
   },
-  backBtn: { background: '#4E342E', border: 'none', color: '#fff', fontSize: '20px', cursor: 'pointer', borderRadius: '15px', padding: '10px 14px', boxShadow: '0 4px 0 #2D1B19' },
+  backBtn: {
+    background: 'rgba(255, 255, 255, 0.05)',
+    border: '1px solid rgba(255, 255, 255, 0.1)',
+    color: '#FFB300',
+    padding: '8px 16px',
+    borderRadius: '12px',
+    fontSize: '11px',
+    fontWeight: '900',
+    cursor: 'pointer',
+    letterSpacing: '1px',
+    transition: 'all 0.3s'
+  },
   subjectName: { color: '#BCAAA4', fontSize: '10px', fontWeight: '800', letterSpacing: '2px' },
   sectionTitle: { color: '#FFF8E1', fontSize: '22px', fontWeight: '900', marginTop: 2 },
   xpChip: { 
