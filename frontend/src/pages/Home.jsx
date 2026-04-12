@@ -109,7 +109,24 @@ const Home = () => {
                <span style={{fontSize: 18}}>⚡</span>
                <span style={{fontWeight: 800, fontSize: 13, letterSpacing: 1}}>{user?.xp || 0} TOTAL XP</span>
             </div>
-            {/* XP and Score Hidden per User Request for a cleaner vibe */}
+            {user?.isPremium && (
+              <div style={{
+                backgroundColor: 'rgba(255, 179, 0, 0.1)', 
+                color: '#FFB300', 
+                padding: '4px 10px', 
+                borderRadius: '8px', 
+                fontSize: '11px', 
+                fontWeight: '900',
+                marginLeft: '12px',
+                border: '1px solid #FFB300',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                boxShadow: '0 0 10px rgba(255,179,0,0.2)'
+              }}>
+                💎 PREMIUM AGENT
+              </div>
+            )}
             {/* Version Badge for verification */}
             <div style={{
               backgroundColor: 'var(--theme-primary)', 
@@ -124,21 +141,6 @@ const Home = () => {
               DEPLOY v2.2: BUILD STABLE
             </div>
           </div>
-          <a 
-            href="upi://pay?pa=praveenkumar63811@oksbi&pn=Praveen%20Kumar&cu=INR&tn=Supporting%20Pico"
-            className="donate-btn-header"
-            style={{
-              transform: isHoveringDonate ? 'scale(1.05)' : 'scale(1)',
-              textDecoration: 'none',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
-            onMouseEnter={() => setIsHoveringDonate(true)}
-            onMouseLeave={() => setIsHoveringDonate(false)}
-          >
-            <span style={{fontSize: 16}}>💝</span> SUPPORT PICO
-          </a>
         </div>
         <SubjectNav activeSubject={activeSubject} onSelect={handleSelectSubject} />
       </div>

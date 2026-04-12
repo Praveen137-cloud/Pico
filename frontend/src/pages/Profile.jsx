@@ -67,15 +67,44 @@ const Profile = () => {
 
   const buyPremium = async () => {
     try {
-      const res = await api.post('/api/user/buy-premium');
-      if (res.data.success) {
-        setUser(res.data.user);
-        if (setAuthUser) setAuthUser(res.data.user);
-        alert('Welcome to PICO PREMIUM! Ads are now cleared from your interface. 🛡️⚡');
-      }
+      // 1. Create Order
+      const orderRes = await api.post('/api/payment/order');
+      const { order } = orderRes.data;
+
+      const options = {
+        key: 'rzp_test_placeholder', // Should Ideally come from backend or env
+        amount: order.amount,
+        currency: order.currency,
+        name: 'PICO ELITE ACADEMY',
+        description: 'CORE PREMIUM UNLOCK',
+        order_id: order.id,
+        handler: async (response) => {
+          try {
+            // 2. Verify Payment
+            const verifyRes = await api.post('/api/payment/verify', response);
+            if (verifyRes.data.success) {
+              setUser(verifyRes.data.user);
+              if (setAuthUser) setAuthUser(verifyRes.data.user);
+              alert('WELCOME TO THE ELITE! PICO PREMIUM ACTIVATED. 💎🛡️');
+            }
+          } catch (err) {
+            alert('Verification failed. If amount was deducted, contact support.');
+          }
+        },
+        prefill: {
+          name: user.name,
+          email: user.email
+        },
+        theme: {
+          color: '#00F2FF'
+        }
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
     } catch (err) {
-      console.error('Premium purchase failed', err);
-      alert('Failed to process premium request.');
+      console.error('Payment initialization failed', err);
+      alert('Could not initiate payment. Try again later.');
     }
   };
 
@@ -130,7 +159,7 @@ const Profile = () => {
     <div className="profile-page">
       <div className="profile-header">
         <div 
-          className="profile-avatar-circle" 
+          className={`profile-avatar-circle ${user?.isPremium ? 'premium' : ''}`} 
           onClick={() => setIsAvatarModalOpen(true)}
           style={{ cursor: 'pointer', position: 'relative', overflow: 'hidden' }}
         >
@@ -153,7 +182,9 @@ const Profile = () => {
           />
         ) : (
           <div className="profile-name-container" onClick={() => setIsEditing(true)}>
-            <h2 className="profile-name">{user.name}</h2>
+            <h2 className={`profile-name ${user?.isPremium ? 'premium-glow' : ''}`}>
+              {user.name} {user?.isPremium && '💎'}
+            </h2>
             <span className="profile-edit-hint">Tap to edit username</span>
           </div>
         )}
@@ -291,23 +322,23 @@ const Profile = () => {
       </a>
 
       <div className="profile-support-box">
-        <h4 style={{color: '#fff', marginBottom: 8, fontSize: 18, fontWeight: 800}}>Support Pico 🦜</h4>
+        <h4 style={{color: '#fff', marginBottom: 8, fontSize: 18, fontWeight: 800}}>Pico Premium 💎</h4>
         
         {user?.isPremium ? (
           <div style={{
-            background: 'rgba(0, 242, 255, 0.1)',
-            border: '2px solid var(--theme-primary)',
-            padding: '20px',
+            background: 'rgba(255, 179, 0, 0.1)',
+            border: '2px solid #FFB300',
+            padding: '24px',
             borderRadius: '16px',
-            marginBottom: '20px'
+            marginBottom: '0'
           }}>
-            <div style={{ color: 'var(--theme-primary)', fontWeight: 900, fontSize: 18, letterSpacing: 2 }}>CORE PREMIUM ACTIVE</div>
-            <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12, marginTop: 4 }}>You are browsing an ads-free experience.</div>
+            <div style={{ color: '#FFB300', fontWeight: 900, fontSize: 18, letterSpacing: 2 }}>CORE PREMIUM ACTIVE</div>
+            <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, marginTop: 4 }}>You have permanent access to an ad-free experience.</div>
           </div>
         ) : (
           <>
-            <p style={{color: 'var(--text-muted)', fontSize: 14, maxWidth: '400px', margin: '0 auto', marginBottom: 20}}>
-              Remove all ads and support development directly with a one-time premium unlock.
+            <p style={{color: 'var(--text-muted)', fontSize: 14, maxWidth: '400px', margin: '0 auto', marginBottom: 24}}>
+              Remove all ads and unlock the "Elite Glow" by upgrading to a Premium account. One-time payment.
             </p>
             <button 
               onClick={buyPremium}
@@ -317,17 +348,16 @@ const Profile = () => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '8px',
-                background: 'linear-gradient(135deg, var(--theme-primary), var(--theme-secondary))',
-                color: '#fff',
-                padding: '14px 24px',
+                background: 'linear-gradient(135deg, #FFB300, #FBBF24)',
+                color: '#000',
+                padding: '16px 32px',
                 borderRadius: '12px',
                 fontWeight: 900,
                 border: 'none',
                 cursor: 'pointer',
-                fontSize: '15px',
+                fontSize: '16px',
                 transition: 'all 0.2s',
-                boxShadow: '0 4px 15px rgba(0, 242, 255, 0.4)',
-                marginBottom: '12px',
+                boxShadow: '0 8px 25px rgba(255, 179, 0, 0.4)',
                 width: '100%'
               }}
             >
@@ -335,30 +365,6 @@ const Profile = () => {
             </button>
           </>
         )}
-
-        {/* UPI Direct Pay Button */}
-        <a 
-          href="upi://pay?pa=praveenkumar63811@oksbi&pn=Praveen%20Kumar&cu=INR&tn=Supporting%20Pico"
-          className="profile-support-btn"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '8px',
-            background: 'rgba(255, 255, 255, 0.05)',
-            border: '1px solid var(--divider)',
-            color: '#fff',
-            padding: '10px 20px',
-            borderRadius: '12px',
-            fontWeight: 800,
-            textDecoration: 'none',
-            fontSize: '13px',
-            transition: 'all 0.2s',
-            width: '100%'
-          }}
-        >
-          <span>⚡</span> UPI DONATION (ANY AMOUNT)
-        </a>
       </div>
 
       <button 

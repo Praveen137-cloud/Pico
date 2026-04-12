@@ -4,6 +4,8 @@ const cors = require('cors');
 require('dotenv').config();
 const { createServer } = require('http');
 const { Server } = require('socket.io');
+const Razorpay = require('razorpay');
+const crypto = require('crypto');
 
 const executionRoutes = require('./routes/execute');
 const authRoutes = require('./routes/auth');
@@ -21,6 +23,12 @@ const Problem = require('./models/Problem');
 const app = express();
 const PORT = process.env.PORT || 5000;
 const httpServer = createServer(app);
+
+// 💳 Razorpay Instance
+const razorpay = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID || 'rzp_test_placeholder', // User will provide actual ID
+  key_secret: process.env.RAZORPAY_KEY_SECRET || 'secret_placeholder'
+});
 
 // Seasonal Helper
 const getCurrentSeason = () => {
@@ -242,6 +250,12 @@ app.get('/api/user', authMiddleware, async (req, res) => {
       user.lastDailyQuestReset = now;
     }
     
+    // 💎 ADMIN IS ALWAYS PREMIUM
+    if (user.role === 'admin') {
+      user.isPremium = true;
+      user.adsHidden = true;
+    }
+    
     await user.save();
     res.json(user);
   } catch(err) {
@@ -426,18 +440,48 @@ app.post('/api/quest/claim', authMiddleware, async (req, res) => {
   }
 });
 
-app.post('/api/user/buy-premium', authMiddleware, async (req, res) => {
+// @route   POST /api/payment/order
+// @desc    Create a Razorpay order
+app.post('/api/payment/order', authMiddleware, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id);
-    if (!user) return res.status(404).json({ error: 'User not found' });
-    
-    user.isPremium = true;
-    user.adsHidden = true; // Automatically hide ads for premium users
-    await user.save();
-    
-    res.json({ success: true, message: 'Welcome to Pico Premium!', user });
+    const options = {
+      amount: 100 * 100, // 100 INR in paise
+      currency: 'INR',
+      receipt: `receipt_${req.user.id}_${Date.now()}`
+    };
+
+    const order = await razorpay.orders.create(options);
+    res.json({ success: true, order });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: 'Failed to create payment order' });
+  }
+});
+
+// @route   POST /api/payment/verify
+// @desc    Verify Razorpay payment signature
+app.post('/api/payment/verify', authMiddleware, async (req, res) => {
+  try {
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+    
+    const body = razorpay_order_id + "|" + razorpay_payment_id;
+    const expectedSignature = crypto
+      .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET || 'secret_placeholder')
+      .update(body.toString())
+      .digest('hex');
+
+    if (expectedSignature === razorpay_signature) {
+      // Payment Verified!
+      const user = await User.findById(req.user.id);
+      user.isPremium = true;
+      user.adsHidden = true;
+      await user.save();
+      
+      res.json({ success: true, message: 'Payment verified successfully and Premium activated!', user });
+    } else {
+      res.status(400).json({ error: 'Invalid payment signature' });
+    }
+  } catch (err) {
+    res.status(500).json({ error: 'Verification failed' });
   }
 });
 
