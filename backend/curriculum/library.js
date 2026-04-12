@@ -1,86 +1,67 @@
 const curriculumData = {
   "Basics": {
-    "icon": "🐣",
-    "concepts": [
-      { "name": "Variable Mastery", "point": "Variables store data. Think of them as labeled boxes in your birdhouse.", "code": "int seeds = 10;" },
-      { "name": "Conditional Logic", "point": "If-statements act like forks in the road. If (fruit) then (eat)!", "code": "if (seeds > 0) { eat(); }" },
-      { "name": "The Loop Life", "point": "Repeat actions without getting dizzy. For-loops are your flight path.", "code": "for (int i=0; i<10; i++) { flap(); }" },
-       // ... Many more will be added by the generator logic
-    ],
-    "quizzes": [
-      { "q": "What stores an integer in C?", "a": "int", "options": ["int", "char", "float", "bird"] },
-      { "q": "Syntax for 'If'?", "a": "if(condition)", "options": ["if condition", "if(condition)", "when(condition)", "fly(if)"] }
+    icon: "🐣",
+    sections: [
+      {
+        title: "Stage 1: Foundation Flight",
+        units: [
+          {
+            title: "Unit 1: The Core of Programs",
+            desc: "Learn how programs hold data and make decisions.",
+            lessons: [
+              { type: 'teaching', questionText: "🦜 Pico: 'Welcome fledglings! A program is just instructions for a very fast, very obedient, but very dense bird (a computer).'" },
+              { type: 'teaching', questionText: "🦜 Pico: 'Variables!'\n\nVariables are like tiny nests that hold exactly one thing. If you want to hold 10 seeds, you write: `int seeds = 10;`", codeSnippet: "int seeds = 10;\nprintf(\"I have %d seeds\", seeds);" },
+              { type: 'teaching', questionText: "🦜 Pico: 'Data Types!'\n\nNests have shapes! An `int` holds whole numbers. A `float` holds decimals. A `char` holds a single letter.", codeSnippet: "int whole = 5;\nfloat decimal = 5.5;\nchar letter = 'A';" },
+              { type: 'teaching', questionText: "🦜 Pico: 'Conditions!'\n\nIf you have a choice, you use conditionals. `if` this, `else` that.", codeSnippet: "if (seeds > 5) {\n  printf(\"Feast!\");\n} else {\n  printf(\"Hunt!\");\n}" },
+              { type: 'multiple_choice', questionText: "🦜 Pico: 'Quick check! Which nest type should I use for exactly 3.14 seeds?'", options: ["int", "char", "float", "boolean"], correctAnswer: "float", explanation: "Correct! 'float' is for floating-point numbers (decimals)." },
+              { type: 'programming_board', questionText: "🦜 Pico: 'Help me write an IF statement to check if seeds are exactly 10.'", codeSnippet: "___ (seeds ___ 10) {\n  printf(\"Perfect number of seeds!\");\n}" }
+            ]
+          },
+          {
+            title: "Unit 2: The Loop Life",
+            desc: "Don't repeat yourself. Let the machine do it.",
+            lessons: [
+              { type: 'teaching', questionText: "🦜 Pico: 'Humans hate doing the same thing twice. Birds love loops! Let's loop.'" },
+              { type: 'teaching', questionText: "🦜 Pico: 'The FOR Loop!'\n\nA FOR loop has 3 parts: start, condition, step. Fly around the tree 5 times!", codeSnippet: "for (int i = 0; i < 5; i++) {\n  fly();\n}" },
+              { type: 'teaching', questionText: "🦜 Pico: 'The WHILE Loop!'\n\nWHILE loops run as long as something is true. Like 'while I am hungry, eat'.", codeSnippet: "while (hungry == 1) {\n  eat_seed();\n}" },
+              { type: 'multiple_choice', questionText: "🦜 Pico: 'If I want to repeat something infinitely, what loop could I use?'", options: ["for(;;)", "while(0)", "if(true)", "None"], correctAnswer: "for(;;)", explanation: "Yes! for(;;) or while(1) runs forever until you break out." }
+            ]
+          }
+        ]
+      }
     ]
   },
   "Arrays": {
-     "icon": "🗄️",
-     "concepts": [
-        { "name": "Contiguous Memory", "point": "Arrays are like a row of bird nests, all perfectly lined up and touching.", "code": "int nests[5];" },
-        { "name": "Indexing starts at 0", "point": "In Array-land, the first nest is actually nest 0. Don't fall out!", "code": "nests[0] = 1;" },
-        { "name": "Linear Search", "point": "Searching for a seed? Start at 0 and go to N. It's safe but slow.", "code": "for(int i=0; i<N; i++) if(A[i]==X) return i;" }
-     ],
-     "quizzes": [
-        { "q": "Array index starts at?", "a": "0", "options": ["1", "0", "-1", "NaN"] },
-        { "q": "Search complexity of an unsorted array?", "a": "O(N)", "options": ["O(1)", "O(log N)", "O(N)", "O(N^2)"] }
-     ]
-  },
-  "Linked Lists": {
-     "icon": "🔗",
-     "concepts": [
-        { "name": "Node Dynamics", "point": "Linked lists are nodes held together by pointers—like birds holding talons.", "code": "struct Node { int data; struct Node* next; };" },
-        { "name": "The NULL terminator", "point": "The last bird points to NULL. That's the end of the flight path.", "code": "current->next = NULL;" },
-        { "name": "Insertion O(1)", "point": "Adding a bird to the front is instant. Just update the talon grip!", "code": "new_node->next = head; head = new_node;" }
-     ],
-     "quizzes": [
-        { "q": "Node points to?", "a": "Next Node", "options": ["Prev Node", "Next Node", "NULL only", "Array"] },
-        { "q": "Linked list access complexity?", "a": "O(N)", "options": ["O(1)", "O(log N)", "O(N)", "O(N^2)"] }
-     ]
-  },
-  "Trees": {
-     "icon": "🌳",
-     "concepts": [
-        { "name": "Root & Branches", "point": "Trees have a Root (Top) and Leaves (Bottom). Unlike real trees, we start from the top!", "code": "struct Node* root = createNode(10);" },
-        { "name": "Binary Search Tree", "point": "Left is smaller, Right is larger. It's the ultimate filing cabinet.", "code": "if(val < node->data) search(node->left, val);" }
-     ],
-     "quizzes": [
-        { "q": "Root of a tree is at?", "a": "The Top", "options": ["The Bottom", "The Top", "The Middle", "The Leaves"] },
-        { "q": "BST search complexity?", "a": "O(log N)", "options": ["O(1)", "O(log N)", "O(N)", "O(N^2)"] }
-     ]
-  },
-  "Graphs": {
-     "icon": "🕸️",
-     "concepts": [
-        { "name": "Vertices & Edges", "point": "A graph is a network of nodes (Vertices) and connections (Edges).", "code": "Graph G = (V, E);" },
-        { "name": "BFS Exploration", "point": "Explore level by level. It's like finding a seed by searching every nest in order.", "code": "queue.push(root); while(!queue.empty()){...}" }
-     ],
-     "quizzes": [
-        { "q": "What defines a graph edge?", "a": "A connection", "options": ["A node", "A connection", "A loop", "A color"] },
-        { "q": "BFS uses what structure?", "a": "Queue", "options": ["Stack", "Queue", "Array", "Tree"] }
-     ]
-  },
-  "Recursion": {
-     "icon": "🔄",
-     "concepts": [
-        { "name": "Base Case", "point": "Without a base case, recursion is a never-ending loop of fruit parties.", "code": "if (n == 0) return 1;" },
-        { "name": "Recursive Call", "point": "A function calls itself. It's like a bird dreaming it's a bird dreaming.", "code": "return n * factorial(n-1);" }
-     ],
-     "quizzes": [
-        { "q": "Essential for stopping recursion?", "a": "Base Case", "options": ["Loop", "Base Case", "Return 0", "Birdhouse"] },
-        { "q": "Recursion uses what system structure?", "a": "Stack", "options": ["Queue", "Stack", "Heap", "Array"] }
-     ]
-  },
-  "Zoho Elite": {
-     "icon": "🦁",
-     "concepts": [
-        { "name": "Real Interview: String Expansion", "point": "Expand a3b2 to aaabb. It's a classic Zoho challenge!", "code": "while(isdigit(s[i])) count = count*10 + (s[i]-'0');" },
-        { "q": "Pattern: Snake Matrix", "point": "Print numbers in a snake pattern. It's all about index logic.", "code": "if(row%2 == 0) for(int j=0; j<N; j++);" }
-     ],
-     "quizzes": [
-        { "q": "Complexity of 'a3b2' expansion?", "a": "O(Total Chars)", "options": ["O(1)", "O(N)", "O(Total Chars)", "O(N^2)"] },
-        { "q": "Zoho often asks for which structure?", "a": "Patterns/Matrices", "options": ["Graphs", "DP", "Patterns/Matrices", "Tries"] }
-     ]
+    icon: "🗄️",
+    sections: [
+      {
+        title: "Stage 1: Memory Blocks",
+        units: [
+          {
+             title: "Unit 1: Contiguous Storage",
+             desc: "Store multiple items in one giant nest row.",
+             lessons: [
+               { type: 'teaching', questionText: "🦜 Pico: 'Imagine 5 nests glued together. That is an array. One variable, many slots!'" },
+               { type: 'teaching', questionText: "🦜 Pico: 'Zero-Indexing!'\n\nThe most important rule: The first nest in an array is Nest 0. Not Nest 1. If you forget this, I will peck you.'", codeSnippet: "int nests[5];\nnests[0] = 10; // First nest\nnests[4] = 5;  // Last nest" },
+               { type: 'teaching', questionText: "🦜 Pico: 'OOB Error!'\n\nIf you have 5 nests and ask for nest[5], you just fell out of the tree. That's an Out Of Bounds error.'", codeSnippet: "int arr[5];\narr[5] = 10; // 💀 DANGER 💀" },
+               { type: 'multiple_choice', questionText: "🦜 Pico: 'In an array declared as `int data[10];`, what is the last valid index?'", options: ["10", "9", "0", "-1"], correctAnswer: "9", explanation: "Exactly. 0 through 9 gives you 10 spots." }
+             ]
+          },
+          {
+             title: "Unit 2: Extreme Benchmarking",
+             desc: "Finding maximum and minimum values safely.",
+             lessons: [
+               { type: 'teaching', questionText: "🦜 Pico: 'Finding Extremes!'\n\nIf you want to find the largest seed in an array, you need a benchmark to compare everything against.'" },
+               { type: 'teaching', questionText: "🦜 Pico: 'The Benchmark Trap!'\n\nNever initialize your `max` variable with 0 if your array contains negative numbers! (-5 > 0 is FALSE). Always initialize with the FIRST array element!'" },
+               { type: 'teaching', questionText: "🦜 Pico: 'The correct code looks like this.'", codeSnippet: "int max = arr[0]; // NOT 0\nfor (int i=1; i<size; i++) {\n  if (arr[i] > max) {\n    max = arr[i];\n  }\n}" },
+               { type: 'programming_board', questionText: "🦜 Pico: 'Complete the loop to find the max minimum.'", codeSnippet: "int max = ___[0];\nfor(int i=1; i<N; i++) {\n  if(arr[i] > max) {\n    ___ = arr[i];\n  }\n}" },
+               { type: 'multiple_choice', questionText: "🦜 Pico: 'Why NOT initialize your `max` variable to zero?'", options: ["It breaks if array is negative", "0 is unlucky", "Arrays don't have zeros", "It's slower"], correctAnswer: "It breaks if array is negative", explanation: "Exactly. If your array is [-5, -2, -9], and you start `max` at 0, your code will proudly say the largest number is 0! Even though 0 isn't in the array!" }
+             ]
+          }
+        ]
+      }
+    ]
   }
-  // ... (Library will be expanded by the script)
 };
 
 module.exports = curriculumData;

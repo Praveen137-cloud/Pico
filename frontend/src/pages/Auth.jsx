@@ -49,7 +49,7 @@ const Auth = () => {
       setUser(res.data.user);
       navigate('/');
     } catch (err) {
-      const detail = err.response?.data?.details || 'Access Denied';
+      const detail = err.response?.data?.details || err.response?.data?.error || 'Network Error or Access Denied';
       setErrorMsg(`Google Auth Rejected: ${detail}`);
       console.error(err);
     }
