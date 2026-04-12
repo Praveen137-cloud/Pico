@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const Subject = require('./models/Subject');
 const Stage = require('./models/Stage');
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/pico_dsa';
 
@@ -27,14 +28,14 @@ async function repairDB() {
 
       // Simple keyword matching against subject names:
       for(let sub of subjects) {
-        if(stage.title.includes(sub.name)) {
+        if(stage.title && sub.name && stage.title.includes(sub.name)) {
            matchingSubject = sub;
            break;
         }
       }
 
       // If we couldn't match dynamically, we can use a hard-coded mapping or check string includes "Sorting & Searching"
-      if (!matchingSubject) {
+      if (!matchingSubject && stage.title) {
         if(stage.title.includes('Basics')) matchingSubject = subjects.find(s => s.name === 'Basics');
         else if(stage.title.includes('Array')) matchingSubject = subjects.find(s => s.name === 'Arrays');
         else if(stage.title.includes('String')) matchingSubject = subjects.find(s => s.name === 'Strings');

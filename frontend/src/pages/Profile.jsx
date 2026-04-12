@@ -66,46 +66,8 @@ const Profile = () => {
   };
 
   const buyPremium = async () => {
-    try {
-      // 1. Create Order
-      const orderRes = await api.post('/api/payment/order');
-      const { order } = orderRes.data;
-
-      const options = {
-        key: 'rzp_test_placeholder', // Should Ideally come from backend or env
-        amount: order.amount,
-        currency: order.currency,
-        name: 'PICO ELITE ACADEMY',
-        description: 'CORE PREMIUM UNLOCK',
-        order_id: order.id,
-        handler: async (response) => {
-          try {
-            // 2. Verify Payment
-            const verifyRes = await api.post('/api/payment/verify', response);
-            if (verifyRes.data.success) {
-              setUser(verifyRes.data.user);
-              if (setAuthUser) setAuthUser(verifyRes.data.user);
-              alert('WELCOME TO THE ELITE! PICO PREMIUM ACTIVATED. 💎🛡️');
-            }
-          } catch (err) {
-            alert('Verification failed. If amount was deducted, contact support.');
-          }
-        },
-        prefill: {
-          name: user.name,
-          email: user.email
-        },
-        theme: {
-          color: '#00F2FF'
-        }
-      };
-
-      const rzp = new window.Razorpay(options);
-      rzp.open();
-    } catch (err) {
-      console.error('Payment initialization failed', err);
-      alert('Could not initiate payment. Try again later.');
-    }
+    // Navigate to Razorpay Payment Link provided by user payment gateway setup
+    window.open('https://razorpay.me/@praveenkumarramachandran?amount=ZFm4ghdmeB6pF5PK8Ki64w%3D%3D', '_blank');
   };
 
   const handleNameSave = () => {

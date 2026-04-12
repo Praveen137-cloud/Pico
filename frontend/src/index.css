@@ -13,6 +13,11 @@
   --theme-primary: #00F2FF; 
   --theme-secondary: #7000FF; /* Neon Purple */
   --neon-glow: 0 0 20px rgba(0, 242, 255, 0.5);
+
+  /* Premium Elite Config */
+  --premium-gold: #FFD700;
+  --premium-obsidian: #0D0900;
+  --premium-glow: 0 0 20px rgba(255, 215, 0, 0.4);
 }
 
 /* ⚡ Electric Bird Pulse */
@@ -39,6 +44,28 @@
   60% { transform: translate(2px, 2px) }
   80% { transform: translate(2px, -2px) }
   100% { transform: translate(0) }
+}
+
+@keyframes floatDiamonds {
+  from { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.8; }
+  90% { opacity: 0.8; }
+  to { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+}
+
+@keyframes shimmerGold {
+  0% { filter: hue-rotate(0deg) brightness(1); }
+  50% { filter: hue-rotate(15deg) brightness(1.2); }
+  100% { filter: hue-rotate(0deg) brightness(1); }
+}
+
+@keyframes premiumGlowPulse {
+  0%, 100% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); border-color: rgba(255, 215, 0, 0.4); }
+  50% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.6); border-color: rgba(255, 215, 0, 1); }
+}
+
+.premium-mode {
+  --bg-dark: var(--premium-obsidian);
 }
 
 .extreme-glow {
@@ -102,6 +129,11 @@ body {
   position: relative;
   background-color: var(--bg-dark);
   box-shadow: 0 0 50px rgba(0,0,0,0.5); /* subtle shadow when constrained on big screens */
+  transition: all 0.5s ease-in-out;
+}
+
+.premium-mode.app-container {
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.15), inset 0 0 15px rgba(255, 215, 0, 0.05); /* obsidian gold rim light */
 }
 
 .main-content {

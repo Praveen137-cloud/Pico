@@ -15,7 +15,7 @@ const Auth = () => {
   const [loading, setLoading] = useState(false);
   const [logs, setLogs] = useState([]);
 
-  const { login, register, setUser, loginAsGuest } = useContext(AuthContext);
+  const { login, register, setUser, loginAsGuest, loginSuccess } = useContext(AuthContext);
   const navigate = useNavigate();
 
   // Cyber Terminal Background Logs
@@ -46,8 +46,7 @@ const Auth = () => {
     try {
       const res = await api.post('/api/auth/google', { credential: response.credential });
       
-      localStorage.setItem('token', res.data.token);
-      setUser(res.data.user);
+      loginSuccess(res.data);
       navigate('/home');
     } catch (err) {
       const detail = err.response?.data?.details || err.response?.data?.error || 'Network Error or Access Denied';

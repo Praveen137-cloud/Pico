@@ -65,7 +65,14 @@ const MainLayout = ({ children }) => {
   );
 };
 
-
+const GlobalPremiumWrapper = ({ children, onClick }) => {
+  const { user } = useContext(AuthContext);
+  return (
+    <div className={`app-container ${user?.isPremium ? 'premium-mode' : ''}`} onClick={onClick}>
+      {children}
+    </div>
+  );
+};
 
 function App() {
   const [bgmMuted, setBgmMuted] = useState(false);
@@ -137,7 +144,7 @@ function App() {
       <AuthProvider>
         <DigitalBackground />
         <div className="crt-overlay" />
-        <div className="app-container" onClick={handleGlobalClick}>
+        <GlobalPremiumWrapper onClick={handleGlobalClick}>
           <Router>
             <Suspense fallback={<div style={{ color: 'white', padding: 40, textAlign: 'center' }}>Loading...</div>}>
               <Routes>
@@ -177,7 +184,7 @@ function App() {
             </Suspense>
             <PicoBot />
           </Router>
-        </div>
+        </GlobalPremiumWrapper>
       </AuthProvider>
     </AudioContext.Provider>
   );
