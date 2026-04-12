@@ -3,4 +3,4 @@ Allow: /
 Allow: /auth
 Disallow: /api/
 
-Sitemap: https://pico-academy.vercel.app/sitemap.xml
+Sitemap: https://pico-sooty.vercel.app/sitemap.xml

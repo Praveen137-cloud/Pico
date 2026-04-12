@@ -125,7 +125,7 @@ const Landing = () => {
           "@context": "https://schema.org",
           "@type": "EducationalOrganization",
           "name": "Pico Elite Academy",
-          "url": "https://pico-academy.vercel.app",
+          "url": "https://pico-sooty.vercel.app",
           "description": "Elite AI-powered DSA and technical interview training platform with 40,000+ interactive lessons.",
           "educationalCredentialAwarded": "Certificate of Completion",
           "teaches": ["Data Structures", "Algorithms", "Web Development", "Dynamic Programming", "System Design"]
