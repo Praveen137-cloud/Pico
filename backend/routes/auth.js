@@ -6,6 +6,7 @@ const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const axios = require('axios');
 const { OAuth2Client } = require('google-auth-library');
+const { sendWelcomeEmail } = require('../utils/email');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret_key_123';
 const GOOGLE_CLIENT_ID_FALLBACK = process.env.GOOGLE_CLIENT_ID || '885867681504-lasrb7t0pm5rlvin175e5rnj70jh3hmf.apps.googleusercontent.com';
@@ -29,6 +30,9 @@ router.post('/register', async (req, res) => {
     await user.save();
 
     console.log(`[Auth] Registration successful for: ${email}`);
+
+    // Send the welcome email
+    sendWelcomeEmail(email, name);
 
     const payload = { user: { id: user.id } };
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
@@ -98,6 +102,9 @@ router.post('/google', async (req, res) => {
       });
       await user.save();
       console.log(`[Google Auth] New user created: ${email}`);
+      
+      // Send the welcome email
+      sendWelcomeEmail(email, name);
     } else if (!user.googleId) {
       // Link Google ID if user exists by email but not linked
       user.googleId = googleId;

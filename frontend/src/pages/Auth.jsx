@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { GoogleLogin } from '@react-oauth/google';
+import { Helmet } from 'react-helmet-async';
 import api from '../api';
 import './Auth.css';
 
@@ -87,6 +88,10 @@ const Auth = () => {
 
   return (
     <div className="auth-page">
+      <Helmet>
+        <title>Login & Signup | Pico Elite Academy</title>
+        <meta name="description" content="Log in to your Pico Elite Academy matrix. Access world-class DSA, Web Dev, and App Dev training modules." />
+      </Helmet>
       {/* Terminal Background */}
       <div className="terminal-background">
         {logs.map((log, idx) => (

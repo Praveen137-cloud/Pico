@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
 import ErrorBoundary from './ErrorBoundary.jsx';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { HelmetProvider } from 'react-helmet-async';
 import './index.css';
 
 const PICO_GOOGLE_ID = "885867681504-lasrb7t0pm5rlvin175e5rnj70jh3hmf.apps.googleusercontent.com";
@@ -14,10 +15,12 @@ if (!import.meta.env.VITE_GOOGLE_CLIENT_ID) {
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <ErrorBoundary>
-      <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-        <App />
-      </GoogleOAuthProvider>
-    </ErrorBoundary>
+    <HelmetProvider>
+      <ErrorBoundary>
+        <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+          <App />
+        </GoogleOAuthProvider>
+      </ErrorBoundary>
+    </HelmetProvider>
   </React.StrictMode>,
 );
