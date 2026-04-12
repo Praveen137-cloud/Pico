@@ -127,4 +127,10 @@ const curriculumData = {
   }
 };
 
+const batch1 = require('./subjects/Batch1');
+const batch2 = require('./subjects/Batch2');
+const batch3 = require('./subjects/Batch3');
+
+Object.assign(curriculumData, batch1, batch2, batch3);
+
 module.exports = curriculumData;
