@@ -61,6 +61,69 @@ const curriculumData = {
         ]
       }
     ]
+  },
+  "Strings": {
+    icon: "🧵",
+    sections: [
+      {
+        title: "Stage 1: ASCII Adventures",
+        units: [
+          {
+            title: "Unit 1: Characters Under the Hood",
+            desc: "Understand what strings really are in memory.",
+            lessons: [
+              { type: 'teaching', questionText: "🦜 Pico: 'Strings!'\n\nA string is just an Array of Characters. That's it! Nothing magical.'" },
+              { type: 'teaching', questionText: "🦜 Pico: 'ASCII Values!'\n\nComputers only understand numbers. Every character is assigned a number. 'A' is 65, 'B' is 66, 'a' is 97.'", codeSnippet: "char letter = 'A';\nint val = (int)letter; // val is 65" },
+              { type: 'teaching', questionText: "🦜 Pico: 'The Null Terminator!'\n\nHow does the computer know a string is over? It looks for a special invisible character at the end called the Null Terminator (`\\0`).'", codeSnippet: "char name[] = \"Pico\";\n// Memory: ['P', 'i', 'c', 'o', '\\0']\n// Size is 5, not 4!" },
+              { type: 'multiple_choice', questionText: "🦜 Pico: 'How many bytes are required to store the string \"Bird\" in C?'", options: ["4", "5", "8", "0"], correctAnswer: "5", explanation: "Correct! 4 letters + 1 Null Terminator (\\0) = 5 bytes." },
+              { type: 'programming_board', questionText: "🦜 Pico: 'Complete the condition to loop through a string until it ends.'", codeSnippet: "for(int i=0; str[i] != ___; i++) {\n  printf(\"%c\", str[i]);\n}" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "Two Pointers": {
+    icon: "✌️",
+    sections: [
+      {
+        title: "Stage 1: The Classic Technique",
+        units: [
+          {
+            title: "Unit 1: The Squeeze",
+            desc: "Master the most common Array algorithmic pattern.",
+            lessons: [
+              { type: 'teaching', questionText: "🦜 Pico: 'Two Pointers!'\n\nSometimes, looking at an array from left-to-right isn't enough. We need to look at both ends at the same time!'" },
+              { type: 'teaching', questionText: "🦜 Pico: 'The Setup!'\n\nWe place one pointer (L) at the start (index 0) and one pointer (R) at the end (index N-1).'", codeSnippet: "int L = 0;\nint R = n - 1;" },
+              { type: 'teaching', questionText: "🦜 Pico: 'The Reversal!'\n\nWant to reverse an array? Swap the items at L and R, then move L forward and R backward! Stop when they cross.'", codeSnippet: "while(L < R) {\n  swap(arr[L], arr[R]);\n  L++;\n  R--;\n}" },
+              { type: 'multiple_choice', questionText: "🦜 Pico: 'When traversing from opposite ends, what is the best loop condition?'", options: ["while(L < R)", "while(L == R)", "while(L > R)", "for(;;)"], correctAnswer: "while(L < R)", explanation: "Yes! If L passes R or equals R, you've checked the whole array." },
+              { type: 'programming_board', questionText: "🦜 Pico: 'Complete the Two Pointer logic to reverse an array.'", codeSnippet: "int L = 0, R = n - 1;\nwhile(L ___ R) {\n  swap(arr[L], arr[R]);\n  L___;\n  R___;\n}" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "Hash Maps": {
+    icon: "🗺️",
+    sections: [
+      {
+        title: "Stage 1: Constant Time Lookups",
+        units: [
+          {
+            title: "Unit 1: Key-Value Glory",
+            desc: "Learn how to find data instantly without looping.",
+            lessons: [
+              { type: 'teaching', questionText: "🦜 Pico: 'Hash Maps (Dictionaries)!'\n\nIf you want to find a definition in a real book, do you read page 1 to 500? No! You use the index. That's a Hash Map.'" },
+              { type: 'teaching', questionText: "🦜 Pico: 'O(1) Time Complexity!'\n\nLooking up a value by its key in a Hash Map takes Constant Time O(1). It is instantly teleporting to the right nest.'", codeSnippet: "HashMap<String, Integer> map = new HashMap<>();\nmap.put(\"Pico\", 100); // Store\nint score = map.get(\"Pico\"); // Retrieve instantly!" },
+              { type: 'teaching', questionText: "🦜 Pico: 'Frequency Counters!'\n\nThe most common interview use of Hash Maps is counting how many times an item appears.'", codeSnippet: "map[num] = map[num] + 1; // Count frequencies!" },
+              { type: 'multiple_choice', questionText: "🦜 Pico: 'What is the theoretical time complexity to retrieve a value from a Hash Map?'", options: ["O(1)", "O(log N)", "O(N)", "O(N^2)"], correctAnswer: "O(1)", explanation: "O(1)! Hash Maps compute a hash and immediately jump to the location." },
+              { type: 'programming_board', questionText: "🦜 Pico: 'Use the map to count frequencies in an array.'", codeSnippet: "for(int x : arr) {\n  map[___]++;\n}" }
+            ]
+          }
+        ]
+      }
+    ]
   }
 };
 

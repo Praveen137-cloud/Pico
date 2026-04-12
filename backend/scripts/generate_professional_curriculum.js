@@ -12,8 +12,8 @@ async function runGenerator() {
     console.log('CONNECTED TO ELITE DB');
 
     console.log('Clearing old populated subjects...');
-    // Clear out 'Basics' and 'Arrays' since they are redefined exactly.
-    await Subject.deleteMany({ name: { $in: ['Basics', 'Arrays'] } });
+    const subjectsToUpdate = Object.keys(curriculumData);
+    await Subject.deleteMany({ name: { $in: subjectsToUpdate } });
 
     for (const [subjectName, data] of Object.entries(curriculumData)) {
       console.log(`GENERATING STRICT 1:1 CONTENT: ${subjectName}...`);
