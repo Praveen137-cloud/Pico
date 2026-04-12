@@ -5,6 +5,7 @@ import { AuthContext } from '../context/AuthContext';
 import { AudioContext } from '../App';
 import TypingEffect from '../components/TypingEffect';
 import TieredHint from '../components/TieredHint';
+import AdSenseBanner from '../components/AdSenseBanner';
 import _Editor from 'react-simple-code-editor';
 const Editor = _Editor.default || _Editor;
 import { highlight, languages } from 'prismjs/components/prism-core';
@@ -560,6 +561,7 @@ const Lesson = () => {
             )}
           </div>
         )}
+        <AdSenseBanner slot="lesson_footer_ads" style={{ maxWidth: '600px', margin: '20px auto' }} />
       </div>
 
       <div style={{

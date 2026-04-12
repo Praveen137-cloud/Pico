@@ -65,6 +65,20 @@ const Profile = () => {
     }
   };
 
+  const buyPremium = async () => {
+    try {
+      const res = await api.post('/api/user/buy-premium');
+      if (res.data.success) {
+        setUser(res.data.user);
+        if (setAuthUser) setAuthUser(res.data.user);
+        alert('Welcome to PICO PREMIUM! Ads are now cleared from your interface. 🛡️⚡');
+      }
+    } catch (err) {
+      console.error('Premium purchase failed', err);
+      alert('Failed to process premium request.');
+    }
+  };
+
   const handleNameSave = () => {
     setIsEditing(false);
     if (!user) return;
@@ -278,10 +292,50 @@ const Profile = () => {
 
       <div className="profile-support-box">
         <h4 style={{color: '#fff', marginBottom: 8, fontSize: 18, fontWeight: 800}}>Support Pico 🦜</h4>
-        <p style={{color: 'var(--text-muted)', fontSize: 14, maxWidth: '400px', margin: '0 auto', marginBottom: 20}}>
-          Love the platform? Support development directly and help us build more premium features!
-        </p>
         
+        {user?.isPremium ? (
+          <div style={{
+            background: 'rgba(0, 242, 255, 0.1)',
+            border: '2px solid var(--theme-primary)',
+            padding: '20px',
+            borderRadius: '16px',
+            marginBottom: '20px'
+          }}>
+            <div style={{ color: 'var(--theme-primary)', fontWeight: 900, fontSize: 18, letterSpacing: 2 }}>CORE PREMIUM ACTIVE</div>
+            <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12, marginTop: 4 }}>You are browsing an ads-free experience.</div>
+          </div>
+        ) : (
+          <>
+            <p style={{color: 'var(--text-muted)', fontSize: 14, maxWidth: '400px', margin: '0 auto', marginBottom: 20}}>
+              Remove all ads and support development directly with a one-time premium unlock.
+            </p>
+            <button 
+              onClick={buyPremium}
+              className="profile-premium-btn"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                background: 'linear-gradient(135deg, var(--theme-primary), var(--theme-secondary))',
+                color: '#fff',
+                padding: '14px 24px',
+                borderRadius: '12px',
+                fontWeight: 900,
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: '15px',
+                transition: 'all 0.2s',
+                boxShadow: '0 4px 15px rgba(0, 242, 255, 0.4)',
+                marginBottom: '12px',
+                width: '100%'
+              }}
+            >
+              🚀 UNLEASH PREMIUM (100 INR)
+            </button>
+          </>
+        )}
+
         {/* UPI Direct Pay Button */}
         <a 
           href="upi://pay?pa=praveenkumar63811@oksbi&pn=Praveen%20Kumar&cu=INR&tn=Supporting%20Pico"
@@ -291,22 +345,20 @@ const Profile = () => {
             alignItems: 'center',
             justifyContent: 'center',
             gap: '8px',
-            background: 'linear-gradient(135deg, #FFD700, #F59E0B)',
-            color: '#000',
-            padding: '14px 24px',
+            background: 'rgba(255, 255, 255, 0.05)',
+            border: '1px solid var(--divider)',
+            color: '#fff',
+            padding: '10px 20px',
             borderRadius: '12px',
             fontWeight: 800,
             textDecoration: 'none',
-            fontSize: '15px',
+            fontSize: '13px',
             transition: 'all 0.2s',
-            boxShadow: '0 4px 15px rgba(245, 158, 11, 0.4)'
+            width: '100%'
           }}
         >
-          <span>⚡</span> DIRECT PAY (UPI)
+          <span>⚡</span> UPI DONATION (ANY AMOUNT)
         </a>
-        <div style={{color: 'var(--text-muted)', fontSize: 11, marginTop: 12}}>
-          Works with GPay, PhonePe, Paytm & BHIM
-        </div>
       </div>
 
       <button 

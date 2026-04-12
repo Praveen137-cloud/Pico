@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext, useRef } from 'react';
 import api from '../api';
 import { AuthContext } from '../context/AuthContext';
 import { useParams, useNavigate } from 'react-router-dom';
+import AdSenseBanner from '../components/AdSenseBanner';
 import './Map.css';
 
 const Map = () => {
@@ -225,6 +226,7 @@ const Map = () => {
           })}
         </div>
 
+        <AdSenseBanner slot="map_footer_ads" style={{ maxWidth: '400px', margin: '40px auto' }} />
         <div style={{ height: 150 }} />
       </div>
     </div>

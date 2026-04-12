@@ -46,4 +46,28 @@ router.delete('/purge-guests', [authMiddleware, adminMiddleware], async (req, re
   }
 });
 
+// @route   PUT /api/admin/users/:id/status
+// @desc    Update user status (Premium, Ads) (admin only)
+// @access  Private/Admin
+router.put('/users/:id/status', [authMiddleware, adminMiddleware], async (req, res) => {
+  try {
+    const { isPremium, adsHidden } = req.body;
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    if (user.role === 'admin') return res.status(403).json({ error: 'Cannot modify an admin' });
+
+    if (isPremium !== undefined) user.isPremium = isPremium;
+    if (adsHidden !== undefined) user.adsHidden = adsHidden;
+
+    await user.save();
+    res.json({ success: true, message: 'User status updated', user: {
+      _id: user._id,
+      isPremium: user.isPremium,
+      adsHidden: user.adsHidden
+    }});
+  } catch (err) {
+    res.status(500).json({ error: 'Server error updating status' });
+  }
+});
+
 module.exports = router;

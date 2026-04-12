@@ -32,6 +32,17 @@ const Admin = () => {
     }
   };
 
+  const handleUpdateStatus = async (id, statusUpdates) => {
+    try {
+      const res = await api.put(`/api/admin/users/${id}/status`, statusUpdates);
+      if (res.data.success) {
+        setUsers(users.map(u => u._id === id ? { ...u, ...statusUpdates } : u));
+      }
+    } catch (err) {
+      alert('Failed to update user status.');
+    }
+  };
+
   const handleDeleteUser = async (id) => {
     if (!window.confirm('Are you sure you want to delete this user? This action cannot be undone.')) return;
     
@@ -94,6 +105,7 @@ const Admin = () => {
               <th>EMAIL INTERFACE</th>
               <th>XP</th>
               <th>TYPE</th>
+              <th>STATUS</th>
               <th>ACTIONS</th>
             </tr>
           </thead>
@@ -107,6 +119,26 @@ const Admin = () => {
                   <span className={`role-badge ${user.isGuest ? 'guest' : 'regular'}`}>
                     {user.isGuest ? 'GUEST' : 'AGENT'}
                   </span>
+                </td>
+                <td data-label="STATUS" className="status-controls">
+                  <div className="status-toggle-group">
+                    <label className="toggle-label">
+                      PREMIUM:
+                      <input 
+                        type="checkbox" 
+                        checked={user.isPremium || false} 
+                        onChange={(e) => handleUpdateStatus(user._id, { isPremium: e.target.checked })}
+                      />
+                    </label>
+                    <label className="toggle-label">
+                      HIDE ADS:
+                      <input 
+                        type="checkbox" 
+                        checked={user.adsHidden || false} 
+                        onChange={(e) => handleUpdateStatus(user._id, { adsHidden: e.target.checked })}
+                      />
+                    </label>
+                  </div>
                 </td>
                 <td data-label="ACTIONS">
                   <button 

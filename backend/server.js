@@ -385,6 +385,21 @@ app.post('/api/quest/claim', authMiddleware, async (req, res) => {
   }
 });
 
+app.post('/api/user/buy-premium', authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    
+    user.isPremium = true;
+    user.adsHidden = true; // Automatically hide ads for premium users
+    await user.save();
+    
+    res.json({ success: true, message: 'Welcome to Pico Premium!', user });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.get('/api/status', (req, res) => {
   res.json({ status: 'API is running' });
 });

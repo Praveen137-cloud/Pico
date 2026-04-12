@@ -5,6 +5,7 @@ import PreLoader from '../components/PreLoader';
 import EmptyState from '../components/EmptyState';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import AdSenseBanner from '../components/AdSenseBanner';
 import './Home.css';
 
 const Home = () => {
@@ -192,6 +193,7 @@ const Home = () => {
             INITIALIZING CORE DATA...
           </div>
         )}
+        <AdSenseBanner slot="home_footer_ads" />
       </div>
     </div>
   );
