@@ -8,7 +8,8 @@ const axios = require('axios');
 const { OAuth2Client } = require('google-auth-library');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret_key_123';
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const GOOGLE_CLIENT_ID_FALLBACK = process.env.GOOGLE_CLIENT_ID || '885867681504-lasrb7t0pm5rlvin175e5rnj70jh3hmf.apps.googleusercontent.com';
+const client = new OAuth2Client(GOOGLE_CLIENT_ID_FALLBACK);
 
 // @route   POST /api/auth/register
 // @desc    Register a user
@@ -71,16 +72,11 @@ router.post('/login', async (req, res) => {
 // @access  Public
 router.post('/google', async (req, res) => {
   const { credential } = req.body;
-  
-  if (!process.env.GOOGLE_CLIENT_ID) {
-    console.error('[Google Auth] CRITICAL: GOOGLE_CLIENT_ID is not configured in .env');
-    return res.status(500).json({ error: 'Server authentication configuration missing.' });
-  }
 
   try {
     const ticket = await client.verifyIdToken({
       idToken: credential,
-      audience: process.env.GOOGLE_CLIENT_ID,
+      audience: GOOGLE_CLIENT_ID_FALLBACK,
     });
     
     const payload = ticket.getPayload();
