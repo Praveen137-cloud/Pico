@@ -10,26 +10,42 @@ export const AuthProvider = ({ children }) => {
   const [subjects, setSubjects] = useState([]);
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchUserData = async () => {
+      if (!token) {
+        setUser(null);
+        setSubjects([]);
+        setLoading(false);
+        return;
+      }
+
+      // Determine what we actually need to fetch
+      const needsUser = !user;
+      const needsSubjects = subjects.length === 0;
+
+      if (!needsUser && !needsSubjects) {
+        setLoading(false);
+        return;
+      }
+
       try {
-        if (token) {
-          const res = await api.get('/api/user');
-          setUser(res.data);
-          
-          // Also fetch subjects globally if we are logged in
-          const subRes = await api.get('/api/curriculum/subjects');
-          setSubjects(subRes.data);
-        } else {
-          setUser(null);
-        }
+        console.log(`[Auth] Syncing session... (Needs User: ${needsUser}, Needs Subjects: ${needsSubjects})`);
+        
+        const [userRes, subRes] = await Promise.all([
+          needsUser ? api.get('/api/user') : Promise.resolve({ data: user }),
+          needsSubjects ? api.get('/api/curriculum/subjects') : Promise.resolve({ data: subjects })
+        ]);
+        
+        if (needsUser) setUser(userRes.data);
+        if (needsSubjects) setSubjects(subRes.data);
       } catch (err) {
-        console.error('Invalid token or failed to fetch user:', err);
-        logout(); 
+        console.error('[Auth Error] Session sync failed:', err);
+        // Interceptor handles 401. For others, we just stop loading.
       } finally {
         setLoading(false);
       }
     };
-    fetchUser();
+
+    fetchUserData();
   }, [token]);
 
   const loginSuccess = (data) => {

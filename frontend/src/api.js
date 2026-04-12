@@ -24,4 +24,20 @@ api.interceptors.request.use((config) => {
   return config;
 }, (error) => Promise.reject(error));
 
+// Global response interceptor to handle 401s
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      console.warn('[Pico API] Unauthorized access (401). Clearing session.');
+      sessionStorage.removeItem('token');
+      // If we are not on the auth page, we might want to reload to trigger state reset
+      if (window.location.pathname !== '/auth') {
+        window.location.href = '/auth';
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default api;
