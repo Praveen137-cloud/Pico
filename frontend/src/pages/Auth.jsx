@@ -48,7 +48,7 @@ const Auth = () => {
       
       localStorage.setItem('token', res.data.token);
       setUser(res.data.user);
-      navigate('/');
+      navigate('/home');
     } catch (err) {
       const detail = err.response?.data?.details || err.response?.data?.error || 'Network Error or Access Denied';
       setErrorMsg(`Google Auth Rejected: ${detail}`);
@@ -61,7 +61,7 @@ const Auth = () => {
     setLoading(true);
     try {
       await loginAsGuest();
-      navigate('/');
+      navigate('/home');
     } catch (err) {
       setErrorMsg('Guest initialization rejected.');
     }
@@ -78,7 +78,7 @@ const Auth = () => {
       } else {
         await register(name || 'Agent', email, password);
       }
-      navigate('/');
+      navigate('/home');
     } catch (err) {
       const detailedError = err.response?.data?.error || 'Authentication sequence failed.';
       setErrorMsg(detailedError);

@@ -26,7 +26,7 @@ const Navigation = () => {
     <>
       <nav className="nav-container">
         <div className="nav-dock">
-          <NavLink to="/" className={({ isActive }) => (isActive ? 'nav-item active' : 'nav-item')}>
+          <NavLink to="/home" className={({ isActive }) => (isActive ? 'nav-item active' : 'nav-item')}>
             {({ isActive }) => (
               <>
                 <div className={isActive ? 'icon-wrapper-active' : 'icon-wrapper'}>

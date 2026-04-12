@@ -6,6 +6,7 @@ import PicoBot from './components/PicoBot';
 import DigitalBackground from './components/DigitalBackground';
 
 // Lazy load pages for performance
+const Landing = lazy(() => import('./pages/Landing'));
 const Home = lazy(() => import('./pages/Home'));
 const Code = lazy(() => import('./pages/Code'));
 const League = React.lazy(() => import('./pages/League'));
@@ -51,7 +52,8 @@ const MainLayout = ({ children }) => {
   const hideNav = location.pathname.startsWith('/lesson') || 
                   location.pathname === '/celebration' ||
                   location.pathname === '/onboarding' ||
-                  location.pathname === '/auth';
+                  location.pathname === '/auth' ||
+                  location.pathname === '/';
   
   return (
     <>
@@ -139,16 +141,17 @@ function App() {
           <Router>
             <Suspense fallback={<div style={{ color: 'white', padding: 40, textAlign: 'center' }}>Loading...</div>}>
               <Routes>
-                {/* Public Route */}
+                {/* Public Routes */}
+                <Route path="/" element={<Landing />} />
                 <Route path="/auth" element={<div className="main-content"><Auth /></div>} />
 
-                {/* Protected Routes directly in layout */}
+                {/* Protected Routes */}
                 <Route path="/*" element={
                   <ProtectedRoute>
                     <MainLayout>
                       <Suspense fallback={<div style={{ color: 'white', padding: 20, textAlign: 'center' }}>Loading page...</div>}>
                         <Routes>
-                          <Route path="/" element={<Home />} />
+                          <Route path="/home" element={<Home />} />
                           <Route path="/code" element={<Code />} />
                           <Route path="/league" element={<League />} />
                           <Route path="/certificate" element={<Certificate />} />
