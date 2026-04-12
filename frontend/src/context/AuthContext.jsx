@@ -69,6 +69,20 @@ export const AuthProvider = ({ children }) => {
     loginSuccess(res.data);
   };
 
+  const refreshUser = async () => {
+    try {
+      const [userRes, subRes] = await Promise.all([
+        api.get('/api/user'),
+        api.get('/api/curriculum/subjects')
+      ]);
+      setUser(userRes.data);
+      setSubjects(subRes.data);
+      return userRes.data;
+    } catch (err) {
+      console.error('[Auth] Refresh failed:', err);
+    }
+  };
+
   const logout = () => {
     sessionStorage.removeItem('token');
     setToken(null);
@@ -76,7 +90,10 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, register, loginAsGuest, logout, setUser, loginSuccess, subjects, setSubjects }}>
+    <AuthContext.Provider value={{ 
+      user, token, loading, login, register, loginAsGuest, logout, 
+      setUser, loginSuccess, subjects, setSubjects, refreshUser 
+    }}>
       {children}
     </AuthContext.Provider>
   );

@@ -281,7 +281,7 @@ const Lesson = () => {
     setIsAiLoading(false);
   };
 
-  const { setUser, setSubjects } = useContext(AuthContext);
+  const { setUser, setSubjects, refreshUser } = useContext(AuthContext);
 
   const [correctAnswersCount, setCorrectAnswersCount] = useState(0);
   const [startTime] = useState(Date.now());
@@ -293,9 +293,9 @@ const Lesson = () => {
       // Completed unit! 
       const timeSpent = Math.floor((Date.now() - startTime) / 1000);
 
-      // 🔥 SAVE PROGRESS TO BACKEND
+      // 🔥 SAVE PROGRESS TO BACKEND (STRICT SYNC)
       try {
-        console.log(`[Sync] Saving unit completion: ${unitId}`);
+        console.log(`[Sync] Attempting to unlock unit: ${unitId}`);
         const res = await api.post('/api/unlock', {
           subjectId,
           sectionId,
@@ -304,15 +304,23 @@ const Lesson = () => {
         
         if (res.data.success) {
           console.log('[Sync] Progress stored successfully');
-          // Update global context so the Map reflects the new progress immediately
+          // Use res data directly for immediate feedback
           if (res.data.user) {
             setUser(res.data.user);
           }
           // Clear scroll cache so the Map forces a scroll to the NEW current unit
           localStorage.removeItem(`scroll_map_${sectionId}`);
+        } else {
+          console.warn('[Sync Warning] Backend returns success:false', res.data);
         }
       } catch (err) {
-        console.error('[Sync Error] Failed to unlock next unit:', err);
+        console.error('[Sync Error] CRITICAL: Failed to unlock next unit:', err);
+        // Fallback: try to just refresh the whole user object
+        try {
+          await refreshUser?.();
+        } catch (rErr) {
+          console.error('[Sync Fallback Error] Refresh failed too:', rErr);
+        }
       }
 
       navigate(`/celebration`, { 

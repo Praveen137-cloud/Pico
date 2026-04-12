@@ -6,13 +6,18 @@ import './Map.css';
 
 const Map = () => {
   const { subjectId, sectionId } = useParams();
-  const { user: authUser } = useContext(AuthContext);
+  const { user: authUser, refreshUser } = useContext(AuthContext);
   const [stage, setStage] = useState(null);
   const [units, setUnits] = useState([]);
   const [subjectName, setSubjectName] = useState('');
   const navigate = useNavigate();
   const activeNodeRef = useRef(null);
   const scrollContainerRef = useRef(null);
+
+  // 0. Force Sync Progress from Server
+  useEffect(() => {
+    refreshUser?.();
+  }, []);
 
   // 1. Fetch Stage & Subject Info
   useEffect(() => {
