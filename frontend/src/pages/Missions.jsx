@@ -71,14 +71,36 @@ const Missions = () => {
       <div style={styles.missionsList}>
         {dailyQuests.map((q, idx) => {
           const isClaimed = user?.questsClaimed?.includes(q.id);
+          
+          // Verification logic
+          let isEligible = false;
+          let unlockHint = "";
+
+          if (q.id === 'quest_login') {
+            isEligible = true;
+          } else if (q.id === 'quest_problem') {
+            isEligible = user?.dailyStats?.lessonsDone > 0;
+            unlockHint = "Solve at least 1 unit lesson today.";
+          } else if (q.id === 'quest_streak') {
+            const lastUpdate = user?.lastStreakUpdate ? new Date(user.lastStreakUpdate) : null;
+            const isToday = lastUpdate && new Date(lastUpdate).toDateString() === new Date().toDateString();
+            isEligible = isToday;
+            unlockHint = "Keep your streak alive by practicing!";
+          } else {
+            isEligible = true; // Placeholder for other quests
+          }
+
+          const canClaim = !isClaimed && isEligible;
+
           return (
             <div 
               key={q.id} 
               style={{
                 ...styles.missionCard, 
                 opacity: isClaimed ? 0.6 : 1,
-                borderColor: isClaimed ? 'var(--divider)' : 'rgba(251, 191, 36, 0.3)',
-                animationDelay: `${idx * 0.1}s`
+                borderColor: isClaimed ? 'var(--divider)' : (canClaim ? 'var(--theme-primary)' : 'rgba(255,255,255,0.05)'),
+                animationDelay: `${idx * 0.1}s`,
+                boxShadow: canClaim ? '0 0 15px rgba(251, 191, 36, 0.2)' : 'none'
               }}
               className="mission-card-animate"
             >
@@ -86,26 +108,37 @@ const Missions = () => {
               <div style={styles.missionInfo}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                   <h3 style={styles.missionName}>{q.title}</h3>
-                  <span style={{ ...styles.xpBadge, color: isClaimed ? 'var(--text-muted)' : 'var(--theme-primary)' }}>
+                  <span style={{ 
+                    ...styles.xpBadge, 
+                    color: isClaimed ? 'var(--text-muted)' : 'var(--theme-primary)',
+                    textShadow: canClaim ? '0 0 10px var(--theme-primary)' : 'none'
+                  }}>
                     +{q.xp} XP
                   </span>
                 </div>
                 <p style={styles.missionDesc}>{q.desc}</p>
+                {!isClaimed && !isEligible && (
+                  <div style={{ color: '#EF4444', fontSize: '10px', fontWeight: '900', marginBottom: '8px', letterSpacing: 1 }}>
+                    🔒 {unlockHint.toUpperCase()}
+                  </div>
+                )}
                 <button 
                   style={{
                     ...styles.claimBtn,
-                    backgroundColor: isClaimed ? 'var(--divider)' : 'var(--theme-primary)',
-                    cursor: isClaimed ? 'default' : 'pointer'
+                    backgroundColor: isClaimed ? 'var(--divider)' : (isEligible ? 'var(--theme-primary)' : 'rgba(255,255,255,0.1)'),
+                    color: isEligible && !isClaimed ? '#000' : 'var(--text-muted)',
+                    cursor: canClaim ? 'pointer' : 'default',
+                    transform: canClaim ? 'scale(1.02)' : 'scale(1)'
                   }}
-                  onClick={() => !isClaimed && claimQuest(q.id, q.xp)}
-                  disabled={isClaimed}
+                  onClick={() => canClaim && claimQuest(q.id, q.xp)}
+                  disabled={!canClaim}
                 >
                   {isClaimed ? (
                     'OBJECTIVE COMPLETE ✓'
+                  ) : isEligible ? (
+                    'CLAIM REWARD →'
                   ) : (
-                    <>
-                      INITIALIZE MISSION <ChevronRight size={14} style={{ marginLeft: 4 }} />
-                    </>
+                    'LOCKED / UNFINISHED'
                   )}
                 </button>
               </div>

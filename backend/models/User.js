@@ -13,6 +13,10 @@ const userSchema = new mongoose.Schema({
   preferredLanguage: { type: String, default: 'c', enum: ['c', 'python', 'java'] },
   isPremium: { type: Boolean, default: false },
   adsHidden: { type: Boolean, default: false },
+  lastDailyQuestReset: { type: Date, default: Date.now },
+  dailyStats: {
+    lessonsDone: { type: Number, default: 0 }
+  },
   
   avatar: { type: String, default: 'Parrot' },
   lastVisitedSubject: { type: String, default: 'Arrays' },

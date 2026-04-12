@@ -230,6 +230,17 @@ app.get('/api/user', authMiddleware, async (req, res) => {
       }
       // If diffDays is 0, they already updated today, so do nothing.
     }
+
+    // 🏆 DAILY MISSION RESET LOGIC
+    const lastReset = user.lastDailyQuestReset ? new Date(user.lastDailyQuestReset) : new Date(0);
+    const lastResetDay = new Date(lastReset.getFullYear(), lastReset.getMonth(), lastReset.getDate());
+    
+    if (today > lastResetDay) {
+      console.log(`[Quest Reset] New day detected for user ${user.name}. Resetting daily missions.`);
+      user.questsClaimed = []; // Clear for the new day
+      user.dailyStats = { lessonsDone: 0 };
+      user.lastDailyQuestReset = now;
+    }
     
     await user.save();
     res.json(user);
@@ -277,6 +288,10 @@ app.post('/api/unlock', (req, _res, next) => { req.io = io; next(); }, authMiddl
     // 🔥 Save last progress point for auto-redirect on login
     if (subjectId) user.lastSubjectId = subjectId;
     if (sectionId) user.lastSectionId = sectionId;
+    
+    // 📈 Track Daily Progress for Missions
+    if (!user.dailyStats) user.dailyStats = { lessonsDone: 0 };
+    user.dailyStats.lessonsDone += 1;
     
     await user.save();
 
@@ -376,6 +391,32 @@ app.post('/api/quest/claim', authMiddleware, async (req, res) => {
     if (user.questsClaimed.includes(questId)) {
       return res.status(400).json({ error: 'Quest already claimed' });
     }
+
+    // 🛡️ QUEST VERIFICATION LOGIC
+    let isEligible = false;
+    const now = new Date();
+    const todayStr = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+
+    if (questId === 'quest_login') {
+      isEligible = true; // Login quest is simple
+    } else if (questId === 'quest_problem') {
+      isEligible = user.dailyStats?.lessonsDone > 0;
+    } else if (questId === 'quest_streak') {
+      if (user.lastStreakUpdate) {
+        const last = new Date(user.lastStreakUpdate);
+        const lastDayStr = new Date(last.getFullYear(), last.getMonth(), last.getDate()).getTime();
+        isEligible = lastDayStr === todayStr;
+      }
+    } else {
+      // For other quests like quest_profile, quest_leaderboard, quest_read
+      // We'll allow them for now once per day as they are interaction-based
+      isEligible = true;
+    }
+
+    if (!isEligible) {
+      return res.status(400).json({ error: 'Objective not met yet. Perform the task first!' });
+    }
+
     user.questsClaimed.push(questId);
     user.xp += xpReward;
     await user.save();
