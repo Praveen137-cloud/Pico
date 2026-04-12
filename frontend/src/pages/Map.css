@@ -81,7 +81,10 @@
 
 .toffee-node.completed {
   background: linear-gradient(135deg, #FFD700 0%, #FFA000 100%);
-  box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+  box-shadow: 
+    inset 0 4px 8px rgba(255,255,255,0.4),
+    0 4px 12px rgba(0,0,0,0.4);
+  filter: saturate(0.8) brightness(0.9); /* Slightly muted compared to active */
 }
 
 .toffee-wrapper-left, .toffee-wrapper-right {

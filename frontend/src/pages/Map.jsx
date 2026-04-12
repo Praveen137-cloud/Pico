@@ -67,11 +67,13 @@ const Map = () => {
     return () => container.removeEventListener('scroll', handleScroll);
   }, [units, sectionId]);
 
-  // 4. Auto-Scroll to Current Unit (when units update or on first load if no persistence)
+  // 4. Auto-Scroll to Current Unit (whenever progress changes or on initial load)
   useEffect(() => {
     if (units.length > 0 && activeNodeRef.current) {
-      const isInitial = !localStorage.getItem(`scroll_map_${sectionId}`);
-      if (isInitial) {
+      // Force scroll to current node if they just returned from a lesson (detected by lack of user scroll or recent update)
+      const forceScroll = !localStorage.getItem(`scroll_map_${sectionId}`);
+      
+      if (forceScroll) {
         setTimeout(() => {
           activeNodeRef.current.scrollIntoView({
             behavior: 'smooth',
@@ -80,7 +82,7 @@ const Map = () => {
         }, 1000);
       }
     }
-  }, [units, sectionId]);
+  }, [units, sectionId, completedCount]); // Trigger on completedCount change
 
   const getSubjectIcon = (name) => {
     const icons = {

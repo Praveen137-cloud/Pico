@@ -292,6 +292,29 @@ const Lesson = () => {
     } else {
       // Completed unit! 
       const timeSpent = Math.floor((Date.now() - startTime) / 1000);
+
+      // 🔥 SAVE PROGRESS TO BACKEND
+      try {
+        console.log(`[Sync] Saving unit completion: ${unitId}`);
+        const res = await api.post('/api/unlock', {
+          subjectId,
+          sectionId,
+          unitId
+        });
+        
+        if (res.data.success) {
+          console.log('[Sync] Progress stored successfully');
+          // Update global context so the Map reflects the new progress immediately
+          if (res.data.user) {
+            setUser(res.data.user);
+          }
+          // Clear scroll cache so the Map forces a scroll to the NEW current unit
+          localStorage.removeItem(`scroll_map_${sectionId}`);
+        }
+      } catch (err) {
+        console.error('[Sync Error] Failed to unlock next unit:', err);
+      }
+
       navigate(`/celebration`, { 
         state: { 
           subjectId, 
