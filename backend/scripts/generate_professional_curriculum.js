@@ -93,10 +93,10 @@ async function runGenerator() {
     await mongoose.connect(MONGODB_URI);
     console.log('CONNECTED TO ELITE DB');
 
-    console.log('Clearing ALL old populated subjects...');
-    await Subject.deleteMany({}); // Complete wipe
+    console.log('SAFETY LOCK ENGAGED: Bypassing deletion to protect manually created lessons.');
+    // await Subject.deleteMany({}); // Complete wipe DISABLED per user request!
 
-    const targetSubjects = Object.keys(curriculumData); // We will generate scales for all our 20 heavy subjects
+    const targetSubjects = Object.keys(curriculumData); 
 
     for (const subjectName of targetSubjects) {
       console.log(`GENERATING MASSIVE SCALE TRACING CONTENT: ${subjectName}...`);
