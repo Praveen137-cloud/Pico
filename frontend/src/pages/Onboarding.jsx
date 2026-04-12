@@ -49,11 +49,11 @@ const Onboarding = () => {
          // Update local auth state
          setUser({ ...user, lastVisitedSubject: subjectName, onboardingCompleted: true });
          // Give a small delay for the "vibe" before navigating
-         setTimeout(() => navigate('/'), 800);
+         setTimeout(() => navigate('/home'), 800);
       }
     } catch (err) {
       console.error('Onboarding preference update failed', err);
-      navigate('/'); // Backup
+      navigate('/home'); // Backup
     }
   };
 
