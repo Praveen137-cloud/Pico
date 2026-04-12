@@ -15,7 +15,7 @@ const Auth = () => {
   const [loading, setLoading] = useState(false);
   const [logs, setLogs] = useState([]);
 
-  const { login, register, setUser, loginAsGuest, loginSuccess } = useContext(AuthContext);
+  const { login, register, setUser, loginAsGuest, loginSuccess, logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
   // Cyber Terminal Background Logs
@@ -39,6 +39,15 @@ const Auth = () => {
     }, 1500);
 
     return () => clearInterval(interval);
+  }, []);
+
+  // 🧹 Auto-Clear stale sessions when hitting the auth page
+  useEffect(() => {
+    const staleToken = sessionStorage.getItem('token');
+    if (staleToken) {
+      console.log('[Auth] Cleaning up existing session state to prevent sync errors...');
+      logout();
+    }
   }, []);
 
   const handleGoogleSuccess = async (response) => {

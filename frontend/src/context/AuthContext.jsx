@@ -87,6 +87,7 @@ export const AuthProvider = ({ children }) => {
     sessionStorage.removeItem('token');
     setToken(null);
     setUser(null);
+    setSubjects([]); // Clear curriculum data on logout
   };
 
   return (

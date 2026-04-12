@@ -18,7 +18,12 @@ const api = axios.create({
 
 api.interceptors.request.use((config) => {
   const token = sessionStorage.getItem('token');
-  if (token) {
+  
+  // 🛡️ DO NOT send token to auth routes to prevent stale session interference
+  const isAuthRoute = config.url.startsWith('/api/auth/') && 
+                     !config.url.includes('/api/auth/last-subject'); // last-subject might need it if it's private, but others are public
+
+  if (token && !isAuthRoute) {
     config.headers['Authorization'] = `Bearer ${token}`;
   }
   return config;
