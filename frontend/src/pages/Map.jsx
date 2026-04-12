@@ -67,6 +67,11 @@ const Map = () => {
     return () => container.removeEventListener('scroll', handleScroll);
   }, [units, sectionId]);
 
+  const completedIds = authUser?.completedUnits?.map(id => id.toString()) || [];
+  const completedCount = units.filter(u => completedIds.includes(u._id.toString())).length;
+  const totalUnits = units.length;
+  const progressPct = totalUnits > 0 ? Math.round((completedCount / totalUnits) * 100) : 0;
+
   // 4. Auto-Scroll to Current Unit (whenever progress changes or on initial load)
   useEffect(() => {
     if (units.length > 0 && activeNodeRef.current) {
@@ -110,11 +115,6 @@ const Map = () => {
       <div style={{ color: '#FFF8E1', fontSize: 24, fontWeight: 900 }}>ENTERING CHOCOLATE CITY...</div>
     </div>
   );
-
-  const completedIds = authUser?.completedUnits?.map(id => id.toString()) || [];
-  const completedCount = units.filter(u => completedIds.includes(u._id.toString())).length;
-  const totalUnits = units.length;
-  const progressPct = totalUnits > 0 ? Math.round((completedCount / totalUnits) * 100) : 0;
 
   let foundActive = false;
 
