@@ -16,19 +16,12 @@ const Home = () => {
   const [isHoveringDonate, setIsHoveringDonate] = useState(false);
   const navigate = useNavigate();
 
-  // 0. Sync Active Subject with User Profile & AUTO-REDIRECT
+  // 0. Sync Active Subject with User Profile
   useEffect(() => {
-    if (user) {
-      if (user.lastVisitedSubject) {
-        setActiveSubject(user.lastVisitedSubject);
-      }
-      
-      // 🔥 Session Persistence: Auto-jump to the last map point
-      if (user.lastSubjectId && user.lastSectionId) {
-        navigate(`/map/${user.lastSubjectId}/${user.lastSectionId}`);
-      }
+    if (user && user.lastVisitedSubject) {
+      setActiveSubject(user.lastVisitedSubject);
     }
-  }, [user, navigate]);
+  }, [user]);
 
   // 1. Fetch Subject List
   useEffect(() => {
@@ -209,6 +202,9 @@ const styles = {
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
+    backgroundColor: 'var(--bg-dark)',
+    position: 'relative',
+    zIndex: 1
   },
   topSticky: {
     position: 'sticky',
