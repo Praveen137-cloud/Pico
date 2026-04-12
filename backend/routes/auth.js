@@ -70,13 +70,23 @@ router.post('/login', async (req, res) => {
 router.post('/google', async (req, res) => {
   const { credential } = req.body;
   
+  if (!process.env.GOOGLE_CLIENT_ID) {
+    console.error('[Google Auth] CRITICAL: GOOGLE_CLIENT_ID is not configured in .env');
+    return res.status(500).json({ error: 'Server authentication configuration missing.' });
+  }
+
   try {
     const ticket = await client.verifyIdToken({
       idToken: credential,
       audience: process.env.GOOGLE_CLIENT_ID,
     });
     
-    const { name, email, sub: googleId, picture } = ticket.getPayload();
+    const payload = ticket.getPayload();
+    if (!payload) {
+      throw new Error('No payload returned from Google');
+    }
+
+    const { name, email, sub: googleId, picture } = payload;
     
     let user = await User.findOne({ email });
     
@@ -86,22 +96,28 @@ router.post('/google', async (req, res) => {
         name,
         email,
         googleId,
-        avatar: 'Parrot' // Default
+        avatar: 'Parrot' 
       });
       await user.save();
+      console.log(`[Google Auth] New user created: ${email}`);
     } else if (!user.googleId) {
       // Link Google ID if user exists by email but not linked
       user.googleId = googleId;
       await user.save();
+      console.log(`[Google Auth] Google ID linked for existing user: ${email}`);
     }
 
-    const payload = { user: { id: user.id } };
-    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
+    const jwtPayload = { user: { id: user.id } };
+    const token = jwt.sign(jwtPayload, JWT_SECRET, { expiresIn: '7d' });
 
+    console.log(`[Google Auth] Successful login: ${email}`);
     res.json({ token, user });
   } catch (err) {
-    console.error('Google Auth Error:', err);
-    res.status(401).json({ error: 'Google authentication failed' });
+    console.error('[Google Auth Failure]:', err.message);
+    res.status(401).json({ 
+      error: 'Google authentication sequence rejected.',
+      details: err.message
+    });
   }
 });
 

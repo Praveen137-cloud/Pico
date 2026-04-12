@@ -7,87 +7,47 @@ const os = require('os');
 const Problem = require('../models/Problem');
 const User = require('../models/User');
 
-// Write a temp file, compile/run it, return output
-function runCode(lang, solutionCode, driverCode, args) {
-  return new Promise((resolve) => {
-    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'pico-'));
-    
-    try {
-      if (lang === 'c') {
-        const solFile = path.join(tmpDir, 'solution.c');
-        const drvFile = path.join(tmpDir, 'main.c');
-        const outFile = path.join(tmpDir, 'program.exe');
-        fs.writeFileSync(solFile, solutionCode);
-        fs.writeFileSync(drvFile, driverCode);
-        const argsStr = args.map(a => `"${a}"`).join(' ');
-        // Try gcc first (Linux/Mac/WSL), then cc
-        const compileCmd = `gcc "${solFile}" "${drvFile}" -o "${outFile}" 2>&1`;
-        exec(compileCmd, { timeout: 10000 }, (compileErr, compileOut) => {
-          const errMsg = compileOut || compileErr?.message || '';
-          if (compileErr && (errMsg.includes('not recognized') || errMsg.includes('No such file') || errMsg.includes('not found'))) {
-            cleanup(tmpDir);
-            return resolve({ stderr: '⚠️ GCC not found on this machine.\nInstall MinGW-w64: https://www.mingw-w64.org/downloads/\nThen add gcc to your PATH and restart the backend server.', stdout: '', code: 1 });
-          }
-          if (compileErr) {
-            cleanup(tmpDir);
-            return resolve({ stderr: compileOut || compileErr.message, stdout: '', code: 1 });
-          }
-          const runCmd = `"${outFile}" ${argsStr}`;
-          exec(runCmd, { timeout: 5000 }, (runErr, stdout, stderr) => {
-            cleanup(tmpDir);
-            resolve({ stdout: stdout || '', stderr: stderr || runErr?.message || '', code: runErr ? 1 : 0 });
-          });
-        });
+// 🚀 REMOTE EXECUTION ENGINE (PISTON API)
+// This enables 'zero-install' code execution across all devices online.
+async function runCode(lang, solutionCode, driverCode, args) {
+  const axios = require('axios');
+  
+  const languageMap = {
+    'python': { name: 'python', version: '3.10.0', solFile: 'solution.py', drvFile: 'main.py' },
+    'c': { name: 'c', version: '10.2.0', solFile: 'solution.c', drvFile: 'main.c' },
+    'java': { name: 'java', version: '15.0.2', solFile: 'Solution.java', drvFile: 'Main.java' }
+  };
 
-      } else if (lang === 'python') {
-        const solFile = path.join(tmpDir, 'solution.py');
-        const drvFile = path.join(tmpDir, 'main.py');
-        fs.writeFileSync(solFile, solutionCode);
-        fs.writeFileSync(drvFile, driverCode);
-        const argsStr = args.join(' ');
-        // Try python3 first, fallback to python
-        // Run python from the tmpDir so `from solution import ...` works
-        const runCmd = `python main.py ${argsStr}`;
-        exec(runCmd, { cwd: tmpDir, timeout: 10000 }, (err, stdout, stderr) => {
-          if (err && (stderr?.includes('not recognized') || err.message?.includes('not recognized'))) {
-            // Try python3
-            exec(`python3 main.py ${argsStr}`, { cwd: tmpDir, timeout: 10000 }, (err2, out2, err2s) => {
-              cleanup(tmpDir);
-              resolve({ stdout: out2 || '', stderr: err2s || err2?.message || '', code: err2 ? 1 : 0 });
-            });
-          } else {
-            cleanup(tmpDir);
-            resolve({ stdout: stdout || '', stderr: stderr || err?.message || '', code: err ? 1 : 0 });
-          }
-        });
+  const config = languageMap[lang];
+  if (!config) return { stderr: `Language '${lang}' not supported by remote engine`, stdout: '', code: 1 };
 
-      } else if (lang === 'java') {
-        // Java: Solution.java + Main.java, compile both, run Main with args
-        const solFile = path.join(tmpDir, 'Solution.java');
-        const drvFile = path.join(tmpDir, 'Main.java');
-        fs.writeFileSync(solFile, solutionCode);
-        fs.writeFileSync(drvFile, driverCode);
-        const argsStr = args.join(' ');
-        exec(`javac "${solFile}" "${drvFile}"`, { cwd: tmpDir, timeout: 15000 }, (err, out, errOut) => {
-          if (err) {
-            cleanup(tmpDir);
-            return resolve({ stderr: errOut || err.message, stdout: '', code: 1 });
-          }
-          exec(`java -cp "${tmpDir}" Main ${argsStr}`, { timeout: 10000 }, (runErr, stdout, stderr) => {
-            cleanup(tmpDir);
-            resolve({ stdout: stdout || '', stderr: stderr || runErr?.message || '', code: runErr ? 1 : 0 });
-          });
-        });
+  try {
+    const payload = {
+      language: config.name,
+      version: config.version,
+      files: [
+        { name: config.solFile, content: solutionCode },
+        { name: config.drvFile, content: driverCode }
+      ],
+      args: args.map(String)
+    };
 
-      } else {
-        cleanup(tmpDir);
-        resolve({ stderr: `Language '${lang}' not supported`, stdout: '', code: 1 });
-      }
-    } catch (e) {
-      cleanup(tmpDir);
-      resolve({ stderr: e.message, stdout: '', code: 1 });
-    }
-  });
+    const response = await axios.post('https://emkc.org/api/v2/piston/execute', payload, { timeout: 15000 });
+    const { run } = response.data;
+
+    return {
+      stdout: run.stdout || '',
+      stderr: run.stderr || '',
+      code: run.code
+    };
+  } catch (err) {
+    console.error('[Remote Execution Error]:', err.message);
+    return {
+      stderr: `🦜 Pico: 'Network failure in the code-wing! Remote compiler is unreachable.' (${err.message})`,
+      stdout: '',
+      code: 1
+    };
+  }
 }
 
 function cleanup(dir) {

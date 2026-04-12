@@ -238,26 +238,34 @@ const Lesson = () => {
     setIsCompiling(true);
     setPicoMsg('');
     try {
-      const res = await api.post('/api/execute', {
-        problemId: currentLesson.problemId || '000000000000000000000000', // Handle dummy or real IDs
+      const res = await api.get('/api/user'); // Ensure local user state is fresh
+      if (res.data) setUser(res.data);
+
+      const execRes = await api.post('/api/execute', {
+        problemId: currentLesson.problemId || '000000000000000000000000',
         code: userCode,
         language: currentLesson.language
       });
       
-      if (res.data.picoMsg) setPicoMsg(res.data.picoMsg);
+      if (execRes.data.picoMsg) setPicoMsg(execRes.data.picoMsg);
 
-      const out = res.data.output || res.data.stderr;
+      const out = execRes.data.output || execRes.data.stderr || '';
       setCodeOutput(out);
       
-      if (res.data.status === 'SUCCESS') {
+      if (execRes.data.status === 'SUCCESS') {
         setFeedback('correct');
         playSound(true);
       } else {
         setFeedback('wrong');
         playSound(false);
+        // If it was a compile/runtime error on remote, specifically mention it.
+        if (execRes.data.status === 'COMPILE_ERROR') {
+           setCodeOutput(`COMPILATION/RUNTIME ERROR:\n${out}`);
+        }
       }
     } catch (err) {
-      setCodeOutput('Error executing code');
+      const serverErr = err.response?.data?.error || 'Execution link failed.';
+      setCodeOutput(`SYSTEM ERROR: ${serverErr}`);
       setFeedback('wrong');
       playSound(false);
     }

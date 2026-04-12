@@ -44,10 +44,13 @@ const Auth = () => {
     setLoading(true);
     try {
       const res = await api.post('/api/auth/google', { credential: response.credential });
-      loginSuccess(res.data);
+      
+      localStorage.setItem('token', res.data.token);
+      setUser(res.data.user);
       navigate('/');
     } catch (err) {
-      setErrorMsg('Google authentication sequence failed.');
+      const detail = err.response?.data?.details || 'Access Denied';
+      setErrorMsg(`Google Auth Rejected: ${detail}`);
       console.error(err);
     }
     setLoading(false);
