@@ -5,6 +5,7 @@ import { GoogleLogin } from '@react-oauth/google';
 import { Helmet } from 'react-helmet-async';
 import api from '../api';
 import './Auth.css';
+import { getIsEngineReady, subscribeToEngineStatus } from '../utils/wakeUp';
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -14,17 +15,26 @@ const Auth = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
   const [logs, setLogs] = useState([]);
+  const [engineReady, setEngineReady] = useState(getIsEngineReady());
 
   const { login, register, setUser, loginAsGuest, loginSuccess, logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
   // Cyber Terminal Background Logs
   useEffect(() => {
+    const unsubscribe = subscribeToEngineStatus((ready) => {
+      setEngineReady(ready);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
     const startupLogs = [
       "> INITIALIZING PICO MATRIX SERVER...",
       "> SECURING PORT 5000...",
       "> ENCRYPTING DATA LINK...",
-      "> WAITING FOR AGENT AUTHENTICATION...",
+      "> DETECTING ENGINE STATUS...",
+      engineReady ? "> ENGINE ONLINE." : "> ENGINE SLEEPING. WAKING UP...",
       "> SYSTEM READY."
     ];
     
@@ -157,8 +167,8 @@ const Auth = () => {
                 required
               />
             </div>
-            <button className="auth-submit-btn" type="submit" disabled={loading}>
-              {loading ? 'SYNCING...' : isLogin ? 'AUTHENTICATE' : 'INITIALIZE'}
+            <button className="auth-submit-btn" type="submit" disabled={loading || !engineReady}>
+              {loading ? 'SYNCING...' : !engineReady ? 'WAKING ENGINE...' : isLogin ? 'AUTHENTICATE' : 'INITIALIZE'}
             </button>
           </form>
 
@@ -178,8 +188,8 @@ const Auth = () => {
               />
             </div>
             
-            <button className="auth-guest-link" onClick={handleGuestLogin}>
-              CONTINUE AS GUEST
+            <button className="auth-guest-link" onClick={handleGuestLogin} disabled={loading || !engineReady}>
+              {!engineReady ? 'ENGINE COLD...' : 'CONTINUE AS GUEST'}
             </button>
           </div>
 

@@ -24,7 +24,7 @@ const sendWelcomeEmail = async (to, name) => {
           <p style="font-size: 14px; color: #a4b0c0;">You have successfully initialized your profile at Pico Elite Academy.</p>
           <p style="font-size: 14px; color: #a4b0c0;">Prepare your mind. Your training in DSA, Web Development, and Advanced Architectures begins now.</p>
         </div>
-        <a href="https://pico-academy.vercel.app/" style="background-color: transparent; color: #00ffcc; border: 1px solid #00ffcc; padding: 12px 24px; text-decoration: none; font-weight: bold; display: inline-block; text-transform: uppercase; letter-spacing: 2px;">Access Terminal</a>
+        <a href="https://pico-sooty.vercel.app/" style="background-color: transparent; color: #00ffcc; border: 1px solid #00ffcc; padding: 12px 24px; text-decoration: none; font-weight: bold; display: inline-block; text-transform: uppercase; letter-spacing: 2px;">Access Terminal</a>
         <p style="margin-top: 40px; font-size: 10px; color: #555;">> End of transmission.</p>
       </div>
     `;

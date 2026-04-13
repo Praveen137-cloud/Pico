@@ -1,6 +1,45 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { wakeBackend } from '../utils/wakeUp';
 
-const PreLoader = () => {
+const PreLoader = ({ onReady }) => {
+  const [statusMessage, setStatusMessage] = useState('PREPARING THE ARENA');
+  const [isWaking, setIsWaking] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+
+    const performWakeUp = async () => {
+      // Small timeout to show "Waking up" message if engine is slow
+      const timer = setTimeout(() => {
+        if (mounted) {
+          setStatusMessage('WAKING UP THE ELITE ENGINE...');
+          setIsWaking(true);
+        }
+      }, 2000);
+
+      const success = await wakeBackend();
+      clearTimeout(timer);
+
+      if (mounted) {
+        if (success) {
+          setStatusMessage('ENGINE ONLINE. ENTERING MATRIX...');
+          // Give a half second to see the success message
+          setTimeout(() => {
+            if (onReady) onReady();
+          }, 800);
+        } else {
+          setStatusMessage('ENGINE LATENCY DETECTED. RETRYING...');
+          // Even if it fails, we might want to let them in, 
+          // but better to keep trying in the background.
+          if (onReady) onReady(); 
+        }
+      }
+    };
+
+    performWakeUp();
+    return () => { mounted = false; };
+  }, [onReady]);
+
   return (
     <div style={styles.overlay}>
       <div style={styles.content}>
@@ -10,8 +49,10 @@ const PreLoader = () => {
         </div>
         
         <div style={styles.textContainer}>
-          <h1 style={styles.title}>PREPARING THE ARENA</h1>
-          <p style={styles.subtitle}>Pico & The Goat are gathering knowledge...</p>
+          <h1 style={styles.title}>
+            {isWaking ? 'ENGINE INITIALIZING' : 'PREPARING THE ARENA'}
+          </h1>
+          <p style={styles.subtitle}>{statusMessage}</p>
         </div>
 
         <div style={styles.progressTrack}>

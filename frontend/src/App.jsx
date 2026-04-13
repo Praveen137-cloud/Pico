@@ -4,6 +4,8 @@ import Navigation from './components/Navigation';
 import { AuthProvider, AuthContext } from './context/AuthContext';
 import PicoBot from './components/PicoBot';
 import DigitalBackground from './components/DigitalBackground';
+import PreLoader from './components/PreLoader';
+import { wakeBackend } from './utils/wakeUp';
 
 // Lazy load pages for performance
 const Landing = lazy(() => import('./pages/Landing'));
@@ -33,7 +35,7 @@ const ProtectedRoute = ({ children }) => {
   const { user, token, loading } = useContext(AuthContext);
   const location = useLocation();
 
-  if (loading) return <div style={{color: 'white', padding: 40, textAlign: 'center'}}>Authenticating...</div>;
+  if (loading) return <PreLoader onReady={() => {}} />;
   if (!token) return <Navigate to="/auth" replace />;
 
   // Force onboarding for first-time users
@@ -77,6 +79,12 @@ const GlobalPremiumWrapper = ({ children, onClick }) => {
 function App() {
   const [bgmMuted, setBgmMuted] = useState(false);
   const [interacted, setInteracted] = useState(false);
+  const [engineReady, setEngineReady] = useState(false);
+  
+  useEffect(() => {
+    // Start warming up the backend immediately
+    wakeBackend().then(() => setEngineReady(true));
+  }, []);
   
   const bgmRef = React.useRef(new Audio('https://cdn.pixabay.com/download/audio/2021/08/09/audio_82136e053a.mp3')); 
   const sfxRef = React.useRef(new Audio('https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8b7f7ebb7.mp3')); 
@@ -146,7 +154,7 @@ function App() {
         <div className="crt-overlay" />
         <GlobalPremiumWrapper onClick={handleGlobalClick}>
           <Router>
-            <Suspense fallback={<div style={{ color: 'white', padding: 40, textAlign: 'center' }}>Loading...</div>}>
+            <Suspense fallback={<PreLoader onReady={() => {}} />}>
               <Routes>
                 {/* Public Routes */}
                 <Route path="/" element={<Landing />} />
