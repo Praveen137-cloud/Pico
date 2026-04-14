@@ -10,9 +10,9 @@ const auditSubjects = async () => {
     console.log('Connected to MongoDB');
 
     const subjects = [
-      'Arrays', 'Recursion', 'Hashing', 'Heaps', 'LinkedLists', 
-      'StacksQueues', 'SearchingSorting', 'Strings', 'Trees', 
-      'Graphs', 'DynamicProgramming', 'Mathbits'
+      'Arrays', 'Recursion', 'Hashing', 'Heaps', 'Linked Lists', 
+      'Stacks & Queues', 'Searching & Sorting', 'Strings', 'Trees', 
+      'Graphs', 'Dynamic Programming', 'Mathbits'
     ];
 
     console.log('\n--- Titan-Grade Curriculum Audit ---\n');
