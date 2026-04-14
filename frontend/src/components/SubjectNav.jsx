@@ -6,7 +6,7 @@ import './SubjectNav.css';
 const SubjectNav = ({ activeSubject, onSelect }) => {
   const { subjects, user, setUser } = useContext(AuthContext);
 
-  // Helper to get consistent icons/colors for subjects (Tech-Focused)
+  const getSubjectMeta = (name) => {
     const meta = Object.entries({
       'Basics': { icon: '💻', color: '#94A3B8' },
       'Arrays': { icon: '🍬', color: '#6366F1' },
