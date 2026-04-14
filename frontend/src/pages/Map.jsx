@@ -170,7 +170,7 @@ const Map = () => {
             const isCurrent = !isDone && isUnlocked && !foundActive;
             if (isCurrent) foundActive = true;
 
-            const icon = isDone ? '⭐' : (isUnlocked ? (isChocolateTheme ? '🍬' : '🍬') : '🔒');
+            const icon = isDone ? '⭐' : (isUnlocked ? (isChocolateTheme ? '' : '🍬') : '🔒');
 
             return (
               <div 
@@ -193,7 +193,10 @@ const Map = () => {
                   </span>
 
                   {isCurrent && (
-                    <div className="current-node-pulse" />
+                    <>
+                      <div className="current-node-pulse" />
+                      <div style={styles.currentIndicator}>NEXT BITE</div>
+                    </>
                   )}
                 </div>
 
