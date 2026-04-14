@@ -510,6 +510,19 @@ app.get('/api/status', (req, res) => {
   });
 });
 
+// 🔥 ANTI-SLEEP HEARTBEAT: Self-ping every 14 mins to keep the free-tier warm
+setInterval(() => {
+  const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
+  const host = process.env.RENDER_EXTERNAL_URL || `localhost:${PORT}`;
+  const url = host.startsWith('http') ? host : `${protocol}://${host}`;
+  
+  require('http').get(url, (res) => {
+    console.log(`[Heartbeat] Self-ping status: ${res.statusCode}`);
+  }).on('error', (err) => {
+    console.error(`[Heartbeat Error] ${err.message}`);
+  });
+}, 14 * 60 * 1000); // 14 mins
+
 httpServer.listen(PORT, '0.0.0.0', () => {
   console.log(`Pico Server is LIVE on port ${PORT} (0.0.0.0)`);
 }).on('error', (err) => {

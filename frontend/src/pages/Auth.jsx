@@ -36,16 +36,17 @@ const Auth = () => {
       "> SECURING PORT 5000...",
       "> ENCRYPTING DATA LINK...",
       "> DETECTING ENGINE STATUS...",
-      engineReady ? "> ENGINE ONLINE." : "> ENGINE SLEEPING. WAKING UP...",
+      engineReady ? "> ENGINE ONLINE. SYNC COMPLETE. 🚀" : "> ENGINE SLEEPING. WAKING UP... 💤",
+      engineReady ? "> ENTRANCE GRANTED." : "> SIGNAL WEAK. ATTEMPTING RE-SYNC...",
       "> SYSTEM READY."
     ];
     let i = 0;
     const interval = setInterval(() => {
       if (i < startupLogs.length) {
-        setLogs(prev => [...prev, startupLogs[i]].slice(-5));
+        setLogs(prev => [...prev, startupLogs[i]].slice(-8)); // Show more logs
         i++;
       } else clearInterval(interval);
-    }, 1000);
+    }, 800);
     return () => clearInterval(interval);
   }, [engineReady]);
 

@@ -12,10 +12,10 @@ const PreLoader = ({ onReady }) => {
       // Small timeout to show "Waking up" message if engine is slow
       const timer = setTimeout(() => {
         if (mounted) {
-          setStatusMessage('WAKING UP THE ELITE ENGINE...');
+          setStatusMessage('SIGNAL WEAK... RE-ESTABLISHING LINK');
           setIsWaking(true);
         }
-      }, 2000);
+      }, 5000);
 
       const success = await wakeBackend();
       clearTimeout(timer);
@@ -28,10 +28,9 @@ const PreLoader = ({ onReady }) => {
             if (onReady) onReady();
           }, 800);
         } else {
-          setStatusMessage('ENGINE LATENCY DETECTED. RETRYING...');
-          // Even if it fails, we might want to let them in, 
-          // but better to keep trying in the background.
-          if (onReady) onReady(); 
+          setStatusMessage('CRITICAL LATENCY DETECTED. RETRY SYNC.');
+          // 🔥 STRICT MODE: We DO NOT call onReady() here anymore.
+          // The user must wait or use the Fix button.
         }
       }
     };
@@ -58,6 +57,16 @@ const PreLoader = ({ onReady }) => {
         <div style={styles.progressTrack}>
           <div style={styles.progressFill} />
         </div>
+
+        {statusMessage.includes('LATENCY') && (
+          <button 
+            onClick={() => window.location.reload()}
+            style={styles.retryBtn}
+          >
+            REFRESH LINK
+          </button>
+        )}
+      </div>
       </div>
 
       <style>{`
@@ -149,6 +158,19 @@ const styles = {
     animation: 'loadingFill 2s infinite ease-in-out',
     boxShadow: '0 0 10px #FF4444',
   },
+  retryBtn: {
+    marginTop: '20px',
+    padding: '12px 24px',
+    backgroundColor: 'transparent',
+    border: '1px solid #FF4444',
+    color: '#FF4444',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    fontSize: '14px',
+    fontWeight: '900',
+    letterSpacing: '1px',
+    transition: 'all 0.2s',
+  }
 };
 
 export default PreLoader;

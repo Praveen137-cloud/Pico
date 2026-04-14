@@ -139,9 +139,62 @@ const sendAdminPaymentNotification = async (userName, email, amount, paymentId) 
   }
 };
 
+/**
+ * Sends an emotional streak reminder email with an XP incentive.
+ */
+const sendStreakReminderEmail = async (to, name, currentStreak) => {
+  try {
+    const htmlContent = `
+      <div style="background-color: #0b0e14; color: #fbbf24; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 40px; border: 2px solid #fbbf24; max-width: 600px; margin: auto;">
+        <div style="text-align: center; margin-bottom: 30px;">
+          <span style="font-size: 64px;">🦜</span>
+        </div>
+        
+        <h1 style="text-align: center; letter-spacing: 2px; border-bottom: 2px solid #fbbf24; padding-bottom: 20px; font-weight: 900;">PICO IS MISSING YOU...</h1>
+        
+        <p style="font-size: 18px; line-height: 1.6; text-align: center;">Greetings, Agent <strong>${name}</strong>.</p>
+        
+        <p style="font-size: 16px; color: #8892b0; text-align: center; line-height: 1.8;">
+          The Matrix has been quiet. Pico's wings feel heavy because your logic hasn't touched the code lately. 
+          Your last streak of <strong>${currentStreak || 0}</strong> days is waiting to be extended.
+        </p>
+
+        <div style="background: rgba(251, 191, 36, 0.1); border: 1px dashed #fbbf24; padding: 25px; text-align: center; margin: 30px 0; border-radius: 12px;">
+          <h2 style="color: #fbbf24; margin-top: 0; font-size: 20px;">🎁 WELCOME BACK GIFT</h2>
+          <p style="color: #fff; font-size: 14px;">Log in today and complete just <strong>ONE mission</strong> to claim an instant bonus:</p>
+          <div style="font-size: 28px; font-weight: 900; color: #fff; margin: 15px 0; text-shadow: 0 0 10px #fbbf24;">+500 XP CACHE</div>
+        </div>
+
+        <div style="text-align: center; margin-top: 35px;">
+          <a href="https://pico-sooty.vercel.app" style="background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #000; padding: 18px 36px; border-radius: 8px; text-decoration: none; font-weight: 900; letter-spacing: 1.5px; box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4); display: inline-block;">INITIALIZE STREAK RECOVERY</a>
+        </div>
+
+        <p style="font-size: 11px; color: #555; text-align: center; margin-top: 40px;">
+          *Bonus XP will be automatically added to your profile upon your first successful compilation today.
+        </p>
+        
+        <footer style="margin-top: 40px; border-top: 1px solid #30363d; padding-top: 30px; text-align: center; font-size: 10px; color: #8892b0; text-transform: uppercase; letter-spacing: 2px;">
+          PICO ELITE ACADEMY // RE-ENGAGEMENT PROTOCOL
+        </footer>
+      </div>
+    `;
+
+    await transporter.sendMail({
+      from: `"Pico (The Sad Parrot)" <${process.env.EMAIL_USER}>`,
+      to,
+      subject: "Pico's wings are heavy... he misses your logic! 🦜",
+      html: htmlContent
+    });
+    console.log(`[Email] Streak reminder sent to ${to}`);
+  } catch (error) {
+    console.error(`[Email Error] Failed to send reminder to ${to}:`, error.message);
+  }
+};
+
 module.exports = {
   sendWelcomeEmail,
   sendVerificationEmail,
   sendPasswordResetEmail,
-  sendAdminPaymentNotification
+  sendAdminPaymentNotification,
+  sendStreakReminderEmail
 };
