@@ -1,3 +1,6 @@
+import React, { useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import './Landing.css';
 import LivingCharacter from '../components/LivingCharacter';
 
