@@ -20,12 +20,17 @@ const GlobalHUD = () => {
       </div>
 
       <div className="hud-right">
+        {user?.isPremium && (
+          <div className="hud-premium-tag">
+            👑 PREMIUM
+          </div>
+        )}
         <div className="hud-stat-pill fire">
           <span style={{ filter: 'drop-shadow(0 0 5px #FF4E50)' }}>🔥</span>
           <span className="stat-val">{user.streak || 0}</span>
         </div>
-        <div className="hud-stat-pill gem">
-           <span style={{ filter: 'drop-shadow(0 0 5px #FFD700)' }}>💎</span>
+        <div className="hud-stat-pill bolt">
+           <span style={{ filter: 'drop-shadow(0 0 5px #FFD700)' }}>⚡</span>
            <span className="stat-val">{user.xp || 0}</span>
         </div>
       </div>
@@ -104,9 +109,22 @@ const GlobalHUD = () => {
           color: #fff;
         }
 
+        .hud-premium-tag {
+          font-size: 10px;
+          font-weight: 900;
+          color: #FFD700;
+          background: rgba(255, 215, 0, 0.1);
+          border: 1px solid rgba(255, 215, 0, 0.3);
+          padding: 3px 8px;
+          border-radius: 8px;
+          letter-spacing: 1px;
+          text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+
         @media (max-width: 480px) {
            .hud-username { display: none; }
            .hud-level-bar { display: none; }
+           .hud-premium-tag { display: none; }
         }
       `}</style>
     </div>
