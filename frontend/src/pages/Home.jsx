@@ -102,9 +102,6 @@ const Home = () => {
       <div style={styles.topSticky} className="glass-panel" style={{ borderRadius: 0, borderTop: 'none' }}>
         <div className="top-stats-bar">
           <div className="stats-group">
-            <div className="char-indicator">
-               <LivingCharacter character="ace" size={50} state={user?.streak > 0 ? 'happy' : 'idle'} />
-            </div>
             <div style={{display: 'flex', alignItems: 'center', gap: 6}}>
                <span style={{fontSize: 18}}>🔥</span>
                <span style={{fontWeight: 800, fontSize: 13, letterSpacing: 1}}>{user?.streak || 0} DAY STREAK</span>

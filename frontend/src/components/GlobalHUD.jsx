@@ -1,7 +1,4 @@
-import React, { useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import LivingCharacter from './LivingCharacter';
 
 const GlobalHUD = () => {
   const { user } = useContext(AuthContext);

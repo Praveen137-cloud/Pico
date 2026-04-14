@@ -122,10 +122,10 @@ const Map = () => {
     </div>
   );
 
-  let foundActive = false;
+  const isChocolateTheme = subjectName.toLowerCase() === 'arrays';
 
   return (
-    <div className="map-page cyber-mesh-bg">
+    <div className={`map-page ${isChocolateTheme ? 'theme-chocolate' : 'cyber-mesh-bg'}`}>
       <div className="adventure-path-overlay" />
 
       <header style={styles.header}>
@@ -169,7 +169,7 @@ const Map = () => {
             const isCurrent = !isDone && isUnlocked && !foundActive;
             if (isCurrent) foundActive = true;
 
-            const icon = isDone ? '⭐' : (isUnlocked ? '🍬' : '🔒');
+            const icon = isDone ? '⭐' : (isUnlocked ? (isChocolateTheme ? '🍫' : '🍬') : '🔒');
 
             return (
               <div 

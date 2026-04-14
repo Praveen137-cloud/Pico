@@ -139,7 +139,7 @@ const Landing = () => {
       {/* NAV */}
       <nav className="landing-nav glass-panel">
         <div className="landing-nav-logo">
-          <LivingCharacter character="electric" size={40} state="happy" />
+          <img src="/logo.png" alt="Pico" width={32} />
           <span className="landing-nav-title">PICO ELITE ACADEMY</span>
         </div>
         <div className="landing-nav-links">
@@ -153,10 +153,10 @@ const Landing = () => {
       {/* HERO */}
       <section className="landing-hero cyber-mesh-bg">
         <div className="hero-character-left">
-           <LivingCharacter character="pico" size={140} state="idle" />
+           {/* Mascots removed for cleaner look */}
         </div>
         <div className="hero-character-right">
-           <LivingCharacter character="electric" size={120} state="idle" />
+           {/* Mascots removed for cleaner look */}
         </div>
         
         <div className="landing-hero-badge">🔥 THE ELITE TRAINING MATRIX — VERSION 3.0</div>
