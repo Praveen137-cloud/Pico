@@ -30,17 +30,19 @@
 }
 
 .pico-bubble {
-  width: 45px;
-  height: 45px;
+  width: 55px; /* Slightly larger for better centering */
+  height: 55px;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: transparent;
 }
 
 .pico-parrot-img {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  mix-blend-mode: screen; /* Effectively removes black background */
 }
 
 .pico-badge {

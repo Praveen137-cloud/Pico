@@ -99,7 +99,6 @@ const PicoBot = () => {
           <div className="pico-bubble">
             <img src="/pico-bird.png" alt="Pico" className="pico-parrot-img" />
           </div>
-          <div className="pico-badge">ELITE ASST</div>
         </div>
       )}
     </div>
