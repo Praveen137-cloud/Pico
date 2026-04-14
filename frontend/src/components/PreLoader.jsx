@@ -44,46 +44,47 @@ const PreLoader = ({ onReady }) => {
 
     performWakeUp();
     return () => { mounted = false; };
-  }, [onReady]); // Note: We still depend on onReady, but App.jsx will now pass a stable one.
+  }, [onReady]);
 
   return (
-    <div style={styles.overlay}>
-      <div style={styles.content}>
-        <div style={styles.iconContainer}>
-          <img src="/pico-bird.png" alt="Pico" style={styles.picoBirdImg} />
-          <div style={styles.theGoat}>🐐</div>
-        </div>
-        
-        <div style={styles.textContainer}>
-          <h1 style={styles.title}>
-            {isWaking ? 'ENGINE INITIALIZING' : 'PREPARING THE ARENA'}
-          </h1>
-          <p style={styles.subtitle}>{statusMessage}</p>
-        </div>
-
-        <div style={styles.progressTrack}>
-          <div style={styles.progressFill} />
-        </div>
-
-        {(statusMessage.includes('LATENCY') || isWaking) && (
-          <div style={{ display: 'flex', gap: '12px' }}>
-            <button 
-              onClick={() => window.location.reload()}
-              style={styles.retryBtn}
-            >
-              REFRESH LINK
-            </button>
-            {statusMessage.includes('WAITING') && (
-              <button 
-                onClick={() => window.open('mailto:support@pico.api', '_blank')}
-                style={{ ...styles.retryBtn, borderColor: 'rgba(255,255,255,0.3)', color: 'rgba(255,255,255,0.5)' }}
-              >
-                REPORT DELAY
-              </button>
-            )}
+    <>
+      <div style={styles.overlay}>
+        <div style={styles.content}>
+          <div style={styles.iconContainer}>
+            <img src="/pico-bird.png" alt="Pico" style={styles.picoBirdImg} />
+            <div style={styles.theGoat}>🐐</div>
           </div>
-        )}
-      </div>
+          
+          <div style={styles.textContainer}>
+            <h1 style={styles.title}>
+              {isWaking ? 'ENGINE INITIALIZING' : 'PREPARING THE ARENA'}
+            </h1>
+            <p style={styles.subtitle}>{statusMessage}</p>
+          </div>
+
+          <div style={styles.progressTrack}>
+            <div style={styles.progressFill} />
+          </div>
+
+          {(statusMessage.includes('LATENCY') || isWaking) && (
+            <div style={{ display: 'flex', gap: '12px' }}>
+              <button 
+                onClick={() => window.location.reload()}
+                style={styles.retryBtn}
+              >
+                REFRESH LINK
+              </button>
+              {statusMessage.includes('WAITING') && (
+                <button 
+                  onClick={() => window.open('mailto:support@pico.api', '_blank')}
+                  style={{ ...styles.retryBtn, borderColor: 'rgba(255,255,255,0.3)', color: 'rgba(255,255,255,0.5)' }}
+                >
+                  REPORT DELAY
+                </button>
+              )}
+            </div>
+          )}
+        </div>
       </div>
 
       <style>{`
@@ -104,7 +105,7 @@ const PreLoader = ({ onReady }) => {
           100% { width: 100%; }
         }
       `}</style>
-    </div>
+    </>
   );
 };
 
