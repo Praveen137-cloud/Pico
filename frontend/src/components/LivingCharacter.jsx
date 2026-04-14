@@ -26,7 +26,7 @@ const LivingCharacter = ({
 
   return (
     <div 
-      className={`living-character-wrapper char-${character} state-${state}`}
+      className={`living-character-wrapper char-${character} state-${state} spring-pop`}
       onClick={onClick}
       style={{
         width: size,
@@ -71,30 +71,30 @@ const LivingCharacter = ({
       <style>{`
         @keyframes character-idle {
           0%, 100% { transform: translateY(0) scale(1) rotate(0); }
-          50% { transform: translateY(-8px) scale(1.03) rotate(1deg); }
+          50% { transform: translateY(-10px) scale(1.05) rotate(1deg); }
         }
         @keyframes character-talking {
           0%, 100% { transform: scale(1) translateY(0); }
-          50% { transform: scale(1.08) translateY(-4px) rotate(-1deg); }
+          50% { transform: scale(1.1) translateY(-6px) rotate(-1deg); }
         }
         @keyframes character-happy {
           0% { transform: translateY(0) scale(1); }
-          30% { transform: translateY(-25px) scale(1.1) rotate(5deg); }
-          60% { transform: translateY(-25px) scale(1.1) rotate(-5deg); }
+          30% { transform: translateY(-35px) scale(1.15) rotate(5deg); }
+          60% { transform: translateY(-35px) scale(1.15) rotate(-5deg); }
           100% { transform: translateY(0) scale(1); }
         }
         @keyframes character-thinking {
            0%, 100% { transform: rotate(0) scale(1); }
-           50% { transform: rotate(-8deg) translateX(-8px) scale(0.98); }
+           50% { transform: rotate(-8deg) translateX(-8px) scale(0.95); }
         }
         @keyframes character-levitating {
           0%, 100% { transform: translateY(0) rotate(0); }
-          50% { transform: translateY(-30px) rotate(5deg); }
+          50% { transform: translateY(-40px) rotate(8deg); }
         }
         @keyframes character-celebrating {
           0%, 100% { transform: scale(1) rotate(0); }
-          25% { transform: scale(1.15) rotate(10deg); }
-          75% { transform: scale(1.15) rotate(-10deg); }
+          25% { transform: scale(1.2) rotate(12deg); }
+          75% { transform: scale(1.2) rotate(-12deg); }
         }
         @keyframes aura-pulse {
           0% { opacity: 0.2; transform: translate(-50%, -50%) scale(0.7); }

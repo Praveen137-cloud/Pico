@@ -124,7 +124,7 @@
 .duo-speech-bubble {
   background: var(--glass-bg);
   backdrop-filter: blur(20px);
-  border: 2px solid var(--theme-primary);
+  border: 3px solid var(--theme-primary);
   padding: 24px 30px;
   border-radius: 28px;
   color: #fff;
@@ -135,17 +135,35 @@
   position: relative;
   box-shadow: 0 12px 0px rgba(0, 0, 0, 0.4), var(--neon-glow);
   margin-left: 20px;
+  transition: transform 0.3s var(--spring-bounce);
+}
+
+.duo-speech-bubble:hover {
+  transform: scale(1.02);
 }
 
 .bubble-tail {
   position: absolute;
-  left: -15px;
-  top: 40px;
+  left: -24px;
+  top: 35px;
   width: 0;
   height: 0;
   border-top: 15px solid transparent;
   border-bottom: 15px solid transparent;
-  border-right: 15px solid var(--theme-primary);
+  border-right: 25px solid var(--theme-primary);
+}
+
+.bubble-tail::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: -15px;
+  width: 0;
+  height: 0;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-right: 25px solid var(--glass-bg);
+  z-index: 1;
 }
 
 .mascot-with-bubble {
@@ -183,19 +201,48 @@
 }
 
 @keyframes popIn {
-  0% { transform: scale(0.8); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
+  0% { transform: scale(0.8) translateY(20px); opacity: 0; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
 }
 
 @keyframes bounceIn {
-  0% { transform: translateY(30px); opacity: 0; }
-  100% { transform: translateY(0); opacity: 1; }
+  0% { transform: scale(0.5); opacity: 0; }
+  70% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
 }
 
 @keyframes shakeIn {
   0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-10px); }
-  75% { transform: translateX(10px); }
+  20%, 60% { transform: translateX(-15px) rotate(-1deg); }
+  40%, 80% { transform: translateX(15px) rotate(1deg); }
+}
+
+/* 🎊 CELEBRATION BURST */
+@keyframes correctPop {
+  0% { transform: scale(1); }
+  30% { transform: scale(0.9); }
+  60% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.correct-celebration {
+  animation: correctPop 0.5s var(--spring-bounce);
+}
+
+.confetti-piece {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: var(--theme-primary);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 2000;
+  animation: confettiFall 1s ease-out forwards;
+}
+
+@keyframes confettiFall {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)) rotate(360deg); opacity: 0; }
 }
 
 /* 🍬 Progress Bar Polish */

@@ -54,6 +54,7 @@ const Lesson = () => {
   const [isGameOver, setIsGameOver] = useState(false);
   const [aiHint, setAiHint] = useState(null);
   const [isAiLoading, setIsAiLoading] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const audioRef = useRef(new Audio());
 
@@ -131,7 +132,9 @@ const Lesson = () => {
       setCombo(prev => prev + 1);
       setCorrectAnswersCount(prev => prev + 1);
       setShowXpBurst(true);
+      setShowConfetti(true);
       setTimeout(() => setShowXpBurst(false), 800);
+      setTimeout(() => setShowConfetti(false), 1500);
       if (timeLeft > 10) setIsSpeedBonus(true);
     } else {
       playError();
@@ -376,7 +379,7 @@ const Lesson = () => {
           <div style={{fontSize: 64, marginBottom: 24}}>🚧</div>
           <h2 style={{color: '#fff', marginBottom: 12}}>Coming Soon!</h2>
           <p style={{color: 'var(--text-muted)'}}>We are actively cooking up advanced coaching lessons for this unit. Check back later!</p>
-          <button style={{...styles.btnPrimary, maxWidth: 300, marginTop: 32}} onClick={() => navigate(-1)}>Go Back</button>
+          <button className="btn-chunky gray" style={{ maxWidth: 300, marginTop: 32 }} onClick={() => navigate(-1)}>Go Back</button>
         </div>
       </div>
     );
@@ -388,6 +391,19 @@ const Lesson = () => {
     <div style={styles.page} className={shake ? 'animate-shake' : ''}>
       {/* Gamification Overlays */}
       {showXpBurst && <div className="xp-burst">+10 XP</div>}
+      {showConfetti && [...Array(12)].map((_, i) => (
+        <div 
+          key={i} 
+          className="confetti-piece" 
+          style={{
+            '--dx': `${(Math.random() - 0.5) * 400}px`,
+            '--dy': `${(Math.random() - 0.5) * 400}px`,
+            left: '50%',
+            top: '50%',
+            backgroundColor: ['#00F2FF', '#7000FF', '#FF00E5', '#FFD700'][i % 4]
+          }}
+        />
+      ))}
       {shake && <div className="impact-flash" />}
       
       {isGameOver && (
@@ -395,7 +411,7 @@ const Lesson = () => {
           <div style={{fontSize: 80, marginBottom: 24}}>💀</div>
           <h1 style={{color: '#fff', fontWeight: 900, letterSpacing: 2}}>SYSTEM COLLAPSE</h1>
           <p style={{color: 'var(--text-muted)', marginBottom: 40}}>The elite firewall has detected your misalignment. Re-syncing is required.</p>
-          <button style={styles.btnPrimary} onClick={resetLesson}>RE-SYNC CORE</button>
+          <button className="btn-chunky cyan" style={{ width: '100%' }} onClick={resetLesson}>RE-SYNC CORE</button>
         </div>
       )}
 
@@ -443,7 +459,7 @@ const Lesson = () => {
                 size={140} 
                 state={feedback === 'correct' ? 'happy' : feedback === 'wrong' ? 'thinking' : 'talking'} 
               />
-              <div className="duo-speech-bubble glass-panel pop-in">
+              <div className={`duo-speech-bubble glass-panel ${feedback === 'correct' ? 'correct-celebration' : 'pop-in'}`}>
                 <div className="bubble-tail" />
                 <TypingEffect text={currentLesson.questionText} />
                 <button 
@@ -487,7 +503,7 @@ const Lesson = () => {
               </div>
             )}
             
-            <button style={{...styles.btnPrimary, marginTop: 40}} onClick={handleNext}>CONCENT ACKNOWLEDGED & SYNCED →</button>
+            <button className="btn-chunky cyan" style={{ marginTop: 40 }} onClick={handleNext}>CONCENT ACKNOWLEDGED & SYNCED →</button>
           </div>
         )}
 
@@ -558,7 +574,7 @@ const Lesson = () => {
                ))}
              </div>
              {!feedback && (
-               <button style={{...styles.btnPrimary, marginTop: 24}} onClick={checkAnswer}>Verify Board</button>
+               <button className="btn-chunky cyan" style={{ marginTop: 24, width: '100%' }} onClick={checkAnswer}>Verify Board</button>
              )}
           </div>
         )}
@@ -609,13 +625,18 @@ const Lesson = () => {
 
         {/* Footer actions depending on state and type */}
         {!feedback && (currentLesson.type === 'multiple_choice') && (
-          <button style={{...styles.btnPrimary, opacity: selectedOption ? 1 : 0.5}} onClick={checkAnswer} disabled={!selectedOption}>
+          <button 
+            className={`btn-chunky ${selectedOption ? 'cyan' : 'gray'}`} 
+            style={{ width: '100%', opacity: selectedOption ? 1 : 0.5 }} 
+            onClick={checkAnswer} 
+            disabled={!selectedOption}
+          >
             Check
           </button>
         )}
         
         {!feedback && (currentLesson.type === 'code_fill_in') && (
-          <button style={styles.btnPrimary} onClick={executeAndCheckCode} disabled={isCompiling}>
+          <button className="btn-chunky cyan" style={{ width: '100%' }} onClick={executeAndCheckCode} disabled={isCompiling}>
             {isCompiling ? 'Running...' : 'Run & Check'}
           </button>
         )}

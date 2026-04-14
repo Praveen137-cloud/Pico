@@ -174,7 +174,7 @@ const Map = () => {
             return (
               <div 
                 key={unit._id} 
-                className="entrance-anim node-float-hover"
+                className="entrance-anim node-float-hover spring-pop"
                 style={{ 
                   ...styles.nodeWrapper, 
                   transform: `translateX(${shift})`, 
