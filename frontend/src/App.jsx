@@ -69,7 +69,7 @@ const MainLayout = ({ children }) => {
   return (
     <>
       {!hideNav && <GlobalHUD />}
-      <div className={`main-content ${hideNav ? 'no-nav' : ''}`} style={{ paddingTop: !hideNav ? '80px' : '0' }}>
+      <div className={`main-content ${hideNav ? 'no-nav' : ''}`} style={{ paddingTop: !hideNav ? '50px' : '0' }}>
         {children}
       </div>
       {!hideNav && <Navigation />}

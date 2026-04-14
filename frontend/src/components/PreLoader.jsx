@@ -138,6 +138,7 @@ const styles = {
     height: '100px',
     objectFit: 'contain',
     animation: 'bounce 1s infinite ease-in-out',
+    mixBlendMode: 'screen',
   },
   theGoat: {
     animation: 'bounce 1s infinite ease-in-out 0.2s',

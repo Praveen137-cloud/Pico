@@ -24,10 +24,6 @@ const GlobalHUD = () => {
           <span style={{ filter: 'drop-shadow(0 0 5px #FF4E50)' }}>🔥</span>
           <span className="stat-val">{user.streak || 0}</span>
         </div>
-        <div className="hud-stat-pill heart">
-          <span style={{ filter: 'drop-shadow(0 0 5px #EF4444)' }}>❤️</span>
-          <span className="stat-val">{user.lives ?? 3}</span>
-        </div>
         <div className="hud-stat-pill gem">
            <span style={{ filter: 'drop-shadow(0 0 5px #FFD700)' }}>💎</span>
            <span className="stat-val">{user.xp || 0}</span>
