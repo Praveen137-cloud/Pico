@@ -16,12 +16,15 @@ const api = axios.create({
   timeout: 10000 // 10s timeout to prevent infinite loading
 });
 
+// ✅ Token key — must match AuthContext.jsx
+const STORAGE_KEY = 'pico_auth_token';
+
 api.interceptors.request.use((config) => {
-  const token = sessionStorage.getItem('token');
+  const token = localStorage.getItem(STORAGE_KEY);
   
   // 🛡️ DO NOT send token to auth routes to prevent stale session interference
   const isAuthRoute = config.url.startsWith('/api/auth/') && 
-                     !config.url.includes('/api/auth/last-subject'); // last-subject might need it if it's private, but others are public
+                     !config.url.includes('/api/auth/last-subject');
 
   if (token && !isAuthRoute) {
     config.headers['Authorization'] = `Bearer ${token}`;
@@ -35,8 +38,8 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       console.warn('[Pico API] Unauthorized access (401). Clearing session.');
-      sessionStorage.removeItem('token');
-      // If we are not on the auth page, we might want to reload to trigger state reset
+      // ✅ Clear from localStorage (was sessionStorage — the cross-device bug)
+      localStorage.removeItem(STORAGE_KEY);
       if (window.location.pathname !== '/auth') {
         window.location.href = '/auth';
       }

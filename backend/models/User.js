@@ -7,6 +7,9 @@ const userSchema = new mongoose.Schema({
   password: { type: String }, // Optional to allow future OAuth where passwords aren't present
   googleId: { type: String, sparse: true }, // For Google OAuth
   isGuest: { type: Boolean, default: false },
+  isVerified: { type: Boolean, default: false }, // \u2705 True for Google/Guest, needs OTP for Email
+  verificationCode: { type: String, default: null }, // 6-digit OTP
+  verificationCodeExpires: { type: Date, default: null },
   role: { type: String, enum: ['user', 'admin'], default: 'user' },
   followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
@@ -52,6 +55,10 @@ const userSchema = new mongoose.Schema({
 
 // Pre-save hook to hash password before saving to database
 userSchema.pre('save', async function() {
+  if (this.isGuest || this.googleId) {
+    this.isVerified = true;
+  }
+  
   if (!this.isModified('password') || !this.password) {
     return;
   }

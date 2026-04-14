@@ -66,8 +66,61 @@ const Profile = () => {
   };
 
   const buyPremium = async () => {
-    // Navigate to Razorpay Payment Link provided by user payment gateway setup
-    window.open('https://razorpay.me/@praveenkumarramachandran?amount=ZFm4ghdmeB6pF5PK8Ki64w%3D%3D', '_blank');
+    try {
+      // 1. Create Order on Backend
+      const orderRes = await api.post('/api/payment/order');
+      if (!orderRes.data.success) throw new Error('Order creation failed');
+      
+      const { order } = orderRes.data;
+
+      // 2. Configure Razorpay Options
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_live_SdDz3gM8QwEOxH',
+        amount: order.amount,
+        currency: order.currency,
+        name: 'Pico Elite Academy',
+        description: 'Premium Account Upgrade',
+        image: '/pico-bird.png',
+        order_id: order.id,
+        handler: async (response) => {
+          try {
+            // 3. Verify Payment on Backend
+            const verifyRes = await api.post('/api/payment/verify', {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              amount: order.amount / 100
+            });
+
+            if (verifyRes.data.success) {
+              setUser(verifyRes.data.user);
+              if (setAuthUser) setAuthUser(verifyRes.data.user);
+              
+              // Optional: Play a sound or show a more dramatic success message
+              alert('💎 PREMIUM ACTIVATED! Welcome to the Elite.');
+            }
+          } catch (err) {
+            console.error('Verification failed', err);
+            alert('Payment verification failed. Please contact support.');
+          }
+        },
+        prefill: {
+          name: user.name,
+          email: user.email
+        },
+        theme: {
+          color: '#fbbf24'
+        }
+      };
+
+      // 3. Open Razorpay Modal
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+
+    } catch (err) {
+      console.error('Payment initialization failed', err);
+      alert('Could not initialize payment. Please try again later.');
+    }
   };
 
   const handleNameSave = () => {

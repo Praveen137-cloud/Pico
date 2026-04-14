@@ -1,15 +1,26 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useRef } from 'react';
 import api from '../api';
 
 export const AuthContext = createContext();
 
+// ✅ Use localStorage so the login session persists across browser restarts
+//    and works correctly on all devices (not just the developer's browser).
+const STORAGE_KEY = 'pico_auth_token';
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(sessionStorage.getItem('token'));
+  const [token, setToken] = useState(() => localStorage.getItem(STORAGE_KEY));
   const [loading, setLoading] = useState(true);
   const [subjects, setSubjects] = useState([]);
+  // Track in-flight fetch to allow cancellation
+  const abortRef = useRef(null);
 
   useEffect(() => {
+    // Cancel any previous in-flight request
+    if (abortRef.current) abortRef.current.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
+
     const fetchUserData = async () => {
       if (!token) {
         setUser(null);
@@ -18,38 +29,32 @@ export const AuthProvider = ({ children }) => {
         return;
       }
 
-      // Determine what we actually need to fetch
-      const needsUser = !user;
-      const needsSubjects = subjects.length === 0;
-
-      if (!needsUser && !needsSubjects) {
-        setLoading(false);
-        return;
-      }
-
       try {
-        console.log(`[Auth] Syncing session... (Needs User: ${needsUser}, Needs Subjects: ${needsSubjects})`);
-        
+        console.log('[Auth] Syncing session from stored token...');
         const [userRes, subRes] = await Promise.all([
-          needsUser ? api.get('/api/user') : Promise.resolve({ data: user }),
-          needsSubjects ? api.get('/api/curriculum/subjects') : Promise.resolve({ data: subjects })
+          api.get('/api/user', { signal: controller.signal }),
+          api.get('/api/curriculum/subjects', { signal: controller.signal })
         ]);
-        
-        if (needsUser) setUser(userRes.data);
-        if (needsSubjects) setSubjects(subRes.data);
+        if (!controller.signal.aborted) {
+          setUser(userRes.data);
+          setSubjects(subRes.data);
+        }
       } catch (err) {
+        if (err.name === 'CanceledError' || err.name === 'AbortError') return; // Normal cleanup
         console.error('[Auth Error] Session sync failed:', err);
-        // Interceptor handles 401. For others, we just stop loading.
+        // 401 handled by interceptor → clears token & redirects
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) setLoading(false);
       }
     };
 
     fetchUserData();
+    return () => controller.abort();
   }, [token]);
 
   const loginSuccess = (data) => {
-    sessionStorage.setItem('token', data.token);
+    // ✅ localStorage persists across sessions — the fix for cross-device login
+    localStorage.setItem(STORAGE_KEY, data.token);
     setToken(data.token);
     setUser(data.user);
   };
@@ -69,6 +74,19 @@ export const AuthProvider = ({ children }) => {
     loginSuccess(res.data);
   };
 
+  const verifyEmail = async (email, code) => {
+    const res = await api.post('/api/auth/verify-email', { email, code });
+    loginSuccess(res.data); // Log in immediately after verification
+  };
+
+  const forgotPassword = async (email) => {
+    await api.post('/api/auth/forgot-password', { email });
+  };
+
+  const resetPassword = async (email, code, newPassword) => {
+    await api.post('/api/auth/reset-password', { email, code, newPassword });
+  };
+
   const refreshUser = async () => {
     try {
       const [userRes, subRes] = await Promise.all([
@@ -84,15 +102,16 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    sessionStorage.removeItem('token');
+    localStorage.removeItem(STORAGE_KEY);
     setToken(null);
     setUser(null);
-    setSubjects([]); // Clear curriculum data on logout
+    setSubjects([]);
   };
 
   return (
     <AuthContext.Provider value={{ 
       user, token, loading, login, register, loginAsGuest, logout, 
+      verifyEmail, forgotPassword, resetPassword,
       setUser, loginSuccess, subjects, setSubjects, refreshUser 
     }}>
       {children}

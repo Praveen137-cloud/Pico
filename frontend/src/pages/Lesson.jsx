@@ -115,6 +115,8 @@ const Lesson = () => {
 
   const playTTS = (text) => {
     if (!text || muted) return;
+    // Guard: speechSynthesis not available on all mobile browsers (Android issue)
+    if (!window.speechSynthesis) return;
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     window.speechSynthesis.speak(utterance);
@@ -299,37 +301,34 @@ const Lesson = () => {
     if (currentLessonIndex + 1 < unit.lessons.length) {
       setCurrentLessonIndex(prev => prev + 1);
     } else {
-      // Completed unit! 
       const timeSpent = Math.floor((Date.now() - startTime) / 1000);
 
-      // 🔥 SAVE PROGRESS TO BACKEND (STRICT SYNC)
-      try {
-        console.log(`[Sync] Attempting to unlock unit: ${unitId}`);
-        const res = await api.post('/api/unlock', {
-          subjectId,
-          sectionId,
-          unitId
-        });
-        
-        if (res.data.success) {
-          console.log('[Sync] Progress stored successfully');
-          // Use res data directly for immediate feedback
-          if (res.data.user) {
-            setUser(res.data.user);
-          }
-          // Clear scroll cache so the Map forces a scroll to the NEW current unit
-          localStorage.removeItem(`scroll_map_${sectionId}`);
-        } else {
-          console.warn('[Sync Warning] Backend returns success:false', res.data);
-        }
-      } catch (err) {
-        console.error('[Sync Error] CRITICAL: Failed to unlock next unit:', err);
-        // Fallback: try to just refresh the whole user object
+      // \uD83D\uDD04 ROBUST SYNC WITH RETRY
+      const syncWithRetry = async (retries = 3, delay = 1000) => {
         try {
-          await refreshUser?.();
-        } catch (rErr) {
-          console.error('[Sync Fallback Error] Refresh failed too:', rErr);
+          console.log(`[Sync] Attempting to unlock unit: ${unitId} (Retries left: ${retries})`);
+          const res = await api.post('/api/unlock', { subjectId, sectionId, unitId });
+          if (res.data.success) {
+            if (res.data.user) setUser(res.data.user);
+            localStorage.removeItem(`scroll_map_${sectionId}`);
+            return true;
+          }
+        } catch (err) {
+          if (retries > 0) {
+            console.warn(`[Sync] Failed. Retrying in ${delay}ms...`);
+            await new Promise(r => setTimeout(r, delay));
+            return syncWithRetry(retries - 1, delay * 2);
+          }
+          throw err;
         }
+        return false;
+      };
+
+      try {
+        await syncWithRetry();
+      } catch (err) {
+        console.error('[Sync Fatal] Progress could not be saved after retries.', err);
+        // We still navigate to celebration but warn the user or let them know
       }
 
       navigate(`/celebration`, { 
@@ -415,7 +414,7 @@ const Lesson = () => {
         </div>
 
         <button
-          onClick={() => { setMuted(m => !m); window.speechSynthesis.cancel(); }}
+        onClick={() => { setMuted(m => !m); if (window.speechSynthesis) window.speechSynthesis.cancel(); }}
           style={{ background: 'none', border: 'none', color: muted ? '#EF4444' : 'var(--text-muted)', fontSize: 18, cursor: 'pointer', padding: '4px 8px' }}
         >{muted ? '🔇' : '🔊'}</button>
       </header>

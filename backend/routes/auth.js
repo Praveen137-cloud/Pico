@@ -4,61 +4,118 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
-const axios = require('axios');
-const { OAuth2Client } = require('google-auth-library');
-const { sendWelcomeEmail } = require('../utils/email');
+const { 
+  sendWelcomeEmail, 
+  sendVerificationEmail, 
+  sendPasswordResetEmail 
+} = require('../utils/email');
+const authMiddleware = require('../middleware/auth');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret_key_123';
-const GOOGLE_CLIENT_ID_FALLBACK = process.env.GOOGLE_CLIENT_ID || '885867681504-lasrb7t0pm5rlvin175e5rnj70jh3hmf.apps.googleusercontent.com';
-const client = new OAuth2Client(GOOGLE_CLIENT_ID_FALLBACK);
+// \uD83D\uDEAB STRICT SECURITY: No fallback for JWT_SECRET in production
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  console.error('[CRITICAL] JWT_SECRET is not defined in .env! Auth system will fail.');
+}
+
+const { OAuth2Client } = require('google-auth-library');
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const client = new OAuth2Client(GOOGLE_CLIENT_ID);
+
+/**
+ * Helper to generate 6-digit OTP
+ */
+const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
 
 // @route   POST /api/auth/register
-// @desc    Register a user
-// @access  Public
 router.post('/register', async (req, res) => {
   try {
     const { name, email, password } = req.body;
     
-    // Check if user already exists
     let user = await User.findOne({ email });
     if (user) {
-      console.log(`[Auth] Registration failed: Email ${email} already exists.`);
-      return res.status(400).json({ error: 'This email is already registered. Please login instead!' });
+      return res.status(400).json({ error: 'This email is already registered.' });
     }
 
-    user = new User({ name, email, password });
+    const otp = generateOTP();
+    const otpExpires = new Date(Date.now() + 15 * 60 * 1000); // 15 mins
+
+    user = new User({ 
+      name, 
+      email, 
+      password, 
+      verificationCode: otp, 
+      verificationCodeExpires: otpExpires 
+    });
+    
     await user.save();
 
-    console.log(`[Auth] Registration successful for: ${email}`);
+    console.log(`[Auth] New Registration: ${email}. Sending OTP...`);
+    await sendVerificationEmail(email, name, otp);
 
-    // Send the welcome email
-    sendWelcomeEmail(email, name);
+    res.json({ 
+      success: true, 
+      message: 'Verification code sent to your email.',
+      email: email 
+    });
+  } catch (err) {
+    console.error(`[Auth Error] Register:`, err);
+    res.status(500).json({ error: 'Server error during registration' });
+  }
+});
+
+// @route   POST /api/auth/verify-email
+router.post('/verify-email', async (req, res) => {
+  try {
+    const { email, code } = req.body;
+    const user = await User.findOne({ 
+      email, 
+      verificationCode: code,
+      verificationCodeExpires: { $gt: Date.now() }
+    });
+
+    if (!user) {
+      return res.status(400).json({ error: 'Invalid or expired verification code.' });
+    }
+
+    user.isVerified = true;
+    user.verificationCode = null;
+    user.verificationCodeExpires = null;
+    await user.save();
+
+    console.log(`[Auth] Email verified: ${email}`);
+    sendWelcomeEmail(email, user.name);
 
     const payload = { user: { id: user.id } };
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
 
     res.json({ token, user });
   } catch (err) {
-    console.error(`[Auth Error] Registration failure for ${req.body.email || 'unknown'}:`, err);
-    res.status(500).json({ error: 'Server error during registration', details: err.message });
+    res.status(500).json({ error: 'Verification failed.' });
   }
 });
 
 // @route   POST /api/auth/login
-// @desc    Authenticate user & get token
-// @access  Public
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ error: 'Invalid Credentials' });
-    }
+    if (!user) return res.status(400).json({ error: 'Invalid Credentials' });
 
     const isMatch = await user.comparePassword(password);
-    if (!isMatch) {
-      return res.status(400).json({ error: 'Invalid Credentials' });
+    if (!isMatch) return res.status(400).json({ error: 'Invalid Credentials' });
+
+    if (!user.isVerified) {
+      // Resend OTP if not verified
+      const otp = generateOTP();
+      user.verificationCode = otp;
+      user.verificationCodeExpires = new Date(Date.now() + 15 * 60 * 1000);
+      await user.save();
+      await sendVerificationEmail(email, user.name, otp);
+      return res.status(403).json({ 
+        error: 'Account not verified. A new code has been sent to your email.',
+        pendingVerification: true 
+      });
     }
 
     const payload = { user: { id: user.id } };
@@ -66,131 +123,128 @@ router.post('/login', async (req, res) => {
 
     res.json({ token, user });
   } catch (err) {
-    console.error('Login Error:', err.message);
-    res.status(500).json({ error: 'Server error during login' });
+    res.status(500).json({ error: 'Login failed.' });
+  }
+});
+
+// @route   POST /api/auth/forgot-password
+router.post('/forgot-password', async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ error: 'User not found.' });
+
+    const otp = generateOTP();
+    user.verificationCode = otp;
+    user.verificationCodeExpires = new Date(Date.now() + 15 * 60 * 1000);
+    await user.save();
+
+    await sendPasswordResetEmail(email, user.name, otp);
+    res.json({ success: true, message: 'Recovery code sent to email.' });
+  } catch (err) {
+    res.status(500).json({ error: 'Recovery request failed.' });
+  }
+});
+
+// @route   POST /api/auth/reset-password
+router.post('/reset-password', async (req, res) => {
+  try {
+    const { email, code, newPassword } = req.body;
+    const user = await User.findOne({ 
+      email, 
+      verificationCode: code,
+      verificationCodeExpires: { $gt: Date.now() }
+    });
+
+    if (!user) return res.status(400).json({ error: 'Invalid or expired code.' });
+
+    user.password = newPassword;
+    user.verificationCode = null;
+    user.verificationCodeExpires = null;
+    await user.save();
+
+    res.json({ success: true, message: 'Password reset successful. Please login.' });
+  } catch (err) {
+    res.status(500).json({ error: 'Reset failed.' });
   }
 });
 
 // @route   POST /api/auth/google
-// @desc    Google OAuth login
-// @access  Public
 router.post('/google', async (req, res) => {
   const { credential } = req.body;
-
   try {
     const ticket = await client.verifyIdToken({
       idToken: credential,
-      audience: GOOGLE_CLIENT_ID_FALLBACK,
+      audience: GOOGLE_CLIENT_ID,
     });
     
     const payload = ticket.getPayload();
-    if (!payload) {
-      throw new Error('No payload returned from Google');
-    }
-
-    const { name, email, sub: googleId, picture } = payload;
+    const { name, email, sub: googleId } = payload;
     
     let user = await User.findOne({ email });
-    
     if (!user) {
-      // Create new user if they don't exist
-      user = new User({
-        name,
-        email,
-        googleId,
-        avatar: 'Parrot' 
-      });
+      user = new User({ name, email, googleId, isVerified: true });
       await user.save();
-      console.log(`[Google Auth] New user created: ${email}`);
-      
-      // Send the welcome email
       sendWelcomeEmail(email, name);
     } else if (!user.googleId) {
-      // Link Google ID if user exists by email but not linked
       user.googleId = googleId;
+      user.isVerified = true;
       await user.save();
-      console.log(`[Google Auth] Google ID linked for existing user: ${email}`);
     }
 
     const jwtPayload = { user: { id: user.id } };
     const token = jwt.sign(jwtPayload, JWT_SECRET, { expiresIn: '7d' });
-
-    console.log(`[Google Auth] Successful login: ${email}`);
     res.json({ token, user });
   } catch (err) {
-    console.error('[Google Auth Failure]:', err.message);
-    res.status(401).json({ 
-      error: 'Google authentication sequence rejected.',
-      details: err.message
-    });
+    res.status(401).json({ error: 'Google auth failed.' });
   }
 });
 
 // @route   POST /api/auth/guest
-// @desc    Create a temporary guest session
-// @access  Public
 router.post('/guest', async (req, res) => {
   try {
-    const guestId = Math.floor(Math.random() * 900) + 100; // 100-999
-    const uniqueTime = Date.now().toString().slice(-6);
-    const email = `guest_${uniqueTime}_${guestId}@pico.internal`;
-    const name = `Guest Parrot #${guestId}`;
-    
-    const user = new User({
-      name,
-      email,
-      isGuest: true,
-      avatar: 'Parrot',
-      xp: 0
+    const guestId = Math.floor(Math.random() * 900) + 100;
+    const email = `guest_${Date.now()}_${guestId}@pico.internal`;
+    const user = new User({ 
+      name: `Guest Parrot #${guestId}`, 
+      email, 
+      isGuest: true, 
+      isVerified: true 
     });
-    
     await user.save();
     
-    const payload = { user: { id: user.id } };
-    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
-    
-    console.log(`[Auth] Guest session initialized: ${name}`);
+    const token = jwt.sign({ user: { id: user.id } }, JWT_SECRET, { expiresIn: '7d' });
     res.json({ token, user });
   } catch (err) {
-    console.error('Guest Auth Error:', err);
-    res.status(500).json({ error: 'Failed to initialize system guest access.' });
+    res.status(500).json({ error: 'Guest initialization failed.' });
   }
 });
 
 // @route   GET /api/auth/leaderboard
-// @desc    Get top users for the global leaderboard
-// @access  Public
 router.get('/leaderboard', async (req, res) => {
   try {
-    const users = await User.find({})
-      .select('name xp avatar streak')
-      .sort({ xp: -1 })
-      .limit(10);
-      
+    const users = await User.find({}, 'name xp avatar streak').sort({ xp: -1 }).limit(10);
     res.json(users);
   } catch (err) {
-    console.error('Leaderboard Fetch Error:', err);
-    res.status(500).json({ error: 'Failed to load leaderboard data' });
+    res.status(500).json({ error: 'Leaderboard load failed.' });
   }
 });
 
 // @route   PUT /api/auth/last-subject
-// @desc    Update user's last visited subject for sorting
-// @access  Private (middleware logic simplified/inline for this repo)
-router.put('/last-subject', async (req, res) => {
+// \uD83D\uDEAB SECURED with authMiddleware
+router.put('/last-subject', authMiddleware, async (req, res) => {
   try {
-    const { userId, subjectName } = req.body;
-    const user = await User.findById(userId);
+    const { subjectName } = req.body;
+    const user = await User.findById(req.user.id);
     if (!user) return res.status(404).json({ error: 'User not found' });
 
     user.lastVisitedSubject = subjectName;
     user.onboardingCompleted = true;
     await user.save();
     
-    res.json({ success: true, lastVisitedSubject: subjectName, onboardingCompleted: true });
+    res.json({ success: true, user });
   } catch (err) {
-    console.error('Update Last Subject Error:', err);
-    res.status(500).json({ error: 'Failed to update subject preference' });
+    res.status(500).json({ error: 'Update failed.' });
   }
 });
 

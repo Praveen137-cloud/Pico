@@ -48,6 +48,14 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
+// \u2705 Prevents logged-in users from landing on the login page again
+const AuthRedirect = ({ children }) => {
+  const { token, loading } = useContext(AuthContext);
+  if (loading) return <PreLoader onReady={() => {}} />;
+  if (token) return <Navigate to="/home" replace />;
+  return children;
+};
+
 // Component to hide navigation dock on auth and onboarding pages
 const MainLayout = ({ children }) => {
   const location = useLocation();
@@ -158,7 +166,7 @@ function App() {
               <Routes>
                 {/* Public Routes */}
                 <Route path="/" element={<Landing />} />
-                <Route path="/auth" element={<div className="main-content"><Auth /></div>} />
+                <Route path="/auth" element={<AuthRedirect><div className="main-content"><Auth /></div></AuthRedirect>} />
 
                 {/* Protected Routes */}
                 <Route path="/*" element={

@@ -457,36 +457,57 @@ app.post('/api/payment/order', authMiddleware, async (req, res) => {
   }
 });
 
+const { sendAdminPaymentNotification } = require('./utils/email');
+
 // @route   POST /api/payment/verify
 // @desc    Verify Razorpay payment signature
 app.post('/api/payment/verify', authMiddleware, async (req, res) => {
   try {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, amount } = req.body;
     
+    const keySecret = process.env.RAZORPAY_KEY_SECRET;
+    if (!keySecret) {
+      console.error('[CRITICAL] RAZORPAY_KEY_SECRET missing!');
+      return res.status(500).json({ error: 'System configuration error.' });
+    }
+
     const body = razorpay_order_id + "|" + razorpay_payment_id;
     const expectedSignature = crypto
-      .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET || 'secret_placeholder')
+      .createHmac('sha256', keySecret)
       .update(body.toString())
       .digest('hex');
 
     if (expectedSignature === razorpay_signature) {
       // Payment Verified!
       const user = await User.findById(req.user.id);
+      if (!user) return res.status(404).json({ error: 'User synchronization lost.' });
+
       user.isPremium = true;
       user.adsHidden = true;
       await user.save();
       
-      res.json({ success: true, message: 'Payment verified successfully and Premium activated!', user });
+      console.log(`[Payment] Success for ${user.email}. Amount: ₹${amount || 100}`);
+
+      // \uD83D\uDCC8 Notify Admin
+      await sendAdminPaymentNotification(user.name, user.email, amount || 100, razorpay_payment_id);
+      
+      res.json({ success: true, message: 'Premium activated!', user });
     } else {
+      console.warn(`[Payment Warning] Invalid signature from ${req.user.id}`);
       res.status(400).json({ error: 'Invalid payment signature' });
     }
   } catch (err) {
-    res.status(500).json({ error: 'Verification failed' });
+    console.error('[Payment Error]:', err);
+    res.status(500).json({ error: 'Verification sequence failed.' });
   }
 });
 
 app.get('/api/status', (req, res) => {
-  res.json({ status: 'API is running' });
+  res.json({ 
+    status: 'SYSTEM ONLINE', 
+    version: '2.2.0-STABLE',
+    engine: 'Pico Matrix Core'
+  });
 });
 
 httpServer.listen(PORT, '0.0.0.0', () => {

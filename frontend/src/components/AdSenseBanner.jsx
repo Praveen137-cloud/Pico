@@ -5,21 +5,31 @@ const AdSenseBanner = ({ slot, style = {}, format = 'auto', responsive = 'true' 
   const { user } = useContext(AuthContext);
 
   // 🛡️ AD BLOCKER LOGIC
-  // Do not show ads if user is an admin, is premium, or has been manually exempted by admin.
   const shouldHideAds = user?.role === 'admin' || user?.isPremium || user?.adsHidden;
 
   useEffect(() => {
-    if (!shouldHideAds) {
+    if (!shouldHideAds && typeof window !== 'undefined') {
       try {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
+        // Prevent multiple initializations in React 18 Strict Mode
+        const ads = document.getElementsByClassName('adsbygoogle');
+        const lastAd = ads[ads.length - 1];
+        if (lastAd && !lastAd.getAttribute('data-adsbygoogle-status')) {
+             (window.adsbygoogle = window.adsbygoogle || []).push({});
+             console.log('[AdSense] Initializing unit:', slot);
+        }
       } catch (e) {
-        console.error('AdSense error:', e);
+        console.warn('[AdSense] Initialization skipped:', e.message);
       }
     }
-  }, [shouldHideAds]);
+  }, [shouldHideAds, slot]);
 
-  if (shouldHideAds) {
-    return null;
+  if (shouldHideAds) return null;
+
+  // \u26A0\uFE0F IMPORTANT: You MUST provide a valid slot ID from your dashboard.
+  // Using "default" or leaving it empty will prevent ads from loading.
+  if (!slot || slot === 'default') {
+     console.warn('[AdSense Warning] Invalid Slot ID provided. Ad will not show.');
+     return <div style={{height: 0, opacity: 0}} />;
   }
 
   return (
@@ -27,8 +37,8 @@ const AdSenseBanner = ({ slot, style = {}, format = 'auto', responsive = 'true' 
       <ins
         className="adsbygoogle"
         style={{ display: 'block' }}
-        data-ad-client="ca-pub-9828288929078248"
-        data-ad-slot={slot || 'default'}
+        data-ad-client="ca-pub-9828288929078248" // \u2705 USER: Ensure this matches your Publisher ID
+        data-ad-slot={slot}
         data-ad-format={format}
         data-full-width-responsive={responsive}
       />
