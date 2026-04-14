@@ -15,12 +15,13 @@ const LivingCharacter = ({
 
   const getAnimation = () => {
     switch (state) {
-      case 'talking': return 'character-talking 0.6s infinite ease-in-out';
-      case 'happy': return 'character-happy 0.8s infinite cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+      case 'talking': return 'character-talking 0.6s infinite var(--spring-bounce)';
+      case 'happy': return 'character-happy 0.8s infinite var(--spring-bounce)';
       case 'thinking': return 'character-thinking 2s infinite ease-in-out';
       case 'levitating': return 'character-levitating 3s infinite ease-in-out';
-      case 'celebrating': return 'character-celebrating 0.5s infinite';
-      default: return 'character-idle 4s infinite ease-in-out';
+      case 'celebrating': return 'character-cheer 0.5s infinite var(--spring-bounce)';
+      case 'shocked': return 'character-shock 0.4s 1 ease-out';
+      default: return 'character-idle 6s infinite ease-in-out';
     }
   };
 
@@ -47,7 +48,7 @@ const LivingCharacter = ({
           height: '100%',
           objectFit: 'contain',
           animation: getAnimation(),
-          filter: character === 'ace' ? 'drop-shadow(0 0 15px rgba(0, 255, 255, 0.4))' : 'drop-shadow(0 0 15px rgba(255, 255, 255, 0.2))',
+          filter: character === 'ace' ? 'drop-shadow(0 0 20px rgba(0, 255, 255, 0.4))' : 'drop-shadow(0 0 20px rgba(255, 215, 0, 0.3))',
           transformOrigin: 'bottom center'
         }}
       />
@@ -61,8 +62,8 @@ const LivingCharacter = ({
         width: '120%',
         height: '120%',
         background: character === 'ace' 
-          ? 'radial-gradient(circle, rgba(0,255,255,0.1) 0%, transparent 70%)'
-          : 'radial-gradient(circle, rgba(255,255,100,0.1) 0%, transparent 70%)',
+          ? 'radial-gradient(circle, rgba(0,255,255,0.15) 0%, transparent 70%)'
+          : 'radial-gradient(circle, rgba(255,179,0,0.15) 0%, transparent 70%)',
         zIndex: -1,
         borderRadius: '50%',
         animation: 'aura-pulse 4s infinite alternate'
@@ -71,34 +72,41 @@ const LivingCharacter = ({
       <style>{`
         @keyframes character-idle {
           0%, 100% { transform: translateY(0) scale(1) rotate(0); }
-          50% { transform: translateY(-10px) scale(1.05) rotate(1deg); }
+          25% { transform: translateY(-8px) scale(1.04) rotate(2deg); }
+          50% { transform: translateY(0) scale(1.02) rotate(0); }
+          75% { transform: translateY(-8px) scale(1.04) rotate(-2deg); }
         }
         @keyframes character-talking {
           0%, 100% { transform: scale(1) translateY(0); }
-          50% { transform: scale(1.1) translateY(-6px) rotate(-1deg); }
+          50% { transform: scale(1.12) translateY(-10px) rotate(-1deg); }
         }
         @keyframes character-happy {
           0% { transform: translateY(0) scale(1); }
-          30% { transform: translateY(-35px) scale(1.15) rotate(5deg); }
-          60% { transform: translateY(-35px) scale(1.15) rotate(-5deg); }
+          30% { transform: translateY(-40px) scale(1.2) rotate(8deg); }
+          60% { transform: translateY(-40px) scale(1.2) rotate(-8deg); }
           100% { transform: translateY(0) scale(1); }
         }
         @keyframes character-thinking {
            0%, 100% { transform: rotate(0) scale(1); }
-           50% { transform: rotate(-8deg) translateX(-8px) scale(0.95); }
+           50% { transform: rotate(-10deg) translateX(-12px) scale(0.92); }
         }
         @keyframes character-levitating {
-          0%, 100% { transform: translateY(0) rotate(0); }
-          50% { transform: translateY(-40px) rotate(8deg); }
+          0%, 100% { transform: translateY(0) rotate(0) scale(1); }
+          50% { transform: translateY(-50px) rotate(10deg) scale(1.05); }
         }
-        @keyframes character-celebrating {
-          0%, 100% { transform: scale(1) rotate(0); }
-          25% { transform: scale(1.2) rotate(12deg); }
-          75% { transform: scale(1.2) rotate(-12deg); }
+        @keyframes character-cheer {
+          0%, 100% { transform: scale(1) rotate(0) translateY(0); }
+          25% { transform: scale(1.25) rotate(15deg) translateY(-20px); }
+          75% { transform: scale(1.25) rotate(-15deg) translateY(-20px); }
+        }
+        @keyframes character-shock {
+          0% { transform: scale(1); filter: brightness(1); }
+          10% { transform: scale(1.3) translateY(-10px); filter: brightness(2); }
+          100% { transform: scale(1); filter: brightness(1); }
         }
         @keyframes aura-pulse {
           0% { opacity: 0.2; transform: translate(-50%, -50%) scale(0.7); }
-          100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.1); }
+          100% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.2); }
         }
       `}</style>
     </div>

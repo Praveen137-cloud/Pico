@@ -1,34 +1,35 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
-  --bg-dark: #020408; /* Deep Space Black */
-  --bg-card: rgba(10, 15, 25, 0.6); 
-  --bg-header: rgba(2, 4, 8, 0.9); 
-  --text-main: #F8FAFC;
+  --bg-dark: #0A1329; /* Midnight Navy */
+  --bg-card: rgba(15, 23, 42, 0.9); 
+  --bg-header: rgba(10, 19, 41, 0.95); 
+  --text-main: #FFFFFF;
   --text-muted: #94A3B8;
   --primary-accent: #00F2FF; /* Cyber Cyan */
   --secondary-accent: #7000FF; /* Neon Purple */
   --tertiary-accent: #FF00E5; /* Cyber Pink */
-  --divider: rgba(255, 255, 255, 0.08);
+  --divider: rgba(255, 255, 255, 0.1);
   
-  /* Premium Glassmorphism Design System Tokens */
-  --glass-bg: rgba(15, 23, 42, 0.65);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-blur: blur(16px);
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+  /* Premium Chunky Design System Tokens */
+  --glass-bg: rgba(30, 41, 59, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-blur: blur(12px);
+  --glass-shadow: 0 12px 0px rgba(0, 0, 0, 0.4);
 
   --theme-primary: #00F2FF; 
   --theme-secondary: #7000FF;
-  --neon-glow: 0 0 25px rgba(0, 242, 255, 0.4);
+  --neon-glow: 0 0 35px rgba(0, 242, 255, 0.4);
 
   /* Elite Tier Config */
   --premium-gold: #FFD700;
   --premium-obsidian: #050505;
-  --premium-glow: 0 0 35px rgba(255, 215, 0, 0.5);
+  --premium-glow: 0 0 45px rgba(255, 215, 0, 0.5);
 
-  /* Duolingo-Style Physics */
+  /* Massive Duolingo-Style Physics */
   --spring-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
-  --btn-depth: 8px;
+  --btn-depth: 12px;
+  --fat-border: 4px;
 }
 
 /* ⚡ Electric Bird Pulse */
@@ -85,9 +86,9 @@
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
+  border: var(--fat-border) solid var(--glass-border);
   box-shadow: var(--glass-shadow);
-  border-radius: 24px;
+  border-radius: 28px;
 }
 
 .cyber-mesh-bg {
@@ -200,64 +201,56 @@ body {
   filter: brightness(1.1);
 }
 
-/* 🧱 Duolingo-Style Chunky Buttons */
+/* 🧱 Massive Duolingo-Style Chunky Buttons */
 .btn-chunky {
   position: relative;
-  border: none;
-  border-radius: 16px;
-  padding: 14px 24px;
-  font-size: 16px;
-  font-weight: 800;
+  border: var(--fat-border) solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 18px 28px;
+  font-size: 18px;
+  font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
   cursor: pointer;
-  transition: all 0.1s var(--spring-bounce);
+  transition: all 0.15s var(--spring-bounce);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 12px;
   box-sizing: border-box;
   text-decoration: none;
   transform: scale(1);
 }
 
 .btn-chunky:hover {
-  filter: brightness(1.1);
-  transform: translateY(-2px);
+  filter: brightness(1.15);
+  transform: translateY(-4px) scale(1.02);
 }
 
 .btn-chunky:active {
-  transform: translateY(var(--btn-depth)) scale(0.96);
+  transform: translateY(calc(var(--btn-depth) - 2px)) scale(0.96);
+  box-shadow: none !important;
 }
 
 .btn-chunky.cyan {
-  background: #00F2FF;
+  background: linear-gradient(to bottom, #00F2FF, #00D5E0);
   color: #000;
   box-shadow: 0 var(--btn-depth) 0 #008B94;
-}
-
-.btn-chunky.cyan:active {
-  box-shadow: 0 0 0 #008B94;
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .btn-chunky.purple {
-  background: #7000FF;
+  background: linear-gradient(to bottom, #7000FF, #5A00CC);
   color: #fff;
   box-shadow: 0 var(--btn-depth) 0 #4C00AD;
-}
-
-.btn-chunky.purple:active {
-  box-shadow: 0 0 0 #4C00AD;
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .btn-chunky.gray {
   background: #1E293B;
   color: #94A3B8;
   box-shadow: 0 var(--btn-depth) 0 #0F172A;
-}
-
-.btn-chunky.gray:active {
-  box-shadow: 0 0 0 #0F172A;
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 /* 🌀 Spring Loaded Animations */

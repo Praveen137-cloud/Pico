@@ -404,6 +404,7 @@ const Lesson = () => {
           }}
         />
       ))}
+      {feedback === 'correct' && <div className="victory-glow" />}
       {shake && <div className="impact-flash" />}
       
       {isGameOver && (

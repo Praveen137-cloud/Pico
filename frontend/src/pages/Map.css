@@ -1,25 +1,25 @@
 :root {
-  --chocolate-dark: #2D1B19;
-  --chocolate-mid: #3E2723;
-  --chocolate-light: #5D4037;
-  --caramel-gold: #FFB300;
-  --caramel-light: #FFCA28;
-  --creamy-white: #FFF8E1;
-  --toffee-gradient: linear-gradient(135deg, #FFB300 0%, #E65100 100%);
-  --wrapper-gradient: linear-gradient(to right, #D7CCC8 0%, #A1887F 100%);
-  --river-color: #3E2723;
+  --map-bg: #0A1329;
+  --map-grid: rgba(0, 242, 255, 0.05);
+  --platform-depth: #008B94;
+  --node-size: 110px;
 }
 
 .map-page {
   min-height: 100vh;
   position: relative;
   overflow: hidden;
+  background-color: var(--map-bg);
+  background-image: 
+    linear-gradient(var(--map-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--map-grid) 1px, transparent 1px);
+  background-size: 50px 50px;
 }
 
 .adventure-path-overlay {
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.6) 100%);
+  background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.4) 100%);
   pointer-events: none;
   z-index: 1;
 }
@@ -40,73 +40,96 @@
   display: none;
 }
 
+/* ⛰\uFE0F 3D PLATFORM NODES */
 .adventure-node {
-  width: 110px;
-  height: 110px;
+  width: var(--node-size);
+  height: var(--node-size);
   border-radius: 50%;
   z-index: 10;
   position: relative;
+  border: 5px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s var(--spring-bounce);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12px 0px var(--platform-depth);
+}
+
+.adventure-node:hover {
+  transform: translateY(-8px) scale(1.1);
+  box-shadow: 0 20px 0px var(--platform-depth);
+}
+
+.adventure-node:active {
+  transform: translateY(8px) scale(0.95);
+  box-shadow: 0 4px 0px var(--platform-depth);
 }
 
 .adventure-node.locked {
-  background: #1E293B;
-  opacity: 0.5;
+  background: #1E293B !important;
+  opacity: 0.6;
   filter: grayscale(1);
-  box-shadow: 0 6px 0 #0F172A;
+  box-shadow: 0 12px 0px #0F172A !important;
   cursor: not-allowed;
+  border-color: rgba(255,255,255,0.1) !important;
 }
 
 .adventure-node.completed {
-  background: var(--theme-secondary);
-  box-shadow: 0 6px 0 #4C00AD;
+  background: linear-gradient(135deg, #7000FF, #5A00CC) !important;
+  box-shadow: 0 12px 0px #4C00AD !important;
 }
 
-.current-node-pulse {
-  position: absolute;
-  inset: -10px;
-  border: 4px solid var(--theme-primary);
-  border-radius: 50%;
-  animation: nodePulse 2s infinite;
-  pointer-events: none;
-}
-
-@keyframes nodePulse {
-  0% { transform: scale(0.9); opacity: 1; }
-  100% { transform: scale(1.4); opacity: 0; }
-}
-
-.node-label {
-  color: #fff;
-  margin-top: 20px;
-  font-weight: 800;
-  font-size: 16px;
-  text-align: center;
-  max-width: 200px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  text-shadow: 0 4px 10px rgba(0,0,0,0.5);
-}
-
+/* ⚡ PULSATING PATHS */
 .trail-line {
   position: absolute;
-  width: 12px;
-  height: 100px;
-  background: rgba(255,255,255,0.1);
+  width: 18px;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.05);
   top: 100px;
-  border-radius: 6px;
+  border-radius: 10px;
   z-index: 1;
+  border: 2px solid rgba(255, 255, 255, 0.05);
 }
 
 .trail-line.active {
   background: var(--theme-primary);
-  box-shadow: 0 0 15px var(--theme-primary);
+  box-shadow: 0 0 20px var(--theme-primary);
+  border-color: rgba(255, 255, 255, 0.2);
+  animation: pathGlow 2s infinite alternate;
 }
 
-@keyframes drop {
-  from { transform: translateY(-50px) scale(0.5); opacity: 0; }
-  to { transform: translateY(0) scale(1); opacity: 1; }
+@keyframes pathGlow {
+  0% { filter: brightness(1) drop-shadow(0 0 5px var(--theme-primary)); }
+  100% { filter: brightness(1.5) drop-shadow(0 0 15px var(--theme-primary)); }
+}
+
+.node-label {
+  color: #fff;
+  margin-top: 25px;
+  font-weight: 900;
+  font-size: 18px;
+  text-align: center;
+  max-width: 250px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 0 6px 12px rgba(0,0,0,0.6);
+}
+
+.current-node-pulse {
+  position: absolute;
+  inset: -15px;
+  border: 6px solid var(--theme-primary);
+  border-radius: 50%;
+  animation: nodePulse 1.5s infinite;
+  pointer-events: none;
+}
+
+@keyframes nodePulse {
+  0% { transform: scale(0.85); opacity: 1; }
+  100% { transform: scale(1.3); opacity: 0; }
 }
 
 .entrance-anim {
-  animation: drop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+  animation: springPop 0.8s var(--spring-bounce) backwards;
 }
+
