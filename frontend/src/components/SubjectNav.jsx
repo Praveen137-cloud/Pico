@@ -7,10 +7,9 @@ const SubjectNav = ({ activeSubject, onSelect }) => {
   const { subjects, user, setUser } = useContext(AuthContext);
 
   // Helper to get consistent icons/colors for subjects (Tech-Focused)
-  const getSubjectMeta = (name) => {
-    const meta = {
+    const meta = Object.entries({
       'Basics': { icon: '💻', color: '#94A3B8' },
-      'Arrays': { icon: '💾', color: '#6366F1' },
+      'Arrays': { icon: '🍬', color: '#6366F1' },
       'Strings': { icon: '🔡', color: '#C084FC' },
       'Math': { icon: '🔢', color: '#10B981' },
       'Sorting': { icon: '📊', color: '#F59E0B' },
@@ -24,8 +23,9 @@ const SubjectNav = ({ activeSubject, onSelect }) => {
       'Dynamic Programming': { icon: '🏗️', color: '#ED40AF' },
       'Algorithm Design': { icon: '🧠', color: '#F97316' },
       'Zoho Elite': { icon: '💎', color: '#FBBF24' }
-    };
-    return meta[name] || { icon: '⚡', color: '#94A3B8' };
+    }).find(([key]) => name.toLowerCase().includes(key.toLowerCase()));
+    
+    return meta ? meta[1] : { icon: '⚡', color: '#94A3B8' };
   };
 
   const handleSubjectClick = async (subjectName) => {

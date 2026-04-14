@@ -96,7 +96,7 @@ const Map = () => {
   }, [units, sectionId, completedCount]); // Trigger on completedCount change
 
   const getSubjectIcon = (name) => {
-    const icons = {
+    const entry = Object.entries({
       'Basics': '🥚',
       'Arrays': '🍬',
       'Strings': '🔡',
@@ -112,8 +112,8 @@ const Map = () => {
       'Hashing & Sets': '🗄️',
       'Advanced Data Structures': '💎',
       'Zoho Elite': '🦁'
-    };
-    return icons[name] || '🍪';
+    }).find(([key]) => name.toLowerCase().includes(key.toLowerCase()));
+    return entry ? entry[1] : '🍪';
   };
 
   if (!stage) return (

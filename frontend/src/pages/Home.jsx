@@ -75,7 +75,7 @@ const Home = () => {
   };
 
   const getSubjectIcon = (name) => {
-    const icons = {
+    const entry = Object.entries({
       'Basics': '🥚',
       'Arrays': '🍬',
       'Strings': '🔡',
@@ -91,8 +91,8 @@ const Home = () => {
       'Hashing & Sets': '🗄️',
       'Advanced Data Structures': '💎',
       'Zoho Elite': '🦁'
-    };
-    return icons[name] || '💻';
+    }).find(([key]) => name.toLowerCase().includes(key.toLowerCase()));
+    return entry ? entry[1] : '💻';
   };
 
   if (isLoading) return <PreLoader />;
