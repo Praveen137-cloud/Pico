@@ -15,10 +15,11 @@ const LivingCharacter = ({
 
   const getAnimation = () => {
     switch (state) {
-      case 'talking': return 'character-talking 0.5s infinite';
-      case 'happy': return 'character-happy 1s infinite alternate';
+      case 'talking': return 'character-talking 0.6s infinite ease-in-out';
+      case 'happy': return 'character-happy 0.8s infinite cubic-bezier(0.175, 0.885, 0.32, 1.275)';
       case 'thinking': return 'character-thinking 2s infinite ease-in-out';
       case 'levitating': return 'character-levitating 3s infinite ease-in-out';
+      case 'celebrating': return 'character-celebrating 0.5s infinite';
       default: return 'character-idle 4s infinite ease-in-out';
     }
   };
@@ -46,7 +47,8 @@ const LivingCharacter = ({
           height: '100%',
           objectFit: 'contain',
           animation: getAnimation(),
-          filter: character === 'ace' ? 'drop-shadow(0 0 15px rgba(0, 255, 255, 0.4))' : 'drop-shadow(0 0 15px rgba(255, 255, 255, 0.2))'
+          filter: character === 'ace' ? 'drop-shadow(0 0 15px rgba(0, 255, 255, 0.4))' : 'drop-shadow(0 0 15px rgba(255, 255, 255, 0.2))',
+          transformOrigin: 'bottom center'
         }}
       />
       
@@ -68,30 +70,35 @@ const LivingCharacter = ({
 
       <style>{`
         @keyframes character-idle {
-          0%, 100% { transform: translateY(0) scale(1); }
-          50% { transform: translateY(-5px) scale(1.02); }
+          0%, 100% { transform: translateY(0) scale(1) rotate(0); }
+          50% { transform: translateY(-8px) scale(1.03) rotate(1deg); }
         }
         @keyframes character-talking {
-          0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.05) translateY(-2px); }
+          0%, 100% { transform: scale(1) translateY(0); }
+          50% { transform: scale(1.08) translateY(-4px) rotate(-1deg); }
         }
         @keyframes character-happy {
-          0% { transform: translateY(0) rotate(0); }
-          25% { transform: translateY(-15px) rotate(5deg); }
-          75% { transform: translateY(-15px) rotate(-5deg); }
-          100% { transform: translateY(0) rotate(0); }
+          0% { transform: translateY(0) scale(1); }
+          30% { transform: translateY(-25px) scale(1.1) rotate(5deg); }
+          60% { transform: translateY(-25px) scale(1.1) rotate(-5deg); }
+          100% { transform: translateY(0) scale(1); }
         }
         @keyframes character-thinking {
-           0%, 100% { transform: rotate(0); }
-           50% { transform: rotate(-10deg) translateX(-5px); }
+           0%, 100% { transform: rotate(0) scale(1); }
+           50% { transform: rotate(-8deg) translateX(-8px) scale(0.98); }
         }
         @keyframes character-levitating {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-20px); }
+          0%, 100% { transform: translateY(0) rotate(0); }
+          50% { transform: translateY(-30px) rotate(5deg); }
+        }
+        @keyframes character-celebrating {
+          0%, 100% { transform: scale(1) rotate(0); }
+          25% { transform: scale(1.15) rotate(10deg); }
+          75% { transform: scale(1.15) rotate(-10deg); }
         }
         @keyframes aura-pulse {
-          0% { opacity: 0.3; transform: translate(-50%, -50%) scale(0.8); }
-          100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.1); }
+          0% { opacity: 0.2; transform: translate(-50%, -50%) scale(0.7); }
+          100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.1); }
         }
       `}</style>
     </div>

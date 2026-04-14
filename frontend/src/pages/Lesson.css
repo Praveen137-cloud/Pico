@@ -120,7 +120,99 @@
   from { opacity: 1; }
   to { opacity: 0; }
 }
-/* Technical Article Styles */
+/* 🗨\uFE0F DUOLINGO STYLE SPEECH BUBBLES */
+.duo-speech-bubble {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 2px solid var(--theme-primary);
+  padding: 24px 30px;
+  border-radius: 28px;
+  color: #fff;
+  font-size: 19px;
+  font-weight: 500;
+  width: 100%;
+  max-width: 500px;
+  position: relative;
+  box-shadow: 0 12px 0px rgba(0, 0, 0, 0.4), var(--neon-glow);
+  margin-left: 20px;
+}
+
+.bubble-tail {
+  position: absolute;
+  left: -15px;
+  top: 40px;
+  width: 0;
+  height: 0;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-right: 15px solid var(--theme-primary);
+}
+
+.mascot-with-bubble {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 20px;
+  width: 100%;
+}
+
+.explanation-bubble {
+  background: rgba(139, 92, 246, 0.1);
+  border: 1.5px solid #8B5CF6;
+  border-radius: 16px;
+  padding: 14px 20px;
+  color: #DDD6FE;
+  font-size: 14px;
+  margin-top: 15px;
+  width: 100%;
+  max-width: 500px;
+  margin-left: auto;
+}
+
+/* 🌀 LIVELY ANIMATIONS */
+.pop-in {
+  animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.bounce-in {
+  animation: bounceIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.shake-in {
+  animation: shakeIn 0.4s ease-in-out;
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes bounceIn {
+  0% { transform: translateY(30px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes shakeIn {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+/* 🍬 Progress Bar Polish */
+.battle-bar.glass-panel {
+  background: rgba(15, 23, 42, 0.8) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.battle-bar-fill {
+  background: linear-gradient(90deg, #00F2FF, #7000FF) !important;
+  border-radius: 20px;
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+  filter: brightness(1.2);
+}
 .technicalArticle {
   width: 100%;
   max-width: 900px;

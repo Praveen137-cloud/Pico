@@ -6,17 +6,17 @@ dotenv.config();
 
 const titanSubjects = [
   { name: 'Arrays', icon: '📦', order: 1 },
-  { name: 'Recursion', icon: '🔄', order: 2 },
-  { name: 'Hashing', icon: '🔑', order: 5 },
-  { name: 'Heaps', icon: '🏔️', order: 6 },
-  { name: 'Linked Lists', icon: '🔗', order: 7 },
-  { name: 'Stacks & Queues', icon: '🥞', order: 8 },
-  { name: 'Searching & Sorting', icon: '🔍', order: 9 },
-  { name: 'Strings', icon: '🧵', order: 10 },
-  { name: 'Trees', icon: '🌳', order: 11 },
-  { name: 'Graphs', icon: '🕸️', order: 12 },
-  { name: 'Dynamic Programming', icon: '🏗️', order: 13 },
-  { name: 'Mathbits', icon: '🦜', order: 14 }
+  { name: 'Strings', icon: '🧵', order: 2 },
+  { name: 'Linked Lists', icon: '🍭', order: 3 },
+  { name: 'Stacks & Queues', icon: '🥞', order: 4 },
+  { name: 'Trees', icon: '🌳', order: 5 },
+  { name: 'Graphs', icon: '🕸️', order: 6 },
+  { name: 'Dynamic Programming', icon: '🏗️', order: 7 },
+  { name: 'Math & Bit Manipulation', icon: '🦜', order: 8 },
+  { name: 'Sorting & Searching', icon: '🔍', order: 9 },
+  { name: 'Recursion & Backtracking', icon: '🔄', order: 10 },
+  { name: 'Hashing & Sets', icon: '🔑', order: 11 },
+  { name: 'Zoho Elite', icon: '🦁', order: 12 }
 ];
 
 async function syncSubjects() {

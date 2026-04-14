@@ -405,19 +405,25 @@ const Lesson = () => {
         <div style={{display: 'flex', alignItems: 'center', gap: '8px', flex: 1}}>
           <div style={{display: 'flex', gap: '4px'}}>
              {[1,2,3].map(h => (
-               <span key={h} className={`heart-icon ${lives < h ? 'broken' : ''}`}>
-                 {lives < h ? '🖤' : '❤️'}
-               </span>
+                <span key={h} className={`heart-icon ${lives < h ? 'broken bounce-in' : ''}`}>
+                  {lives < h ? '🖤' : '❤️'}
+                </span>
              ))}
           </div>
-          <div className="battle-bar">
-            <div className="battle-bar-fill" style={{width: `${(currentLessonIndex / unit.lessons.length) * 100}%`}}></div>
+          <div className="battle-bar glass-panel" style={{ height: 16, borderRadius: 20 }}>
+            <div 
+              className="battle-bar-fill" 
+              style={{
+                width: `${(currentLessonIndex / unit.lessons.length) * 100}%`,
+                transition: 'width 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                boxShadow: '0 0 15px var(--theme-primary)'
+              }}
+            ></div>
           </div>
         </div>
 
         <div style={{display: 'flex', alignItems: 'center', gap: '12px'}}>
-          {combo > 1 && <div className="combo-badge">🔥 x{combo}</div>}
-          {isSpeedBonus && <div className="speed-badge">⚡ SPEED</div>}
+          {combo > 1 && <div className="combo-badge pop-in">🔥 x{combo}</div>}
           <div style={{color: 'var(--theme-primary)', fontWeight: 900, fontSize: 13}}>{timeLeft}s</div>
         </div>
 
@@ -427,35 +433,31 @@ const Lesson = () => {
         >{muted ? '🔇' : '🔊'}</button>
       </header>
 
-      <div style={styles.content}>
+      <div style={styles.content} className="smooth-scroll">
         <h2 style={styles.unitTitle}>{unit.title}</h2>
         {currentLesson.type !== 'teaching' && (
-          <div style={styles.mascotArea}>
-            <LivingCharacter 
-              character="pico" 
-              size={120} 
-              state={feedback === 'correct' ? 'happy' : feedback === 'wrong' ? 'thinking' : 'idle'} 
-            />
-            <div className="speech-bubble-v2 glass-panel">
-              <TypingEffect text={currentLesson.questionText} />
-              <button 
-                className="tts-btn-mini"
-                onClick={() => playTTS(currentLesson.questionText)}
-                title="Pico Read Aloud"
-              >
-                🔊 Read Aloud
-              </button>
+          <div style={styles.mascotArea} className="bounce-in">
+            <div className="mascot-with-bubble">
+              <LivingCharacter 
+                character="pico" 
+                size={140} 
+                state={feedback === 'correct' ? 'happy' : feedback === 'wrong' ? 'thinking' : 'talking'} 
+              />
+              <div className="duo-speech-bubble glass-panel pop-in">
+                <div className="bubble-tail" />
+                <TypingEffect text={currentLesson.questionText} />
+                <button 
+                  className="tts-btn-mini hover-scale"
+                  onClick={() => playTTS(currentLesson.questionText)}
+                >
+                  🔊 READ
+                </button>
+              </div>
             </div>
             {feedback === 'wrong' && currentLesson.explanation && (
-              <div style={styles.explanationBox}>
-                <span style={{marginRight: 8}}>📖</span>
+              <div className="explanation-bubble shake-in">
+                <span style={{marginRight: 8}}>💡</span>
                 {currentLesson.explanation}
-              </div>
-            )}
-            {aiHint && (
-              <div style={styles.aiHintBox}>
-                <div style={styles.aiHintLabel}>PICO'S SECRET HINT 🦜</div>
-                <TypingEffect text={aiHint} />
               </div>
             )}
           </div>
