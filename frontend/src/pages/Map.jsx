@@ -98,7 +98,7 @@ const Map = () => {
   const getSubjectIcon = (name) => {
     const icons = {
       'Basics': '🥚',
-      'Arrays': '🍫',
+      'Arrays': '🍬',
       'Strings': '🔡',
       'Linked Lists': '🍭',
       'Stacks & Queues': '🍬',
@@ -118,11 +118,11 @@ const Map = () => {
 
   if (!stage) return (
     <div className="map-page" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ color: '#FFF8E1', fontSize: 24, fontWeight: 900 }}>ENTERING CHOCOLATE CITY...</div>
+      <div style={{ color: '#FFF8E1', fontSize: 24, fontWeight: 900 }}>ENTERING TOFFEE CITY...</div>
     </div>
   );
 
-  const isChocolateTheme = (subjectName || '').toLowerCase() === 'arrays';
+  const isChocolateTheme = (subjectName || '').toLowerCase().includes('arrays');
   let foundActive = false;
 
   return (
@@ -130,7 +130,7 @@ const Map = () => {
       <div className="adventure-path-overlay" />
 
       <header style={styles.header}>
-        <button style={styles.backBtn} onClick={() => navigate('/')}>← BACK TO HQ</button>
+        <button style={styles.backBtn} onClick={() => navigate('/home')}>← BACK TO HQ</button>
         <div style={{ flex: 1, paddingLeft: 10 }}>
           <div style={styles.subjectName}>{getSubjectIcon(subjectName)} {subjectName.toUpperCase()} RESEARCH</div>
           <div style={styles.sectionTitle}>{stage.title}</div>
@@ -140,7 +140,7 @@ const Map = () => {
       {/* Progress Bar (Chocolate Filling style) */}
       <div className="progress-section" style={styles.progressContainer}>
         <div style={styles.progressHeader}>
-          <span style={{ color: '#BCAAA4', fontSize: 11, fontWeight: 900 }}>COCOA PROGRESS</span>
+          <span style={{ color: '#BCAAA4', fontSize: 11, fontWeight: 900 }}>TOFFEE PROGRESS</span>
           <span style={{ color: '#FFB300', fontWeight: 900, fontSize: 13 }}>{completedCount}/{totalUnits} TOFFEES COLLECTED</span>
         </div>
         <div style={styles.progressTrack}>
@@ -170,7 +170,7 @@ const Map = () => {
             const isCurrent = !isDone && isUnlocked && !foundActive;
             if (isCurrent) foundActive = true;
 
-            const icon = isDone ? '⭐' : (isUnlocked ? (isChocolateTheme ? '🍫' : '🍬') : '🔒');
+            const icon = isDone ? '⭐' : (isUnlocked ? (isChocolateTheme ? '🍬' : '🍬') : '🔒');
 
             return (
               <div 
@@ -231,15 +231,16 @@ const styles = {
     boxShadow: '0 4px 20px rgba(0,0,0,0.5)'
   },
   backBtn: {
-    background: 'rgba(255, 255, 255, 0.05)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
+    background: '#4E342E',
+    border: '2px solid #5D4037',
     color: '#FFB300',
-    padding: '8px 16px',
-    borderRadius: '12px',
+    padding: '8px 20px',
+    borderRadius: '16px',
     fontSize: '11px',
     fontWeight: '900',
     cursor: 'pointer',
-    letterSpacing: '1px',
+    letterSpacing: '1.5px',
+    boxShadow: '0 4px 10px rgba(0,0,0,0.5)',
     transition: 'all 0.3s'
   },
   subjectName: { color: '#BCAAA4', fontSize: '10px', fontWeight: '800', letterSpacing: '2px' },

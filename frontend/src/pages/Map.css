@@ -141,6 +141,17 @@
   border-color: #5D4037;
   box-shadow: 0 12px 0px #2D1B19;
   background: linear-gradient(135deg, #4E342E, #3E2723);
+  border-radius: 28px; /* More blocky as requested */
+}
+
+.theme-chocolate .adventure-node.completed {
+  background: linear-gradient(135deg, #FFB300, #F59E0B) !important;
+  box-shadow: 0 12px 0px #B45309 !important;
+  border-color: #FFF8E1 !important;
+}
+
+.theme-chocolate .current-node-pulse {
+  border-color: #FFB300;
 }
 
 .theme-chocolate .adventure-node:hover {

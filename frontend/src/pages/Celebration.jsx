@@ -29,7 +29,7 @@ const Celebration = () => {
       <header style={styles.header}>
         <button 
           style={styles.backBtn} 
-          onClick={() => (subjectId && sectionId) ? navigate(`/map/${subjectId}/${sectionId}`) : navigate('/')}
+          onClick={() => (subjectId && sectionId) ? navigate(`/map/${subjectId}/${sectionId}`) : navigate('/home')}
         >&larr;</button>
       </header>
 
@@ -68,7 +68,7 @@ const Celebration = () => {
           )}
           <button 
             style={styles.btnPrimary} 
-            onClick={() => (subjectId && sectionId) ? navigate(`/map/${subjectId}/${sectionId}`) : navigate('/')}
+            onClick={() => (subjectId && sectionId) ? navigate(`/map/${subjectId}/${sectionId}`) : navigate('/home')}
           >
             { (subjectId && sectionId) ? 'Back to Map' : 'Back to Lessons' }
           </button>

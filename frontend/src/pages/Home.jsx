@@ -77,7 +77,7 @@ const Home = () => {
   const getSubjectIcon = (name) => {
     const icons = {
       'Basics': '🥚',
-      'Arrays': '🍫',
+      'Arrays': '🍬',
       'Strings': '🔡',
       'Linked Lists': '🍭',
       'Stacks & Queues': '🍬',
