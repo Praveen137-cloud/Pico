@@ -153,10 +153,10 @@ const Landing = () => {
       {/* HERO */}
       <section className="landing-hero cyber-mesh-bg">
         <div className="hero-character-left">
-           <LivingCharacter character="pico" size={220} state="levitating" />
+           <LivingCharacter character="pico" size={140} state="idle" />
         </div>
         <div className="hero-character-right">
-           <LivingCharacter character="ace" size={280} state="happy" />
+           <LivingCharacter character="electric" size={120} state="idle" />
         </div>
         
         <div className="landing-hero-badge">🔥 THE ELITE TRAINING MATRIX — VERSION 3.0</div>

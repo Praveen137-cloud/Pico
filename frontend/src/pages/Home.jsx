@@ -144,11 +144,10 @@ const Home = () => {
             const progress = total > 0 ? (completed / total) * 100 : 0;
 
             return (
-              <div key={index} className={`extreme-card glass-panel ${isVibrating ? 'vibrate-active' : ''}`} style={styles.sectionCard}>
+              <div key={index} className="glass-panel" style={styles.sectionCard}>
                 <div style={styles.sectionHeader}>
                   <div className="stage-badge-container">
                     <div style={styles.sectionNum}>STAGE {index + 1}</div>
-                    <LivingCharacter character="pico" size={30} state="idle" style={{ position: 'absolute', right: -10, top: -10 }} />
                   </div>
                   <h2 style={styles.sectionTitle}>{stage.title}</h2>
                 </div>
@@ -161,8 +160,8 @@ const Home = () => {
                 </div>
                 
                 <button 
-                  className="btn-chunky cyan"
-                  style={{ marginTop: '-8px' }}
+                  className="btn-primary"
+                  style={{ width: '100%', padding: '12px', fontSize: '14px', borderRadius: '8px' }}
                   onClick={() => navigate(`/map/${subjects.find(s => s.name === activeSubject)._id}/${stage._id}`)}
                 >
                   INITIALIZE CORE
@@ -269,25 +268,24 @@ const styles = {
     minWidth: '80px'
   },
   curriculumContainer: {
-    padding: '16px',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '16px',
-    paddingBottom: '24px'
+    padding: '20px',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+    gap: '20px',
+    paddingBottom: '40px'
   },
   sectionCard: {
     backgroundColor: 'rgba(30, 41, 59, 0.4)',
-    backdropFilter: 'blur(16px)',
-    borderRadius: '24px',
-    padding: '28px',
+    backdropFilter: 'blur(10px)',
+    borderRadius: '16px',
+    padding: '20px',
     display: 'flex',
     flexDirection: 'column',
-    gap: '24px',
+    gap: '16px',
     border: '1px solid rgba(255,255,255,0.1)',
     position: 'relative',
-    overflow: 'hidden',
-    boxShadow: '0 20px 50px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,255,255,0.02)',
-    transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
+    transition: 'transform 0.2s ease-in-out',
+    boxShadow: '0 4px 20px rgba(0,0,0,0.2)'
   },
   badgeWrapper: {
     backgroundColor: '#6366F1',

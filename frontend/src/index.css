@@ -14,22 +14,22 @@
   /* Premium Chunky Design System Tokens */
   --glass-bg: rgba(30, 41, 59, 0.85);
   --glass-border: rgba(255, 255, 255, 0.2);
-  --glass-blur: blur(12px);
-  --glass-shadow: 0 12px 0px rgba(0, 0, 0, 0.4);
+  --glass-blur: blur(8px);
+  --glass-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 
   --theme-primary: #00F2FF; 
   --theme-secondary: #7000FF;
-  --neon-glow: 0 0 35px rgba(0, 242, 255, 0.4);
+  --neon-glow: 0 0 20px rgba(0, 242, 255, 0.2);
 
   /* Elite Tier Config */
   --premium-gold: #FFD700;
   --premium-obsidian: #050505;
-  --premium-glow: 0 0 45px rgba(255, 215, 0, 0.5);
+  --premium-glow: 0 0 30px rgba(255, 215, 0, 0.3);
 
-  /* Massive Duolingo-Style Physics */
-  --spring-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
-  --btn-depth: 12px;
-  --fat-border: 4px;
+  /* Sleek Premium Physics */
+  --spring-bounce: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --btn-depth: 4px;
+  --fat-border: 1px;
 }
 
 /* ⚡ Electric Bird Pulse */
@@ -311,20 +311,12 @@ body {
 /* 📳 Haptic Vibration Animation */
 @keyframes stageVibrate {
   0% { transform: translate(0) scale(1); }
-  10% { transform: translate(-2px, 2px) scale(1.02); }
-  20% { transform: translate(2px, -2px) scale(1.02); }
-  30% { transform: translate(-2px, -2px) scale(1.02); }
-  40% { transform: translate(2px, 2px) scale(1.02); }
-  50% { transform: translate(-2px, 2px) scale(1.02); }
-  60% { transform: translate(2px, -2px) scale(1.02); }
-  70% { transform: translate(-2px, -2px) scale(1.02); }
-  80% { transform: translate(2px, 2px) scale(1.02); }
-  90% { transform: translate(-2px, 2px) scale(1.02); }
+  50% { transform: scale(1.02); }
   100% { transform: translate(0) scale(1); }
 }
 
 .vibrate-active {
-  animation: stageVibrate 0.3s ease-in-out;
+  animation: stageVibrate 0.2s ease-out;
   border-color: #fff !important;
-  box-shadow: 0 0 40px var(--theme-primary) !important;
+  box-shadow: 0 0 20px var(--theme-primary) !important;
 }

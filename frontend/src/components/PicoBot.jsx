@@ -97,7 +97,7 @@ const PicoBot = () => {
       ) : (
         <div className="pico-launcher" onClick={() => setIsOpen(true)}>
           <div className="pico-avatar">
-            <LivingCharacter character="ace" size={80} state="levitating" />
+            <img src="/pico-bird.png" alt="Pico" style={{ width: 80, height: 80, objectFit: 'contain' }} />
           </div>
           <div className="pico-badge">ELITE ASST</div>
         </div>
