@@ -22,7 +22,7 @@ const GlobalHUD = () => {
       <div className="hud-right">
         {user?.isPremium && (
           <div className="hud-premium-tag">
-            👑 PREMIUM
+            👑
           </div>
         )}
         <div className="hud-stat-pill fire">
@@ -124,7 +124,6 @@ const GlobalHUD = () => {
         @media (max-width: 480px) {
            .hud-username { display: none; }
            .hud-level-bar { display: none; }
-           .hud-premium-tag { display: none; }
         }
       `}</style>
     </div>
