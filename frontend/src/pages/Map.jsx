@@ -122,7 +122,8 @@ const Map = () => {
     </div>
   );
 
-  const isChocolateTheme = subjectName.toLowerCase() === 'arrays';
+  const isChocolateTheme = (subjectName || '').toLowerCase() === 'arrays';
+  let foundActive = false;
 
   return (
     <div className={`map-page ${isChocolateTheme ? 'theme-chocolate' : 'cyber-mesh-bg'}`}>

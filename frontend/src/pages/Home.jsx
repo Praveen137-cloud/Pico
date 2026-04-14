@@ -120,18 +120,7 @@ const Home = () => {
         <SubjectNav activeSubject={activeSubject} onSelect={handleSelectSubject} />
       </div>
 
-      {/* Professional Academic Banner */}
-      <div className="season-banner" style={{borderColor: season.color, minHeight: '130px', padding: '32px 24px 24px 24px', display: 'flex', flexDirection: 'column', gap: '16px'}}>
-        <div style={{...styles.seasonBadge, backgroundColor: season.color, position: 'absolute', top: 0, left: 0, borderBottomRightRadius: '12px'}}>
-          {season.icon} {season.name} QUARTER
-        </div>
-        
-        <div style={{...styles.bannerHeader, marginTop: '12px'}}>
-           <div style={styles.logoText}>PICO ELITE ACADEMY</div>
-           <div style={styles.seasonTitle} className="season-title">{getSubjectIcon(activeSubject)} {activeSubject} Research Phase</div>
-           <div style={styles.seasonDesc} className="season-desc">Advanced theoretical exploration of {activeSubject} structures.</div>
-        </div>
-      </div>
+      {/* REDUNDANT SEASON BANNER REMOVED */}
       
       <div style={styles.curriculumContainer} className="curriculum-container">
         {stages.length > 0 ? (
