@@ -81,9 +81,7 @@ const Map = () => {
   // 4. Auto-Scroll to Current Unit (whenever progress changes or on initial load)
   useEffect(() => {
     if (units.length > 0 && activeNodeRef.current) {
-      // Force scroll to current node if they just returned from a lesson (detected by lack of user scroll or recent update)
       const forceScroll = !localStorage.getItem(`scroll_map_${sectionId}`);
-      
       if (forceScroll) {
         setTimeout(() => {
           activeNodeRef.current.scrollIntoView({
@@ -93,7 +91,7 @@ const Map = () => {
         }, 1000);
       }
     }
-  }, [units, sectionId, completedCount]); // Trigger on completedCount change
+  }, [units, sectionId, completedCount]);
 
   const getSubjectIcon = (name) => {
     const entry = Object.entries({
@@ -122,11 +120,10 @@ const Map = () => {
     </div>
   );
 
-  const isChocolateTheme = (subjectName || '').toLowerCase().includes('arrays');
   let foundActive = false;
 
   return (
-    <div className={`map-page ${isChocolateTheme ? 'theme-chocolate' : 'cyber-mesh-bg'}`}>
+    <div className="map-page">
       <div className="adventure-path-overlay" />
 
       <header style={styles.header}>
@@ -170,7 +167,7 @@ const Map = () => {
             const isCurrent = !isDone && isUnlocked && !foundActive;
             if (isCurrent) foundActive = true;
 
-            const icon = isDone ? '⭐' : (isUnlocked ? (isChocolateTheme ? '' : '🍬') : '🔒');
+            const icon = isDone ? '⭐' : (isUnlocked ? '🍬' : '🔒');
 
             return (
               <div 
@@ -185,10 +182,10 @@ const Map = () => {
                 ref={isCurrent ? activeNodeRef : null}
               >
                 <div 
-                  className={`adventure-node btn-chunky ${!isUnlocked ? 'locked' : ''} ${isDone ? 'completed' : 'cyan'}`}
+                  className={`adventure-node ${!isUnlocked ? 'locked' : ''} ${isDone ? 'completed' : ''}`}
                   onClick={() => isUnlocked && navigate(`/lesson/${subjectId}/${sectionId}/${unit._id}`)}
                 >
-                  {isDone && isChocolateTheme && (
+                  {isDone && (
                     <>
                       <div className="node-wing-left" />
                       <div className="node-wing-right" />
@@ -257,16 +254,6 @@ const styles = {
   },
   subjectName: { color: '#BCAAA4', fontSize: '10px', fontWeight: '800', letterSpacing: '2px' },
   sectionTitle: { color: '#FFF8E1', fontSize: '22px', fontWeight: '900', marginTop: 2 },
-  xpChip: { 
-    backgroundColor: 'rgba(255,179,0,0.15)', 
-    color: '#FFB300', 
-    padding: '10px 18px', 
-    borderRadius: '25px', 
-    fontWeight: 900, 
-    fontSize: 12, 
-    border: '2px solid #FFB300',
-    boxShadow: '0 0 15px rgba(255,179,0,0.2)'
-  },
   progressContainer: { padding: '12px 24px 20px', backgroundColor: '#3E2723', position: 'relative', zIndex: 20 },
   progressHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
   progressTrack: { height: 14, borderRadius: 10, backgroundColor: '#2D1B19', overflow: 'hidden', border: '2px solid #4E342E' },
