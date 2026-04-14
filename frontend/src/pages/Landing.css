@@ -26,18 +26,22 @@
 /* ---- NAV ---- */
 .landing-nav {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 1200px;
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 32px;
-  background: rgba(8, 12, 20, 0.85);
+  padding: 12px 32px;
+  border-radius: 20px;
+  background: rgba(8, 12, 20, 0.4);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(0, 255, 200, 0.08);
+  border: 1px solid rgba(0, 255, 200, 0.15);
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.5);
 }
 
 .landing-nav-logo {
@@ -112,6 +116,33 @@
   justify-content: center;
   text-align: center;
   padding: 120px 24px 80px;
+  overflow: hidden;
+}
+
+.hero-character-left {
+  position: absolute;
+  left: 5%;
+  top: 40%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  filter: blur(1px) opacity(0.8);
+  display: block;
+}
+
+.hero-character-right {
+  position: absolute;
+  right: 5%;
+  top: 35%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  filter: drop-shadow(0 0 30px rgba(0, 242, 255, 0.3));
+  display: block;
+}
+
+@media (max-width: 1100px) {
+  .hero-character-left, .hero-character-right {
+    display: none;
+  }
 }
 
 .landing-hero-badge {

@@ -125,8 +125,8 @@ const Map = () => {
   let foundActive = false;
 
   return (
-    <div className="map-page">
-      <div className="chocolate-city-bg" />
+    <div className="map-page cyber-mesh-bg">
+      <div className="adventure-path-overlay" />
 
       <header style={styles.header}>
         <button style={styles.backBtn} onClick={() => navigate('/')}>← BACK TO HQ</button>
@@ -184,41 +184,25 @@ const Map = () => {
                 ref={isCurrent ? activeNodeRef : null}
               >
                 <div 
-                  className={`toffee-node ${!isUnlocked ? 'locked' : ''} ${isDone ? 'completed' : ''}`}
+                  className={`adventure-node btn-chunky ${!isUnlocked ? 'locked' : ''} ${isDone ? 'completed' : 'cyan'}`}
                   onClick={() => isUnlocked && navigate(`/lesson/${subjectId}/${sectionId}/${unit._id}`)}
                 >
-                  <div className="toffee-wrapper-left" />
-                  <div className="toffee-wrapper-right" />
-                  <span style={{ fontSize: '40px', filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.4))' }}>
+                  <span style={{ fontSize: '32px' }}>
                     {icon}
                   </span>
 
                   {isCurrent && (
-                    <div className="current-indicator" style={styles.currentIndicator}>
-                      NEXT BITE
-                    </div>
+                    <div className="current-node-pulse" />
                   )}
                 </div>
 
-                <div style={{ 
-                  color: isUnlocked ? '#FFF8E1' : '#5D4037', 
-                  marginTop: 18, 
-                  fontWeight: 900, 
-                  textAlign: 'center', 
-                  maxWidth: 180, 
-                  fontSize: 16,
-                  textShadow: '0 2px 8px rgba(0,0,0,0.9)',
-                  lineHeight: '1.1'
-                }}>
+                <div className="node-label">
                   {unit.title}
                 </div>
 
                 {index < units.length - 1 && (
-                  <div className="chocolate-river" style={{
-                    height: '110px',
-                    top: '90px',
-                    transform: `rotate(${index % 2 === 0 ? '-25deg' : '25deg'})`,
-                    left: 'calc(50% - 8px)'
+                  <div className={`trail-line ${isDone ? 'active' : ''}`} style={{
+                    transform: `translateX(${index % 2 === 0 ? '-30px' : '30px'}) rotate(${index % 2 === 0 ? '-45deg' : '45deg'})`,
                   }} />
                 )}
               </div>

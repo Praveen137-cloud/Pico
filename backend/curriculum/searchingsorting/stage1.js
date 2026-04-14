@@ -1,1642 +1,1479 @@
 const stage1 = [
   {
     "order": 1,
-    "title": "The Forest Scout",
-    "desc": "Introduction to Searching and Linear Search.",
+    "title": "Unit 1: The Forest Scout (Linear Search)",
+    "desc": "Foundations of sequential discovery.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"The Grand Hunt! Searching is the art of finding a specific bird in this vast forest. If we have no order, we must check every branch! 🦜\""
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"Linear Search: Start from the first tree and check each one until you find the bird or reach the end. It's simple, but slow for big forests! 🦜\""
+        "questionText": "[MISSION LORE 1.1] The Grand Hunt",
+        "explanation": "Ace: 'Searching is the art of finding a specific item in a set. In Linear Search, we check every item one by one.' Pico: 'Checking every branch! 100% 🦜'",
+        "encouragementText": "Ace: 'Persistence is the first tool of the scout.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "In Linear Search, what is the best-case time complexity?",
-        "options": [
-          "O(1) - Found at the first tree!",
-          "O(N)",
-          "O(log N)"
-        ],
-        "correctAnswer": "O(1) - Found at the first tree!"
+        "questionText": "What is the best-case time complexity of Linear Search?",
+        "options": ["O(1)", "O(N)", "O(log N)", "Pico rule"],
+        "correctAnswer": "O(1)",
+        "explanation": "If the bird is at the very first tree, we find it instantly!"
       },
       {
-        "type": "match_following",
-        "questionText": "Match Search basics!",
-        "pairs": [
-          {
-            "key": "Linear Search",
-            "value": "Sequential scan"
-          },
-          {
-            "key": "Best Case",
-            "value": "First element"
-          },
-          {
-            "key": "Worst Case",
-            "value": "Last or not found"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] Sequential Scan",
+        "explanation": "Ace: 'Linear search is simple but slow for large sets. It takes O(N) time because in the worst case, you check every single item.'",
+        "encouragementText": "Pico: 'Lots of trees! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "Linear search checks elements ___.",
-        "codeSnippet": "Traversal = ___ ;",
-        "correctAnswer": "one by one"
-      },
-      {
-        "type": "multiple_choice",
-        "questionText": "Time complexity of Linear Search in a forest of N trees?",
-        "options": [
-          "O(N)",
-          "O(log N)",
-          "O(1)"
-        ],
-        "correctAnswer": "O(N)"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Check for equality.",
-        "codeSnippet": "if (forest[i] ___ target) return i;",
-        "correctAnswer": "=="
+        "questionText": "Fill the condition for matching target T.",
+        "codeSnippet": "if (arr[i] ___ T) return i;",
+        "correctAnswer": "==",
+        "explanation": "We compare the current element with the target."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Every bird counts! 🦜\""
+        "questionText": "[CORE GATE] Use Case",
+        "explanation": "Ace: 'Use Linear Search when the data is unsorted or very small. For sorted data, we have faster ways.'",
+        "encouragementText": "Ace: 'Simplicity is the base of all complexity.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "By Pico: \"Can I find a bird in an unsorted list quickly?\"",
-        "options": [
-          "Only using Linear Search!",
-          "Yes, effortlessly",
-          "0"
-        ],
-        "correctAnswer": "Only using Linear Search!"
+        "questionText": "Time complexity of Linear Search on N items?",
+        "options": ["O(N)", "O(log N)", "O(1)", "Pico guess"],
+        "correctAnswer": "O(N)",
+        "explanation": "Execution time grows linearly with the number of elements."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[SYNC] Return Values",
+        "explanation": "Ace: 'Usually, we return the INDEX of the found item, or -1 if the target is not in the set.'",
+        "encouragementText": "Pico: 'Where is he? 100% 🦜'"
+      },
+      {
+        "type": "programming_board",
+        "questionText": "Starting index for search.",
+        "codeSnippet": "for(int i = ___ ; i < n; i++)",
+        "correctAnswer": "0",
+        "explanation": "Standard search starts at the beginning of the array."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Sequential Path",
+        "explanation": "You have mastered the most basic way to find anything. Ace: 'The hunt begins.'",
+        "encouragementText": "Pico: 'I found a seed! 100% 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Search terms!",
+        "pairs": [
+          { "key": "Best Case", "value": "O(1)" },
+          { "key": "Worst Case", "value": "O(N)" },
+          { "key": "Not Found", "value": "Return -1" }
+        ]
       }
     ]
   },
   {
     "order": 2,
-    "title": "The Sentinel Scout",
-    "desc": "Optimizing Linear Search with a Sentinel.",
+    "title": "Unit 2: The Sentinel Scout",
+    "desc": "Optimizing Linear Search by reducing boundary comparisons.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"The Guarded Gate! We can speed up Linear Search by placing the bird we're looking for at the very last tree. This avoids checking the boundary in every step! 🦜\""
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"Sentinel Search: Temporarily replace the last element with the target. Now we only need one comparison per loop! 🦜\"",
-        "codeSnippet": "int last = arr[n-1];\narr[n-1] = target;\nwhile(arr[i] != target) i++;\narr[n-1] = last;"
+        "questionText": "[MISSION LORE 1.2] The Guarded Gate",
+        "explanation": "Ace: 'In a standard loop, we check two things: \"Is target found?\" and \"Is loop finished?\". Sentinel Search places the target at the end, so we only need to check \"Is target found?\" in the loop!'",
+        "encouragementText": "Ace: 'Smart scouting avoids redundant checks.'"
       },
       {
         "type": "multiple_choice",
         "questionText": "What does Sentinel Search reduce?",
-        "options": [
-          "Number of boundary comparisons",
-          "Time complexity from O(N) to O(log N)",
-          "Memory usage"
-        ],
-        "correctAnswer": "Number of boundary comparisons"
+        "options": ["Memory usage", "Number of boundary comparisons per iteration", "Time complexity class", "Pico rule"],
+        "correctAnswer": "Number of boundary comparisons per iteration",
+        "explanation": "By putting the target at the end, the loop is guaranteed to find it, so `i < N` check isn't needed *inside* the loop."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[SYNC] Temporary Swap",
+        "explanation": "Ace: '1. Store the last element. 2. Put target in the last slot. 3. Loop until found. 4. Restore the last element.'",
+        "encouragementText": "Pico: 'Swap it back! 100% 🦜'"
+      },
+      {
+        "type": "programming_board",
+        "questionText": "Setting the sentinel.",
+        "codeSnippet": "arr[n-1] = ___ ;",
+        "correctAnswer": "target",
+        "explanation": "We force the target to exist at the end."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[CORE GATE] Micro-Optimization",
+        "explanation": "Ace: 'For huge arrays, saving one comparison per loop adds up to significant real-world speed.'",
+        "encouragementText": "Ace: 'Performance is the sum of small savings.'"
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "Complexity of Sentinel search?",
+        "options": ["O(N)", "O(log N)", "O(1)", "Pico guess"],
+        "correctAnswer": "O(N)",
+        "explanation": "It's still linear, just with a smaller constant factor."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[SYNC] Boundary Case",
+        "explanation": "Ace: 'If the loop stops at `i == n-1` and the original last element wasn't the target, then it's not found.'",
+        "encouragementText": "Pico: 'Did we cheat? 100% 🦜'"
+      },
+      {
+        "type": "programming_board",
+        "questionText": "Loop condition (Sentinel).",
+        "codeSnippet": "while(arr[i] ___ target) i++;",
+        "correctAnswer": "!=",
+        "explanation": "The loop ONLY checks for the target."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Efficient Scout",
+        "explanation": "You have learned to streamline your loops. Ace: 'The path is clean.'",
+        "encouragementText": "Pico: 'Faster flight! 100% 🦜'"
       },
       {
         "type": "match_following",
         "questionText": "Match Sentinel logic!",
         "pairs": [
-          {
-            "key": "Sentinel",
-            "value": "Temporary target"
-          },
-          {
-            "key": "Benefit",
-            "value": "Fewer loop checks"
-          },
-          {
-            "key": "Complexity",
-            "value": "Still O(N)"
-          }
+          { "key": "Sentinel", "value": "Target at end" },
+          { "key": "Standard", "value": "Two checks per loop" },
+          { "key": "Restoration", "value": "Put old last back" }
         ]
-      },
-      {
-        "type": "programming_board",
-        "questionText": "Sentinel search reduces the number of ___ per iteration.",
-        "codeSnippet": "Reduced = ___ ;",
-        "correctAnswer": "comparisons"
-      },
-      {
-        "type": "multiple_choice",
-        "questionText": "Is Sentinel Search worth it for very small arrays?",
-        "options": [
-          "Not significantly",
-          "Yes, always",
-          "No, it's slower"
-        ],
-        "correctAnswer": "Not significantly"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Set sentinel.",
-        "codeSnippet": "arr[n-1] = ___ ;",
-        "correctAnswer": "target"
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"Smart scouting! 🦜\""
-      },
-      {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Does the worst case change?\"",
-        "options": [
-          "No, it's still O(N)",
-          "Yes, O(1)!",
-          "0"
-        ],
-        "correctAnswer": "No, it's still O(N)"
       }
     ]
   },
   {
     "order": 3,
-    "title": "The Sorted Divide",
-    "desc": "Introduction to Binary Search.",
+    "title": "Unit 3: Binary Search Foundations",
+    "desc": "Introduction to the O(log N) hunter.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Order is Power! If the birds are perched in order of their size, we don't need to check every tree. We can just check the middle and eliminate half the forest! 🦜\""
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"Binary Search: The ultimate hunter. It requires a SORTED forest. By checking the middle, we decide if our bird is in the left half or the right half! 🦜\""
+        "questionText": "[MISSION LORE 1.3] The Sorted Divide",
+        "explanation": "Ace: 'If the forest is SORTED, we don't need to check every tree. Check the middle, and eliminate half the forest!' Pico: 'Halving the work! 100% 🦜'",
+        "encouragementText": "Ace: 'Order is the lever that moves the scale of efficiency.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "What is the mandatory condition for Binary Search?",
-        "options": [
-          "Sorted elements",
-          "Unique elements",
-          "Bird sounds"
-        ],
-        "correctAnswer": "Sorted elements"
+        "questionText": "Mandatory condition for Binary Search?",
+        "options": ["Unique elements", "Sorted elements", "Small array", "Pico rule"],
+        "correctAnswer": "Sorted elements",
+        "explanation": "Without sorting, we don't know which half to discard."
       },
       {
-        "type": "match_following",
-        "questionText": "Match BS logic!",
-        "pairs": [
-          {
-            "key": "Target < Middle",
-            "value": "Search Left half"
-          },
-          {
-            "key": "Target > Middle",
-            "value": "Search Right half"
-          },
-          {
-            "key": "Target == Middle",
-            "value": "Found!"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] Logarithmic Power",
+        "explanation": "Ace: 'Binary Search is O(log N). From 1,000,000 items to 1 in just 20 steps.'",
+        "encouragementText": "Pico: 'So fast! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "Binary Search follows which paradigm?",
-        "codeSnippet": "Paradigm = ___ ;",
-        "correctAnswer": "divide and conquer"
+        "questionText": "Middle calculation.",
+        "codeSnippet": "mid = (low + high) / ___ ;",
+        "correctAnswer": "2",
+        "explanation": "Finding the average index."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Time Complexity: O(log N). From 1,000,000 trees to 1 bird in just 20 steps! 🦜\""
+        "questionText": "[CORE GATE] Decision Rule",
+        "explanation": "Ace: 'If target > mid, look in the right half. If target < mid, look in the left half.'",
+        "encouragementText": "Ace: 'Choice defines the search space.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Efficiency of Binary Search vs Linear Search on 1000 items?",
-        "options": [
-          "BS is much faster",
-          "Linear is faster",
-          "Same"
-        ],
-        "correctAnswer": "BS is much faster"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Initial low index.",
-        "codeSnippet": "int low = ___ ;",
-        "correctAnswer": "0"
+        "questionText": "Complexity class of Binary Search?",
+        "options": ["O(N)", "O(log N)", "O(N^2)", "Pico guess"],
+        "correctAnswer": "O(log N)",
+        "explanation": "We divide the problem size by 2 at every step."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Splitting the ranks! 🦜\""
+        "questionText": "[SYNC] Range Shrinking",
+        "explanation": "Ace: 'We update the `low` or `high` boundaries to focus the search.'",
+        "encouragementText": "Pico: 'Smaller nest! 100% 🦜'"
       },
       {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Is order mandatory?\"",
-        "options": [
-          "SQUAWK YES!",
-          "No.",
-          "0"
-        ],
-        "correctAnswer": "SQUAWK YES!"
+        "type": "programming_board",
+        "questionText": "Updating `low` if target is on the right.",
+        "codeSnippet": "if (target > arr[mid]) low = ___ ;",
+        "correctAnswer": "mid + 1",
+        "explanation": "We move past the middle."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Logarithmic Hunter",
+        "explanation": "You have mastered the divide. The forest is yours. Ace: 'The scale is unlocked.'",
+        "encouragementText": "Pico: 'Found him! 100% 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match BS terms!",
+        "pairs": [
+          { "key": "Target > Mid", "value": "low = mid + 1" },
+          { "key": "Target < Mid", "value": "high = mid - 1" },
+          { "key": "Mid == Target", "value": "Found" }
+        ]
       }
     ]
   },
   {
     "order": 4,
-    "title": "Precision Midpoint",
-    "desc": "Calculating the middle index safely.",
+    "title": "Unit 4: Precision Midpoint",
+    "desc": "Avoiding the infamous integer overflow bug.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Avoid the Overflow! Calculating `(low + high) / 2` can crash your wings if the numbers are too big. Use the safe path! 🦜\""
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"The Safe Middle: `low + (high - low) / 2`. This ensures the sum never exceeds the limits of our integer nest! 🦜\"",
-        "codeSnippet": "mid = low + (high - low) / 2;"
+        "questionText": "[MISSION LORE 1.4] The Overflow Trap",
+        "explanation": "Ace: '`(low + high) / 2` can fail if `low + high` is larger than the maximum integer size. This is a classic bug!' Pico: 'Avoid the crash! 100% 🦜'",
+        "encouragementText": "Ace: 'Robustness is found in the details of the math.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Why use `low + (high - low) / 2`?",
-        "options": [
-          "Prevent Integer Overflow",
-          "It's faster",
-          "Pico likes it"
-        ],
-        "correctAnswer": "Prevent Integer Overflow"
+        "questionText": "How do we calculate mid SAFELY?",
+        "options": ["(low + high) / 2", "low + (high - low) / 2", "(low - high) / 2", "Pico rule"],
+        "correctAnswer": "low + (high - low) / 2",
+        "explanation": "By subtracting first, we ensure the intermediate sum never overflows the integer limit."
       },
       {
-        "type": "match_following",
-        "questionText": "Match Midpoint math!",
-        "pairs": [
-          {
-            "key": "low=0, high=10",
-            "value": "mid=5"
-          },
-          {
-            "key": "low=5, high=10",
-            "value": "mid=7"
-          },
-          {
-            "key": "Max Int safe",
-            "value": "low + (high-low)/2"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] The Addition-Subtraction Dance",
+        "explanation": "Ace: 'Subtracting low from high gives the DISTANCE. Dividing it by 2 and adding it back to low gives the center.'",
+        "encouragementText": "Pico: 'Math wings! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "Safe mid calculation formula.",
+        "questionText": "Safe mid formula components.",
         "codeSnippet": "mid = low + ( ___ ) / 2;",
-        "correctAnswer": "high - low"
+        "correctAnswer": "high - low",
+        "explanation": "Calculating the offset."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Even for small forests, habits define the elite scout! 🦜\""
+        "questionText": "[CORE GATE] Large Scale Data",
+        "explanation": "Ace: 'This bug existed in many standard libraries for years. Always use the safe version.'",
+        "encouragementText": "Ace: 'History is a teacher of precision.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "If low=10 and high=20, what is mid?",
-        "options": [
-          "15",
-          "10",
-          "20"
-        ],
-        "correctAnswer": "15"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Middle calculation.",
-        "codeSnippet": "mid = low + (high - low) ___ 2;",
-        "correctAnswer": "/"
+        "questionText": "If low=10 and high=20, what is the distance?",
+        "options": ["30", "10", "15", "Pico guess"],
+        "correctAnswer": "10",
+        "explanation": "high - low = 10."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Steady center! 🦜\""
+        "questionText": "[SYNC] Integer Precision",
+        "explanation": "Ace: 'In C++ and Java, integers are fixed size. This formula is mandatory for production code.'",
+        "encouragementText": "Pico: 'Fix the bug! 100% 🦜'"
       },
       {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Is it safe now?\"",
-        "options": [
-          "SQUAWK YES!",
-          "No.",
-          "0"
-        ],
-        "correctAnswer": "SQUAWK YES!"
+        "type": "programming_board",
+        "questionText": "Final mid result for low=10, dist=10.",
+        "codeSnippet": "mid = 10 + (10 / 2) = ___ ;",
+        "correctAnswer": "15",
+        "explanation": "Middle of 10 and 20 is 15."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Precision Architect",
+        "explanation": "You have immunized your code against overflow. Ace: 'The calculation is safe.'",
+        "encouragementText": "Pico: 'Steady flight! 100% 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Mid terms!",
+        "pairs": [
+          { "key": "low + (high-low)/2", "value": "Safe version" },
+          { "key": "(low+high)/2", "value": "Unsafe version" },
+          { "key": "Distance", "value": "high - low" }
+        ]
       }
     ]
   },
   {
     "order": 5,
-    "title": "Iterative Conquest",
-    "desc": "Implementing Iterative Binary Search.",
+    "title": "Unit 5: Iterative Binary Search",
+    "desc": "Implementing BS without recursion.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"The Ground Loop! Iterative search uses a simple while-loop to shrink the search space until the bird is trapped! 🦜\""
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"The Loop: `while (low <= high)`. If target > mid, move `low = mid + 1`. If target < mid, move `high = mid - 1`. 🦜\"",
-        "codeSnippet": "while (low <= high) {\n  int mid = low + (high - low) / 2;\n  if (arr[mid] == target) return mid;\n  if (arr[mid] < target) low = mid + 1;\n  else high = mid - 1;\n}"
+        "questionText": "[MISSION LORE 1.5] The Loop Hunter",
+        "explanation": "Ace: 'Loops are the backbone of search. Iterative Binary Search uses a `while` loop to shrink the bounds until the target is trapped.' Pico: 'Round and round! 100% 🦜'",
+        "encouragementText": "Ace: 'Continuity is the fuel of discovery.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "In Iterative BS, when does the search end as 'unsuccessful'?",
-        "options": [
-          "When low > high",
-          "When mid == 0",
-          "When birds leave"
-        ],
-        "correctAnswer": "When low > high"
+        "questionText": "Condition for the while loop in Binary Search?",
+        "options": ["low < high", "low <= high", "low != high", "Pico rule"],
+        "correctAnswer": "low <= high",
+        "explanation": "We must continue even when low equals high, as that single element might be the target."
       },
       {
-        "type": "match_following",
-        "questionText": "Match Iterative steps!",
-        "pairs": [
-          {
-            "key": "Move low",
-            "value": "mid + 1"
-          },
-          {
-            "key": "Move high",
-            "value": "mid - 1"
-          },
-          {
-            "key": "Condition",
-            "value": "low <= high"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] Step Logic",
+        "explanation": "Ace: 'Calculate mid, check, update low or high. If the loop ends without a match, return -1.'",
+        "encouragementText": "Pico: 'Keep looking! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "Termination condition for the loop.",
-        "codeSnippet": "while (low ___ high)",
-        "correctAnswer": "<="
+        "questionText": "Initial values.",
+        "codeSnippet": "low = 0; high = ___ ;",
+        "correctAnswer": "n - 1",
+        "explanation": "The range starts from the full array indices."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Space Complexity: O(1). No recursion stack needed! Efficient and lean. 🦜\""
+        "questionText": "[CORE GATE] Efficiency",
+        "explanation": "Ace: 'Iterative search is O(1) space, meaning it uses no extra memory, making it preferred for high-performance systems.'",
+        "encouragementText": "Ace: 'Lean code is fast code.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "What happens if target is NOT in the array?",
-        "options": [
-          "Returns -1 or sentinel",
-          "Infinite loop",
-          "Array crashes"
-        ],
-        "correctAnswer": "Returns -1 or sentinel"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Return not found.",
-        "codeSnippet": "return ___ ;",
-        "correctAnswer": "-1"
+        "questionText": "Update if target < arr[mid]?",
+        "options": ["low = mid + 1", "high = mid - 1", "high = mid", "Pico guess"],
+        "correctAnswer": "high = mid - 1",
+        "explanation": "The target is in the left half, so we move the high bound."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Looped victory! 🦜\""
+        "questionText": "[SYNC] Termination",
+        "explanation": "Ace: 'If `low > high`, the search space has collapsed to zero.'",
+        "encouragementText": "Pico: 'End of the line! 100% 🦜'"
       },
       {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Is the loop closed?\"",
-        "options": [
-          "Until low > high!",
-          "No.",
-          "0"
-        ],
-        "correctAnswer": "Until low > high!"
+        "type": "programming_board",
+        "questionText": "The return if target is found.",
+        "codeSnippet": "if (arr[mid] == target) return ___ ;",
+        "correctAnswer": "mid",
+        "explanation": "Return the location (index) of the target."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Loop Master",
+        "explanation": "You have implemented the core search loop. Ace: 'The execution is flawless.'",
+        "encouragementText": "Pico: 'I found 10 seeds! 100% 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Loop steps!",
+        "pairs": [
+          { "key": "Init", "value": "low=0, high=n-1" },
+          { "key": "Check", "value": "low <= high" },
+          { "key": "Failure", "value": "return -1" }
+        ]
       }
     ]
   },
   {
     "order": 6,
-    "title": "Recursive Reach",
-    "desc": "Implementing Recursive Binary Search.",
+    "title": "Unit 6: Recursive Binary Search",
+    "desc": "The elegant approach to division.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"The Echoing Call! Recursion lets the forest speak to itself. Each call narrows the search in a new, smaller branch! 🦜\""
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"Recursion: Pass `low` and `high` as parameters. Base case is `low > high`. Recursive calls narrow the range! 🦜\"",
-        "codeSnippet": "int search(arr, low, high, x) {\n  if (low > high) return -1;\n  int mid = low + (high-low)/2;\n  if (arr[mid] == x) return mid;\n  if (arr[mid] > x) return search(arr, low, mid-1, x);\n  return search(arr, mid+1, high, x);\n}"
+        "questionText": "[MISSION LORE 1.6] The Echoing Call",
+        "explanation": "Ace: 'Recursion is a function calling itself. For search, we solve a smaller sub-problem in every call.' Pico: 'Bird calls ringing through the woods! 100% 🦜'",
+        "encouragementText": "Ace: 'Elegance is the shortcut of the mind.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Space complexity of Recursive Binary Search?",
-        "options": [
-          "O(log N) (Stack space)",
-          "O(1)",
-          "O(N)"
-        ],
-        "correctAnswer": "O(log N) (Stack space)"
+        "questionText": "What is the base case for Recursive BS?",
+        "options": ["mid == n", "low > high", "arr[mid] == 0", "Pico rule"],
+        "correctAnswer": "low > high",
+        "explanation": "When the interval is empty, sorting must stop and declare failure."
       },
       {
-        "type": "match_following",
-        "questionText": "Match Recursive parts!",
-        "pairs": [
-          {
-            "key": "Base Case",
-            "value": "low > high"
-          },
-          {
-            "key": "Stack Space",
-            "value": "O(log N)"
-          },
-          {
-            "key": "Time",
-            "value": "O(log N)"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] Stack Space",
+        "explanation": "Ace: 'Recursive search takes O(log N) space on the function call stack. Be careful with deep recursion!'",
+        "encouragementText": "Pico: 'Stacking nests! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "Recursive BS base case condition.",
-        "codeSnippet": "if (low ___ high) return -1;",
-        "correctAnswer": ">"
+        "questionText": "The recursive call for the right side.",
+        "codeSnippet": "return binarySearch(arr, ___ , high, target);",
+        "correctAnswer": "mid + 1",
+        "explanation": "Moving the low boundary forward in the next call."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Elegant and clean code, but uses recursive stack memory. Choose your wings wisely! 🦜\""
+        "questionText": "[CORE GATE] Self-Similarity",
+        "explanation": "Ace: 'Recursion works because searching in index [0-100] is exactly the same as searching in [51-100].'",
+        "encouragementText": "Ace: 'Pattern is the anchor of recursive logic.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Can recursion overflow the stack for huge N?",
-        "options": [
-          "Yes, if N is massive",
-          "No, it's logarithmic",
-          "Never"
-        ],
-        "correctAnswer": "No, it's logarithmic"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Recursive call right.",
-        "codeSnippet": "return search(arr, mid + 1, high, ___);",
-        "correctAnswer": "x"
+        "questionText": "Complexity of Recursive BS?",
+        "options": ["Time: O(log N), Space: O(log N)", "Time: O(N), Space: O(1)", "Time: O(1)", "Pico guess"],
+        "correctAnswer": "Time: O(log N), Space: O(log N)",
+        "explanation": "Both time and memory usage grow logarithmically with N."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Echoing wisdom! 🦜\""
+        "questionText": "[SYNC] Argument Passing",
+        "explanation": "Ace: 'You must pass the target and the updated boundaries in every recursive call.'",
+        "encouragementText": "Pico: 'Carry the seeds! 100% 🦜'"
       },
       {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Does the recursion end?\"",
-        "options": [
-          "At the base case!",
-          "No.",
-          "0"
-        ],
-        "correctAnswer": "At the base case!"
+        "type": "programming_board",
+        "questionText": "The recursive call for the left side.",
+        "codeSnippet": "return binarySearch(arr, low, ___ , target);",
+        "correctAnswer": "mid - 1",
+        "explanation": "Moving the high boundary back in the next call."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Recursive Scout",
+        "explanation": "You have mastered the elegant split. Ace: 'The code is clean.'",
+        "encouragementText": "Pico: 'Echo! echo! 100% 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Recur terms!",
+        "pairs": [
+          { "key": "Base Case", "value": "low > high" },
+          { "key": "Recursive case", "value": "low <= high" },
+          { "key": "Space", "value": "O(log N)" }
+        ]
       }
     ]
   },
   {
     "order": 7,
-    "title": "The First Glimpse",
-    "desc": "Finding the first occurrence of an element.",
+    "title": "Unit 7: Lower Bound (First Presence)",
+    "desc": "Finding the very first occurrence in a sorted set.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"The Earliest Bird! When many birds look the same, we might want to find the one closest to the start of the forest. 🦜\""
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"First Occurrence: When `arr[mid] == target`, don't stop! Save the index as a potential answer and search the LEFT half to see if a earlier bird exists! 🦜\"",
-        "codeSnippet": "if (arr[mid] == target) {\n  result = mid;\n  high = mid - 1;\n}"
+        "questionText": "[MISSION LORE 1.7] The Earliest Bird",
+        "explanation": "Ace: 'Standard BS stops when it finds ONE match. Lower Bound continues searching the LEFT half even after a match, to find the absolute FIRST occurrence.' Pico: 'Looking for the first seed of the bunch! 100% 🦜'",
+        "encouragementText": "Ace: 'Priority defines the search refinement.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "To find the FIRST occurrence, where do you search after finding a match?",
-        "options": [
-          "Left half",
-          "Right half",
-          "Stop immediate"
-        ],
-        "correctAnswer": "Left half"
+        "questionText": "What do we do when `arr[mid] == target` while searching for Lower Bound?",
+        "options": ["Stop and return mid", "Save mid as potential answer and set high = mid - 1", "Set low = mid + 1", "Pico rule"],
+        "correctAnswer": "Save mid as potential answer and set high = mid - 1",
+        "explanation": "We check if there's *another* match even further to the left."
       },
       {
-        "type": "match_following",
-        "questionText": "Match First Occur logic!",
-        "pairs": [
-          {
-            "key": "Match found",
-            "value": "Save as result"
-          },
-          {
-            "key": "Search left",
-            "value": "high = mid - 1"
-          },
-          {
-            "key": "Continue",
-            "value": "Refine match"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] Result Variables",
+        "explanation": "Ace: 'We keep a variable `ans` initialized to -1. Every time we find a match, we update `ans` and keep narrowing the range.'",
+        "encouragementText": "Pico: 'Remember the spot! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "After match, set `high` to check for earlier matches.",
-        "codeSnippet": "high = ___ ;",
-        "correctAnswer": "mid - 1"
+        "questionText": "Finding Lower Bound of 2 in [1, 2, 2, 2, 3].",
+        "codeSnippet": "FirstIndex = ___ ;",
+        "correctAnswer": "1",
+        "explanation": "Index 1 is the first occurrence of 2."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"O(log N). We still halve the forest, just with a secondary mission to find the earliest! 🦜\""
+        "questionText": "[CORE GATE] Range Queries",
+        "explanation": "Ace: 'Lower Bound is used to find the start of a range of identical elements.'",
+        "encouragementText": "Ace: 'Precision in boundaries is the key to range mastery.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "In [1, 2, 2, 2, 3], first index of 2?",
-        "options": [
-          "1",
-          "2",
-          "3"
-        ],
-        "correctAnswer": "1"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Save potential result.",
-        "codeSnippet": "if (arr[mid] == x) ___ = mid;",
-        "correctAnswer": "result"
+        "questionText": "Complexity to find Lower Bound?",
+        "options": ["O(N)", "O(log N)", "O(log log N)", "Pico guess"],
+        "correctAnswer": "O(log N)",
+        "explanation": "It's just one specialized binary search."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Earliest entry! 🦜\""
+        "questionText": "[SYNC] In-range checks",
+        "explanation": "Ace: 'Lower bound also identifies the first element GREATER than it if the target isn't present.'",
+        "encouragementText": "Pico: 'Still useful! 100% 🦜'"
       },
       {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Did we find the very first?\"",
-        "options": [
-          "Found and verified!",
-          "No.",
-          "0"
-        ],
-        "correctAnswer": "Found and verified!"
+        "type": "programming_board",
+        "questionText": "Narrowing left.",
+        "codeSnippet": "if (arr[mid] >= target) { ans = mid; high = ___ ; }",
+        "correctAnswer": "mid - 1",
+        "explanation": "We keep looking left to find the absolute minimum index."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Boundary Scout",
+        "explanation": "You have identified the start of the flock. Ace: 'The boundary is fixed.'",
+        "encouragementText": "Pico: 'First seed found! 100% 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Bound terms!",
+        "pairs": [
+          { "key": "Lower Bound", "value": "First element >= target" },
+          { "key": "Upper Bound", "value": "First element > target" },
+          { "key": "ans", "value": "Potenial match storage" }
+        ]
       }
     ]
   },
   {
     "order": 8,
-    "title": "The Last Sighting",
-    "desc": "Finding the last occurrence of an element.",
+    "title": "Unit 8: Upper Bound (Last Sighting)",
+    "desc": "Finding the end of the range.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"The Final Perch! If multiple identical birds exist, finding the very last one requires searching the RIGHT half after a match! 🦜\""
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"Last Occurrence: When `arr[mid] == target`, save the result and move `low = mid + 1` to check for later birds! 🦜\"",
-        "codeSnippet": "if (arr[mid] == target) {\n  result = mid;\n  low = mid + 1;\n}"
+        "questionText": "[MISSION LORE 1.8] The Final Perch",
+        "explanation": "Ace: 'Upper Bound finds the first element STRICTLY GREATER than the target. It helps find where a range ends.' Pico: 'Finding the exit! 100% 🦜'",
+        "encouragementText": "Ace: 'Knowledge of the limit is the definition of range.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "To find the LAST occurrence, where do you search after a match?",
-        "options": [
-          "Right half",
-          "Left half",
-          "Middle"
-        ],
-        "correctAnswer": "Right half"
+        "questionText": "If searching for target 2 in [1, 2, 2, 2, 3], what is the Upper Bound index?",
+        "options": ["1", "3", "4", "Pico rule"],
+        "correctAnswer": "4",
+        "explanation": "Index 4 (value 3) is the first element greater than 2."
       },
       {
-        "type": "match_following",
-        "questionText": "Match Last Occur logic!",
-        "pairs": [
-          {
-            "key": "Match found",
-            "value": "Save as result"
-          },
-          {
-            "key": "Search right",
-            "value": "low = mid + 1"
-          },
-          {
-            "key": "Continue",
-            "value": "Check for later"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] Rightward Push",
+        "explanation": "Ace: 'For Upper Bound, if `arr[mid] <= target`, we must look in the RIGHT half, because we want someone definitely bigger.'",
+        "encouragementText": "Pico: 'Go right! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "After match, set `low` to check for later matches.",
-        "codeSnippet": "low = ___ ;",
-        "correctAnswer": "mid + 1"
+        "questionText": "Finding the last occurrence of 2 in [1, 2, 2, 2, 3] usually utilizes UB - 1.",
+        "codeSnippet": "LastIndex = ___ ;",
+        "correctAnswer": "3",
+        "explanation": "Index 3 is the last 2."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"O(log N). Same speed, different direction! 🦜\""
+        "questionText": "[CORE GATE] STL functions",
+        "explanation": "Ace: 'In C++, `std::upper_bound` returns an iterator to the first element > query.'",
+        "encouragementText": "Ace: 'Standard tools use standard logic.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "In [1, 2, 2, 2, 3], last index of 2?",
-        "options": [
-          "3",
-          "2",
-          "1"
-        ],
-        "correctAnswer": "3"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Move low forward.",
-        "codeSnippet": "low = mid ___ 1;",
-        "correctAnswer": "+"
+        "questionText": "Complexity of Upper Bound?",
+        "options": ["O(log N)", "O(N)", "O(1)", "Pico guess"],
+        "correctAnswer": "O(log N)",
+        "explanation": "Matches the cost of any binary search."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Latest sighting! 🦜\""
+        "questionText": "[SYNC] Empty Search",
+        "explanation": "Ace: 'If all elements are smaller than target, UB returns N (the size of the array).'",
+        "encouragementText": "Pico: 'Off the map! 100% 🦜'"
       },
       {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Did we find the very last?\"",
-        "options": [
-          "SQUAWK YES!",
-          "No.",
-          "0"
-        ],
-        "correctAnswer": "SQUAWK YES!"
+        "type": "programming_board",
+        "questionText": "Condition for UB.",
+        "codeSnippet": "if (arr[mid] ___ target) low = mid + 1;",
+        "correctAnswer": "<=",
+        "explanation": "If current element is less or equal, we must look right for a strictly greater one."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Limit Architect",
+        "explanation": "You have defined the end of the set. Ace: 'The limit is seen.'",
+        "encouragementText": "Pico: 'Last bird spotted! 100% 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match UB logic!",
+        "pairs": [
+          { "key": "Strictly Greater", "value": "Upper Bound" },
+          { "key": "Range End", "value": "UB - 1" },
+          { "key": "low = mid + 1", "value": "Push right" }
+        ]
       }
     ]
   },
   {
     "order": 9,
-    "title": "Counting the Flock",
-    "desc": "Count total occurrences using Binary Search.",
+    "title": "Unit 9: Counting the Flock",
+    "desc": "Using bounds to count occurrences instantly.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"The Census! To count how many identical birds are in a sorted forest, we can find the `First` and `Last` occurrences and subtract! 🦜\""
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"Count = (Last Index - First Index + 1). O(log N) because we run two Binary Searches! 🦜\"",
-        "codeSnippet": "count = (last - first) + 1;"
+        "questionText": "[MISSION LORE 1.9] The Census",
+        "explanation": "Ace: 'To count how many times target X appears, subtract the Lower Bound from the Upper Bound! This is much faster than looping and counting.' Pico: 'Subtraction power! 100% 🦜'",
+        "encouragementText": "Ace: 'Efficiency is the avoidance of redundant work.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "If first=2 and last=5, how many birds are there?",
-        "options": [
-          "4",
-          "3",
-          "5"
-        ],
-        "correctAnswer": "4",
-        "explanation": "5 - 2 + 1 = 4"
+        "questionText": "Formula to count target frequency in a sorted array?",
+        "options": ["UB + LB", "UB - LB", "LB - UB", "Pico rule"],
+        "correctAnswer": "UB - LB",
+        "explanation": "If LB index is 1 and UB index is 4, count is 4 - 1 = 3."
       },
       {
-        "type": "match_following",
-        "questionText": "Match Counting logic!",
-        "pairs": [
-          {
-            "key": "First Find",
-            "value": "Earliest match"
-          },
-          {
-            "key": "Last Find",
-            "value": "Latest match"
-          },
-          {
-            "key": "Formula",
-            "value": "Last - First + 1"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] Index Subtraction",
+        "explanation": "Ace: 'This works in O(log N) total time. Linear counting would be O(N).'",
+        "encouragementText": "Pico: 'Save time! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "Total count formula in sorted array.",
-        "codeSnippet": "Count = (Last - First) ___ 1;",
-        "correctAnswer": "+"
+        "questionText": "Count of 2s in [1, 2, 2, 2, 3] (LB=1, UB=4).",
+        "codeSnippet": "Count = ___ ;",
+        "correctAnswer": "3",
+        "explanation": "The 2s are at indices 1, 2, 3."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Much faster than O(N) linear counting. Scalable for billions of birds! 🦜\""
+        "questionText": "[CORE GATE] Database Tuning",
+        "explanation": "Ace: 'Databases use this technique to estimate how many rows will be returned by a query (Cardinality Estimation).'",
+        "encouragementText": "Ace: 'The index makes the count instantaneous.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Complexity to count in sorted array?",
-        "options": [
-          "O(log N)",
-          "O(N)",
-          "O(1)"
-        ],
-        "correctAnswer": "O(log N)"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Range calculation.",
-        "codeSnippet": "total = last ___ first + 1;",
-        "correctAnswer": "-"
+        "questionText": "Complexity for counting in sorted array?",
+        "options": ["O(N)", "O(log N)", "O(1)", "Pico guess"],
+        "correctAnswer": "O(log N)",
+        "explanation": "Calculated by two binary search calls."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Census accuracy! 🦜\""
+        "questionText": "[SYNC] Presence check",
+        "explanation": "Ace: 'If UB - LB == 0, the target is 100% NOT in the array.'",
+        "encouragementText": "Pico: 'Empty net! 100% 🦜'"
       },
       {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Can we count quickly?\"",
-        "options": [
-          "SQUAWK YES!",
-          "No.",
-          "0"
-        ],
-        "correctAnswer": "SQUAWK YES!"
+        "type": "programming_board",
+        "questionText": "Final presence indicator.",
+        "codeSnippet": "bool exists = (UB - LB ___ 0);",
+        "correctAnswer": ">",
+        "explanation": "If the range has size greater than zero, it exists."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Census Master",
+        "explanation": "You have numbered the flock at a glance. Ace: 'The total is known.'",
+        "encouragementText": "Pico: 'I counted 3! 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Count terms!",
+        "pairs": [
+          { "key": "Difference", "value": "Total count" },
+          { "key": "O(log N)", "value": "Wait time" },
+          { "key": "Sorted", "value": "Required order" }
+        ]
       }
     ]
   },
   {
     "order": 10,
-    "title": "The Root Hunter",
-    "desc": "Binary Search for Square Root.",
+    "title": "Unit 10: Numerical Binary Search (Sqrt)",
+    "desc": "Searching on values, not indices.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Math in the Air! Binary Search isn't just for arrays. We can use it to find the square root of a number `X` by searching in the range [0, X]! 🦜\""
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"Check if `mid * mid <= X`. If true, `mid` is a potential square root, so search the RIGHT half for a bigger one! 🦜\"",
-        "codeSnippet": "while(low <= high) {\n  mid = low + (high-low)/2;\n  if(mid*mid <= X) { ans=mid; low=mid+1; }\n  else high=mid-1;\n}"
+        "questionText": "[MISSION LORE 1.10] The Root Hunter",
+        "explanation": "Ace: 'Binary search works on any monotonic range. To find the square root of X, search in the range [1, X]!' Pico: 'Searching for math birds! 100% 🦜'",
+        "encouragementText": "Ace: 'Knowledge is the intersection of range and rule.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Square root of 10 (floor)?",
-        "options": [
-          "3",
-          "4",
-          "2"
-        ],
-        "correctAnswer": "3",
-        "explanation": "3*3=9 (<=10), 4*4=16 (>10)"
+        "questionText": "In finding `sqrt(10)`, what does `mid * mid = 9` tell us?",
+        "options": ["Answer is smaller", "Answer is probably 3 (Keep search right for floor)", "Answer is wrong", "Pico rule"],
+        "correctAnswer": "Answer is probably 3 (Keep search right for floor)",
+        "explanation": "Since 9 < 10, 3 is a potential candidate for the floor of the square root."
       },
       {
-        "type": "match_following",
-        "questionText": "Match Root login!",
-        "pairs": [
-          {
-            "key": "mid*mid <= X",
-            "value": "Search Right"
-          },
-          {
-            "key": "mid*mid > X",
-            "value": "Search Left"
-          },
-          {
-            "key": "Range",
-            "value": "0 to X"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] Square Check",
+        "explanation": "Ace: 'Condition: If `mid * mid <= X`, update `ans` and move `low`. Else move `high`.'",
+        "encouragementText": "Pico: 'Multiply! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "Maximum value for search range of sqrt(X).",
+        "questionText": "Initial searching high bound for sqrt(100).",
         "codeSnippet": "high = ___ ;",
-        "correctAnswer": "X"
+        "correctAnswer": "100",
+        "explanation": "The square root will never be larger than the number itself."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"O(log X). This finds integer square roots efficiently! 🦜\""
+        "questionText": "[CORE GATE] Convergence",
+        "explanation": "Ace: 'For floating point square roots, we continue for a fixed number of iterations (e.g. 100) until the precision is perfect.'",
+        "encouragementText": "Ace: 'Repetition leads to absolute precision.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Can this be extended to find roots with decimals?",
-        "options": [
-          "Yes (Precision loops)",
-          "No",
-          "Only for birds"
-        ],
-        "correctAnswer": "Yes (Precision loops)"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Square check.",
-        "codeSnippet": "if (mid * mid ___ X) ans = mid;",
-        "correctAnswer": "<="
+        "questionText": "Complexity for finding floor(sqrt(X))?",
+        "options": ["O(X)", "O(log X)", "O(1)", "Pico guess"],
+        "correctAnswer": "O(log X)",
+        "explanation": "Standard binary search complexity over the value range."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Mathematical flight! 🦜\""
+        "questionText": "[SYNC] Result update",
+        "explanation": "Ace: '`ans` keeps the largest value such that `val * val <= target`.'",
+        "encouragementText": "Pico: 'Biggest square! 100% 🦜'"
       },
       {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Did we find the root?\"",
-        "options": [
-          "SQUAWK YES!",
-          "No.",
-          "0"
-        ],
-        "correctAnswer": "SQUAWK YES!"
+        "type": "programming_board",
+        "questionText": "Check for sqrt.",
+        "codeSnippet": "while(low <= high) { long long mid = ...; if (mid * mid ___ X) { ans = mid; ... }}",
+        "correctAnswer": "<=",
+        "explanation": "Ensuring we don't exceed the target square."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Value Scout",
+        "explanation": "You have transitioned from searching arrays to searching truths. Ace: 'The value is found.'",
+        "encouragementText": "Pico: 'Found 3! 100% 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Sqrt terms!",
+        "pairs": [
+          { "key": "mid * mid", "value": "Check power" },
+          { "key": "Floor", "value": "Int result" },
+          { "key": "Monotonic", "value": "Required range property" }
+        ]
       }
     ]
   },
   {
     "order": 11,
-    "title": "Discovery of Order",
-    "desc": "Introduction to Sorting.",
+    "title": "Unit 11: Rotating Arrays I (The Pivot)",
+    "desc": "Searching in sorted-then-shifted data.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"The Organized Flock! Sorting is the process of arranging birds in a specific order—be it size, wing color, or seed priority! 🦜\""
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"Why Sort? Because many powerful searches, like Binary Search, ONLY work when the forest is ordered! 🦜\""
+        "questionText": "[MISSION LORE 1.11] The Bent Forest",
+        "explanation": "Ace: 'What if a sorted array is rotated? (e.g. [4, 5, 6, 7, 0, 1, 2]). We need to find the \"Pivot Point\"—the minimum element—to restore the order!' Pico: 'The forest is curved! 100% 🦜'",
+        "encouragementText": "Ace: 'Disorder is just hidden symmetry.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "A sorted array is required for which searching algorithm?",
-        "options": [
-          "Binary Search",
-          "Linear Search",
-          "Sentinel Search"
-        ],
-        "correctAnswer": "Binary Search"
+        "questionText": "In [4, 5, 0, 1, 2], how do we know the pivot is to the RIGHT of index 0?",
+        "options": ["arr[0] < arr[last]", "arr[0] > arr[last]", "Colors", "Pico rule"],
+        "correctAnswer": "arr[0] > arr[last]",
+        "explanation": "In a rotated sorted array, the start being larger than the end proves the pivot lies in between."
       },
       {
-        "type": "match_following",
-        "questionText": "Match Sorting goals!",
-        "pairs": [
-          {
-            "key": "Ascending",
-            "value": "Small to Large"
-          },
-          {
-            "key": "Descending",
-            "value": "Large to Small"
-          },
-          {
-            "key": "Stability",
-            "value": "Preserving relative order"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] Property check",
+        "explanation": "Ace: 'A sorted array has `arr[0] < arr[n-1]`. A rotated one does not. We binary search for the inflection point.'",
+        "encouragementText": "Pico: 'Find the drop! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "Sorting makes the forest ___ to search.",
-        "codeSnippet": "Searchable = ___ ;",
-        "correctAnswer": "faster"
+        "questionText": "Identifying min in [5, 6, 1, 2, 3].",
+        "codeSnippet": "MinVal = ___ ;",
+        "correctAnswer": "1",
+        "explanation": "The smallest element is the pivot."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Time Complexity: Basic sorts take O(N^2), while advanced ones take O(N log N). Every wing beat counts! 🦜\""
+        "questionText": "[CORE GATE] System Recovery",
+        "explanation": "Ace: 'Rotated arrays happen in circular buffers and time-series data. Handling them is a vital skill.'",
+        "encouragementText": "Ace: 'Structure is resilient to rotation.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "In an ascending sort, where does the smallest bird go?",
-        "options": [
-          "The very first tree",
-          "The very last tree",
-          "The middle"
-        ],
-        "correctAnswer": "The very first tree"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Descending check.",
-        "codeSnippet": "if (current < next) ___ (current, next);",
-        "correctAnswer": "swap"
+        "questionText": "Complexity to find pivot in rotated array?",
+        "options": ["O(N)", "O(log N)", "O(1)", "Pico guess"],
+        "correctAnswer": "O(log N)",
+        "explanation": "Binary search finds it by checking the slope."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Defining the ranks! 🦜\""
+        "questionText": "[SYNC] Slope logic",
+        "explanation": "Ace: 'If `arr[mid] > arr[high]`, the pivot is in the right half. Else it is in the left half.'",
+        "encouragementText": "Pico: 'Right side drop! 100% 🦜'"
       },
       {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Can we sort thousands of birds?\"",
-        "options": [
-          "SQUAWK YES!",
-          "No.",
-          "0"
-        ],
-        "correctAnswer": "SQUAWK YES!"
+        "type": "programming_board",
+        "questionText": "Updating high in binary pivot search.",
+        "codeSnippet": "if (arr[mid] < arr[high]) high = ___ ;",
+        "correctAnswer": "mid",
+        "explanation": "Pivot might be mid or to the left."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Pivot Pilot",
+        "explanation": "You have located the break in the line. Ace: 'The rotation is identified.'",
+        "encouragementText": "Pico: 'Found the bottom! 100% 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Rotation terms!",
+        "pairs": [
+          { "key": "Inflection", "value": "Max-to-Min drop" },
+          { "key": "arr[0] < arr[n-1]", "value": "Already sorted" },
+          { "key": "arr[mid] > arr[high]", "value": "Search right" }
+        ]
       }
     ]
   },
   {
     "order": 12,
-    "title": "Bubbling Up",
-    "desc": "Introduction to Bubble Sort.",
+    "title": "Unit 12: Rotating Arrays II (Search)",
+    "desc": "Finding a target in a rotated sorted array.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"The Rising Bubble! Bubble Sort repeatedly swaps adjacent birds if they are in the wrong order. The heaviest birds 'bubble' to the end! 🦜\""
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"Pass by Pass: In each pass, the largest unsorted bird finds its final spot at the end of the forest! 🦜\"",
-        "codeSnippet": "for(i=0; i<n-1; i++) {\n  for(j=0; j<n-i-1; j++) {\n    if(arr[j] > arr[j+1]) swap(arr[j], arr[j+1]);\n  }\n}"
+        "questionText": "[MISSION LORE 1.12] The Curved Hunt",
+        "explanation": "Ace: 'Now that you can find the pivot, you can search for ANY target. The trick is to identify which half is \"Normal\" (sorted) and decide where to go.' Pico: 'Finding a seed in the curves! 100% 🦜'",
+        "encouragementText": "Ace: 'Segments of order form the bridge of discovery.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Time complexity of Bubble Sort (Average/Worst)?",
-        "options": [
-          "O(N^2)",
-          "O(N)",
-          "O(log N)"
-        ],
-        "correctAnswer": "O(N^2)"
+        "questionText": "In a rotated array, at least ONE half must be ___.",
+        "options": ["Empty", "Sorted", "All zero", "Pico rule"],
+        "correctAnswer": "Sorted",
+        "explanation": "Cutting a rotated sorted array at ANY point yields at least one perfectly sorted half."
       },
       {
-        "type": "match_following",
-        "questionText": "Match Bubble logic!",
-        "pairs": [
-          {
-            "key": "Outer Loop",
-            "value": "Number of passes"
-          },
-          {
-            "key": "Inner Loop",
-            "value": "Adjacent comparisons"
-          },
-          {
-            "key": "Swap Condition",
-            "value": "arr[j] > arr[j+1]"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] Half-check",
+        "explanation": "Ace: 'If `arr[low] <= arr[mid]`, the left half is sorted. Check if target is inside [low, mid]. Else look right.'",
+        "encouragementText": "Pico: 'Safe half! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "Bubble sort compares ___ elements.",
-        "codeSnippet": "Comparison = ___ ;",
-        "correctAnswer": "adjacent"
+        "questionText": "Checking if target is in sorted left half.",
+        "codeSnippet": "if (target >= arr[low] && target ___ arr[mid])",
+        "correctAnswer": "<=",
+        "explanation": "Target must be between the boundaries of the sorted segment."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Simple to code, but very slow for massive flocks. It's the first flight of many! 🦜\""
+        "questionText": "[CORE GATE] Interview Classic",
+        "explanation": "Ace: 'This is one of the most common coding interview questions. It tests your ability to handle multiple conditions in BS.'",
+        "encouragementText": "Ace: 'Complexity is the test of mental range.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "After the first pass, where is the largest element?",
-        "options": [
-          "At the last index",
-          "At the first index",
-          "Random"
-        ],
-        "correctAnswer": "At the last index"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Bubble swap.",
-        "codeSnippet": "if (arr[j] > arr[j+1]) ___ (arr[j], arr[j+1]);",
-        "correctAnswer": "swap"
+        "questionText": "Complexity for searching rotated array?",
+        "options": ["O(N)", "O(log N)", "O(log log N)", "Pico guess"],
+        "correctAnswer": "O(log N)",
+        "explanation": "It's still just binary search."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Bubbling power! 🦜\""
+        "questionText": "[SYNC] Pivot strategy 2",
+        "explanation": "Ace: 'You can also find the pivot first, then do one BS in the correct half.'",
+        "encouragementText": "Pico: 'Two steps! 100% 🦜'"
       },
       {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Is it the fastest sort?\"",
-        "options": [
-          "SQUAWK NO!",
-          "Yes.",
-          "0"
-        ],
-        "correctAnswer": "SQUAWK NO!"
+        "type": "programming_board",
+        "questionText": "The case where right half is definitely sorted.",
+        "codeSnippet": "else { // Right half is sorted\n  if (target > arr[mid] && target <= arr[ ___ ]) low = mid + 1;\n}",
+        "correctAnswer": "high",
+        "explanation": "Checking the range of the right-sorted segment."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Curved Architect",
+        "explanation": "You have hunted through the shifted forest. Ace: 'The target is caught.'",
+        "encouragementText": "Pico: 'Curved and found! 100% 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Search cases!",
+        "pairs": [
+          { "key": "Left sorted", "value": "arr[low] <= arr[mid]" },
+          { "key": "Right sorted", "value": "arr[mid] < arr[high]" },
+          { "key": "Match", "value": "return mid" }
+        ]
       }
     ]
   },
   {
     "order": 13,
-    "title": "Optimized Bubbles",
-    "desc": "Bubble Sort with early exit optimization.",
+    "title": "Unit 13: Median of Two Sorted Arrays",
+    "desc": "Finding the middle across two datasets.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"The Early Exit! If a pass happens and NO birds were swapped, the forest is already sorted! We can stop immediately and save our energy! 🦜\""
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"Optimized Bubble: Use a `swapped` boolean. If it remains `false` after a full pass, break the loop! 🦜\"",
-        "codeSnippet": "bool swapped = false;\nfor(...) {\n  swapped = false;\n  for(...) { if(arr[j]>arr[j+1]) { swap(...); swapped = true; } }\n  if (!swapped) break;\n}"
+        "questionText": "[MISSION LORE 1.13] The Dual Stream",
+        "explanation": "Ace: 'Suppose you have two sorted arrays. What is the median of their combined set? We don't want to merge them (O(N)). We want to find the split point in binary time!' Pico: 'Two rivers, one bridge! 100% 🦜'",
+        "encouragementText": "Ace: 'Global order is found at the intersection of local sorts.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "In a pre-sorted array, what is the complexity of Optimized Bubble Sort?",
-        "options": [
-          "O(N)",
-          "O(N^2)",
-          "O(1)"
-        ],
-        "correctAnswer": "O(N)"
+        "questionText": "Optimality of combined median search?",
+        "options": ["O(N+M)", "O(log(min(N,M)))", "O(1)", "Pico rule"],
+        "correctAnswer": "O(log(min(N,M)))",
+        "explanation": "By binary searching on the partition point of the smaller array, we instantly know the partition of the other."
       },
       {
-        "type": "match_following",
-        "questionText": "Match Opti-Bubble!",
-        "pairs": [
-          {
-            "key": "Swapped = true",
-            "value": "Continue sorting"
-          },
-          {
-            "key": "Swapped = false",
-            "value": "Break and stop"
-          },
-          {
-            "key": "Best Case",
-            "value": "Already sorted"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] Partition Logic",
+        "explanation": "Ace: 'Total size is (N+M). We want (N+M+1)/2 items in the left side of our split across both arrays.'",
+        "encouragementText": "Pico: 'Split the birds! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "Flag used to detect if sorting is done.",
-        "codeSnippet": "Flag = ___ ;",
-        "correctAnswer": "swapped"
+        "questionText": "Checking the split: maxLeft1 <= ___ .",
+        "codeSnippet": "maxLeft1 <= ___ ;",
+        "correctAnswer": "minRight2",
+        "explanation": "Standard check for valid partition in dual-array median finding."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"O(N) for sorted data, but still O(N^2) for the worst case. A small, clever wing-tweak! 🦜\""
+        "questionText": "[CORE GATE] Hard Problems",
+        "explanation": "Ace: 'This is considered a HARD problem, but once you understand binary search on partitions, it becomes mechanical.'",
+        "encouragementText": "Ace: 'Difficulty is the fog before the logic clears.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Does optimization help if only one bird is out of place?",
-        "options": [
-          "Yes",
-          "No",
-          "Only for eagles"
-        ],
-        "correctAnswer": "Yes"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Reset flag.",
-        "codeSnippet": "swapped = ___ ;",
-        "correctAnswer": "false"
+        "questionText": "Combined size is 5 (Odd). Median is?",
+        "options": ["Average of two middle", "The Max of Left side", "The Min of Right side", "Pico guess"],
+        "correctAnswer": "The Max of Left side",
+        "explanation": "For odd totals, the max of the 'Left' partition is the median."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Smart exit! 🦜\""
+        "questionText": "[SYNC] Edge cases",
+        "explanation": "Ace: 'Handle cases where one array is empty by using infinity values for comparison.'",
+        "encouragementText": "Pico: 'Ghost seeds! 100% 🦜'"
       },
       {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Did we save energy?\"",
-        "options": [
-          "SQUAWK YES!",
-          "No.",
-          "0"
-        ],
-        "correctAnswer": "SQUAWK YES!"
+        "type": "programming_board",
+        "questionText": "Condition to search closer left on Array 1.",
+        "codeSnippet": "if (maxLeft1 > minRight2) high = ___ ;",
+        "correctAnswer": "partition1 - 1",
+        "explanation": "Too many items from A1; move the partition back."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Dual Master",
+        "explanation": "You have balanced the two rivers. The median is yours. Ace: 'The center holds.'",
+        "encouragementText": "Pico: 'Perfect balance! 100% 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Dual terms!",
+        "pairs": [
+          { "key": "Partition", "value": "Cut point" },
+          { "key": "maxLeft", "value": "Largest on left side" },
+          { "key": "minRight", "value": "Smallest on right side" }
+        ]
       }
     ]
   },
   {
     "order": 14,
-    "title": "Selective Choice",
-    "desc": "Introduction to Selection Sort.",
+    "title": "Unit 14: Bubble Sort (The Buoyancy)",
+    "desc": "Foundational comparison sorting.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"The Minimum Hunter! Selection Sort finds the smallest bird in the entire forest and swaps it into the first tree. Then find the next smallest for the second tree! 🦜\""
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"Selection Process: We maintain a `min_idx`. After scanning the unsorted part, we swap and move forward. 🦜\"",
-        "codeSnippet": "for(i=0; i<n-1; i++) {\n  min_idx = i;\n  for(j=i+1; j<n; j++) if(arr[j] < arr[min_idx]) min_idx = j;\n  swap(arr[min_idx], arr[i]);\n}"
+        "questionText": "[MISSION LORE 1.14] The Floating Seeds",
+        "explanation": "Ace: 'Bubble Sort compares adjacent items and swaps them if they are in the wrong order. The largest element \"Bubbles up\" to the end in every pass.' Pico: 'Seeds floating to the top! 100% 🦜'",
+        "encouragementText": "Ace: 'Local correction leads to global alignment.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Time complexity of Selection Sort?",
-        "options": [
-          "O(N^2) (Always)",
-          "O(N)",
-          "O(N log N)"
-        ],
-        "correctAnswer": "O(N^2) (Always)"
+        "questionText": "Time complexity of Bubble Sort?",
+        "options": ["O(N)", "O(N^2)", "O(log N)", "Pico rule"],
+        "correctAnswer": "O(N^2)",
+        "explanation": "Two nested loops; each element is potentially compared with every other."
       },
       {
-        "type": "match_following",
-        "questionText": "Match Selection logic!",
-        "pairs": [
-          {
-            "key": "Find Min",
-            "value": "Search unsorted"
-          },
-          {
-            "key": "Swap",
-            "value": "Place at current front"
-          },
-          {
-            "key": "Outer Pass",
-            "value": "Identify final position"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] The Swap Logic",
+        "explanation": "Ace: 'If `arr[j] > arr[j+1]`, swap them. Continue until no swaps are needed.'",
+        "encouragementText": "Pico: 'Swap it! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "Selection Sort minimizes the number of ___.",
-        "codeSnippet": "Minimized = ___ ;",
-        "correctAnswer": "swaps"
+        "questionText": "Number of passes needed for N items.",
+        "codeSnippet": "Passes = ___ ;",
+        "correctAnswer": "N-1",
+        "explanation": "In each pass, one more element reaches its final spot."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Selection Sort is unique because it never does more than O(N) swaps. Perfect if moving heavy birds is expensive! 🦜\""
+        "questionText": "[CORE GATE] Stability",
+        "explanation": "Ace: 'Bubble sort is Stable. Items with the same value keep their original relative order.'",
+        "encouragementText": "Ace: 'Integrity is preserved through local rules.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Is Selection Sort stable by default?",
-        "options": [
-          "No (Swaps skip elements)",
-          "Yes",
-          "Only for smaller birds"
-        ],
-        "correctAnswer": "No (Swaps skip elements)"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Update min index.",
-        "codeSnippet": "if (arr[j] < arr[min_idx]) min_idx = ___ ;",
-        "correctAnswer": "j"
+        "questionText": "Optimization: If no swaps happen in a pass, the array is ___.",
+        "options": ["Empty", "Sorted", "Reversed", "Pico guess"],
+        "correctAnswer": "Sorted",
+        "explanation": "The 'Swapped' flag allows Bubble sort to finish early."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Hunter's precision! 🦜\""
+        "questionText": "[SYNC] In-Place",
+        "explanation": "Ace: 'Bubble Sort uses O(1) extra space because it only swaps elements within the existing array.'",
+        "encouragementText": "Pico: 'Save memory! 100% 🦜'"
       },
       {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Did we find the smallest?\"",
-        "options": [
-          "Swap to front!",
-          "No.",
-          "0"
-        ],
-        "correctAnswer": "Swap to front!"
+        "type": "programming_board",
+        "questionText": "Inner loop bound optimization.",
+        "codeSnippet": "for(int j=0; j < n-i- ___ ; j++)",
+        "correctAnswer": "1",
+        "explanation": "Since the last 'i' elements are already sorted."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Bubble Scout",
+        "explanation": "You have witnessed the slow ascent of order. Ace: 'The surface is reached.'",
+        "encouragementText": "Pico: 'So many pops! 100% 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Bubble terms!",
+        "pairs": [
+          { "key": "Adjacent", "value": "Comparison target" },
+          { "key": "Bubbling", "value": "Movement to end" },
+          { "key": "Swapped flag", "value": "Early exit" }
+        ]
       }
     ]
   },
   {
     "order": 15,
-    "title": "The Weaver's Nest",
-    "desc": "In-place Selection Sort logic.",
+    "title": "Unit 15: Selection Sort (The Picking)",
+    "desc": "Finding the minimum and placing it forward.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"In-Place Weaving! Selection sort doesn't need extra nests. It works entirely within the current array by swapping birds. 🦜\""
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"Space Complexity: O(1). No extra memory is allocated to hold the birds. We use the same branch we started with! 🦜\""
+        "questionText": "[MISSION LORE 1.15] The Selective Eye",
+        "explanation": "Ace: 'Selection Sort scans the entire unsorted part of the array, finds the minimum, and swaps it with the first unsorted element.' Pico: 'Picking the best seeds first! 100% 🦜'",
+        "encouragementText": "Ace: 'Discernment is the first step of organization.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "What does O(1) space complexity mean?",
-        "options": [
-          "Constant extra memory used",
-          "Memory scales with N",
-          "No memory is used"
-        ],
-        "correctAnswer": "Constant extra memory used"
+        "questionText": "Complexity of Selection Sort?",
+        "options": ["O(N)", "O(N^2)", "O(log N)", "Pico rule"],
+        "correctAnswer": "O(N^2)",
+        "explanation": "N passes, each scanning through the remaining items."
       },
       {
-        "type": "match_following",
-        "questionText": "Match Selection constraints!",
-        "pairs": [
-          {
-            "key": "Space",
-            "value": "O(1)"
-          },
-          {
-            "key": "Time",
-            "value": "O(N^2)"
-          },
-          {
-            "key": "Swaps",
-            "value": "O(N)"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] Min Index",
+        "explanation": "Ace: 'We keep track of the `min_idx`. After the scan, we do exactly ONE swap per pass.'",
+        "encouragementText": "Pico: 'Only one swap! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "Selection sort swaps elements into their ___ positions.",
-        "codeSnippet": "Target = ___ ;",
-        "correctAnswer": "correct"
+        "questionText": "Finding the winner.",
+        "codeSnippet": "if (arr[j] < arr[min_idx]) min_idx = ___ ;",
+        "correctAnswer": "j",
+        "explanation": "Updating the location of the current smallest bird."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Stable time, variable swaps. It's a reliable hunter in a fixed memory forest! 🦜\""
+        "questionText": "[CORE GATE] Memory Swaps",
+        "explanation": "Ace: 'Selection Sort is useful when memory writing is expensive (like EEPROM), because it performs the minimum number of swaps ($O(N)$).' ",
+        "encouragementText": "Ace: 'Economy of action is the virtue of the selection.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "How many comparisons are made in the first pass of N elements?",
-        "options": [
-          "N - 1",
-          "N",
-          "1"
-        ],
-        "correctAnswer": "N - 1"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Starting i.",
-        "codeSnippet": "for (int i = 0; i < n ___ 1; i++)",
-        "correctAnswer": "-"
+        "questionText": "Is Selection Sort stable?",
+        "options": ["Yes", "No (Swaps can jump over identical items)", "Always", "Pico guess"],
+        "correctAnswer": "No (Swaps can jump over identical items)",
+        "explanation": "Selection sort is generally unstable because of long-distance swaps."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Fixed space! 🦜\""
+        "questionText": "[SYNC] Divide",
+        "explanation": "Ace: 'The array is split into two parts: Sorted items at the front, unsorted at the back.'",
+        "encouragementText": "Pico: 'Growing line! 100% 🦜'"
       },
       {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Are we memory efficient?\"",
-        "options": [
-          "SQUAWK YES!",
-          "No.",
-          "0"
-        ],
-        "correctAnswer": "SQUAWK YES!"
+        "type": "programming_board",
+        "questionText": "Placing the winner.",
+        "codeSnippet": "swap(arr[i], arr[ ___ ]);",
+        "correctAnswer": "min_idx",
+        "explanation": "Moving the found minimum into the sorted section."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Selective Scout",
+        "explanation": "You have learned to find the best and place them first. Ace: 'The rank is formed.'",
+        "encouragementText": "Pico: 'I picked it! 100% 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Selection terms!",
+        "pairs": [
+          { "key": "min_idx", "value": "Target storage" },
+          { "key": "One swap", "value": "Pass result" },
+          { "key": "Scan", "value": "O(N) operation per pass" }
+        ]
       }
     ]
   },
   {
     "order": 16,
-    "title": "Playing Your Cards",
-    "desc": "Introduction to Insertion Sort.",
+    "title": "Unit 16: Insertion Sort (The Organizer)",
+    "desc": "Sorting like a hand of cards.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"The Deck Master! Think of sorting a hand of playing cards. You pick a card and 'insert' it into its correct position among the cards already in your hand! 🦜\""
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"Subarray Order: We divide the forest into 'sorted' and 'unsorted' sections. Take the first unsorted bird and slide it into the sorted section! 🦜\""
+        "questionText": "[MISSION LORE 1.16] The Nest Builder",
+        "explanation": "Ace: 'Insertion Sort takes one element at a time and \"Inserts\" it into its correct position among the already sorted elements. Think of organizing cards in your hand.' Pico: 'Putting the seeds in their slots! 100% 🦜'",
+        "encouragementText": "Ace: 'Insertion is the incremental creation of order.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "How does Insertion Sort treat the first element initially?",
-        "options": [
-          "As already sorted",
-          "As unsorted",
-          "As the root"
-        ],
-        "correctAnswer": "As already sorted"
+        "questionText": "Complexity of Insertion Sort for ALREADY sorted data?",
+        "options": ["O(N^2)", "O(N)", "O(1)", "Pico rule"],
+        "correctAnswer": "O(N)",
+        "explanation": "Adaptive! If it's sorted, we just check each item once and stay put."
       },
       {
-        "type": "match_following",
-        "questionText": "Match Insertion cards!",
-        "pairs": [
-          {
-            "key": "Key",
-            "value": "The bird to insert"
-          },
-          {
-            "key": "Sorted part",
-            "value": "Left side"
-          },
-          {
-            "key": "Unsorted part",
-            "value": "Right side"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] The Shift",
+        "explanation": "Ace: 'To make room for the new element, we shift all larger neighbors to the right.'",
+        "encouragementText": "Pico: 'Slide over! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "Insertion sort builds the result ___.",
-        "codeSnippet": "Method = ___ ;",
-        "correctAnswer": "incrementally"
+        "questionText": "Condition for shifting.",
+        "codeSnippet": "while(j >= 0 && arr[j] ___ key) { ... j--; }",
+        "correctAnswer": ">",
+        "explanation": "While the neighboring bird is bigger, move it right to make space for the key."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Time Complexity: O(N^2) worst case. But if the forest is mostly sorted, it's very fast—O(N)! 🦜\""
+        "questionText": "[CORE GATE] Hybrid Sorts",
+        "explanation": "Ace: 'Because it is so fast for small N (e.g. N < 15), fast algorithms like Timsort use Insertion Sort for small fragments.'",
+        "encouragementText": "Ace: 'Small-scale speed is the foundation of global velocity.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Is Insertion Sort efficient for small datasets?",
-        "options": [
-          "Yes, very efficient",
-          "No",
-          "Only for cards"
-        ],
-        "correctAnswer": "Yes, very efficient"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Pick key.",
-        "codeSnippet": "int key = arr[ ___ ];",
-        "correctAnswer": "i"
+        "questionText": "Is Insertion Sort stable?",
+        "options": ["Yes", "No", "Depends", "Pico guess"],
+        "correctAnswer": "Yes",
+        "explanation": "We only shift elements if they are strictly larger than the key, preserving order of equals."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Card logic! 🦜\""
+        "questionText": "[SYNC] Key item",
+        "explanation": "Ace: 'The `key` is the element currently being inserted.'",
+        "encouragementText": "Pico: 'Hold the key! 100% 🦜'"
       },
       {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Are you holding the deck?\"",
-        "options": [
-          "SQUAWK YES!",
-          "No.",
-          "0"
-        ],
-        "correctAnswer": "SQUAWK YES!"
+        "type": "programming_board",
+        "questionText": "Placing the key.",
+        "codeSnippet": "arr[j+1] = ___ ;",
+        "correctAnswer": "key",
+        "explanation": "Dropping the element into the empty slot created by shifting."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Organizing Scout",
+        "explanation": "You have mastered the incremental build. Ace: 'The sequence is solid.'",
+        "encouragementText": "Pico: 'Perfect hand! 100% 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Insertion terms!",
+        "pairs": [
+          { "key": "O(N)", "value": "Best case" },
+          { "key": "Shifting", "value": "Making room" },
+          { "key": "Adaptive", "value": "Input-sensitive" }
+        ]
       }
     ]
   },
   {
     "order": 17,
-    "title": "The Nest Shift",
-    "desc": "The inner loop of Insertion Sort.",
+    "title": "Unit 17: Bucket Sort",
+    "desc": "Sorting by range: Dividing into containers.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"The Crowded Row! To make room for the new bird, we must shift the larger birds to the right until a space opens up! 🦜\""
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"The Shift: While `arr[j] > key`, move `arr[j+1] = arr[j]`. This copies the bird rightward. 🦜\"",
-        "codeSnippet": "int j = i - 1;\nwhile(j >= 0 && arr[j] > key) {\n  arr[j+1] = arr[j];\n  j = j - 1;\n}\narr[j+1] = key;"
+        "questionText": "[MISSION LORE 1.17] The Sorting Vases",
+        "explanation": "Ace: 'If items are uniformly distributed, we put them into \"Buckets\". Then sort each bucket individually. It is extremely fast!' Pico: 'Different seeds in different pots! 100% 🦜'",
+        "encouragementText": "Ace: 'Distribution is the first clue to order.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "What happens in the inner while loop?",
-        "options": [
-          "Elements are shifted right",
-          "Elements are swapped",
-          "Random movement"
-        ],
-        "correctAnswer": "Elements are shifted right"
+        "questionText": "Average complexity of Bucket Sort?",
+        "options": ["O(N log N)", "O(N)", "O(N^2)", "Pico rule"],
+        "correctAnswer": "O(N)",
+        "explanation": "If buckets are even, we only have a few items per bucket, leading to linear time."
       },
       {
-        "type": "match_following",
-        "questionText": "Match the Shift!",
-        "pairs": [
-          {
-            "key": "arr[j+1] = arr[j]",
-            "value": "Right shift"
-          },
-          {
-            "key": "Condition",
-            "value": "arr[j] > key"
-          },
-          {
-            "key": "Final place",
-            "value": "arr[j+1] = key"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] Bucket Index",
+        "explanation": "Ace: 'Index = (value * num_buckets). This maps the value to its container.'",
+        "encouragementText": "Pico: 'Pick a bucket! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "Direction of shifts in Insertion Sort.",
-        "codeSnippet": "Shifts = ___ ;",
-        "correctAnswer": "rightward"
+        "questionText": "Sorting individual buckets.",
+        "codeSnippet": "for(b in buckets) ___ (b);",
+        "correctAnswer": "sort",
+        "explanation": "Commonly using Insertion Sort for small bucket contents."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Stability Alert! Insertion sort is stable because we only shift birds that are GREATER than our key. Identical birds stay in order! 🦜\""
+        "questionText": "[CORE GATE] Range limits",
+        "explanation": "Ace: 'Works best for numbers in a known range (like [0, 1]). Performance drops if many items hit the same bucket.'",
+        "encouragementText": "Ace: 'Uniformity is the fuel of bucket efficiency.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Max number of comparisons for node at index 5?",
-        "options": [
-          "5",
-          "1",
-          "N"
-        ],
-        "correctAnswer": "5"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Move index back.",
-        "codeSnippet": "j = j ___ 1;",
-        "correctAnswer": "-"
+        "questionText": "Bucket Sort worst-case?",
+        "options": ["O(N)", "O(N^2) (All items in one bucket)", "O(1)", "Pico guess"],
+        "correctAnswer": "O(N^2) (All items in one bucket)",
+        "explanation": "If distribution is clumped, we lose the benefit of the buckets."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Nesting complete! 🦜\""
+        "questionText": "[SYNC] Combine",
+        "explanation": "Ace: 'Finally, concatenate all sorted buckets into one array.'",
+        "encouragementText": "Pico: 'Glue them back! 100% 🦜'"
       },
       {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Did we find the gap?\"",
-        "options": [
-          "SQUAWK YES!",
-          "No.",
-          "0"
-        ],
-        "correctAnswer": "SQUAWK YES!"
+        "type": "programming_board",
+        "questionText": "Number of buckets for N items (Common).",
+        "codeSnippet": "NumBuckets = ___ ;",
+        "correctAnswer": "N",
+        "explanation": "Using roughly one bucket per item helps achieve O(N) time."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Bucket Scout",
+        "explanation": "You have learned to separate and conquer. Ace: 'The flow is partitioned.'",
+        "encouragementText": "Pico: 'Sorted pots! 100% 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Bucket terms!",
+        "pairs": [
+          { "key": "O(N)", "value": "Average case" },
+          { "key": "Insertion", "value": "Internal sort" },
+          { "key": "Concatenate", "value": "Combine step" }
+        ]
       }
     ]
   },
   {
     "order": 18,
-    "title": "The Status Quo (Stability)",
-    "desc": "Understanding Stability in Sorting.",
+    "title": "Unit 18: Counting Sort",
+    "desc": "Sorting without comparison: Using counts as positions.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Loyal Friends! A sorting algorithm is STABLE if it preserves the relative order of birds with identical values. If two birds arrived together, they should stay in that order! 🦜\""
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"Example: If you sort by Bird Type (Parrots, Eagles), and multiple Parrots exist, a stable sort keeps them in their original sequence! 🦜\""
+        "questionText": "[MISSION LORE 1.18] The Census Sort",
+        "explanation": "Ace: 'If you have a limited range of integers, just count how many of each exist. Then place them in order!' Pico: 'How many red seeds? How many blue? 100% 🦜'",
+        "encouragementText": "Ace: 'Counting is a higher-order operation than comparison.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Which of these is NOT naturally stable?",
-        "options": [
-          "Selection Sort",
-          "Bubble Sort",
-          "Insertion Sort"
-        ],
-        "correctAnswer": "Selection Sort"
+        "questionText": "Complexity of Counting Sort?",
+        "options": ["O(N log N)", "O(N + K) where K is the range", "O(N^2)", "Pico rule"],
+        "correctAnswer": "O(N + K) where K is the range",
+        "explanation": "One pass to count, one to create the result. Very fast if K is small."
       },
       {
-        "type": "match_following",
-        "questionText": "Match Stability status!",
-        "pairs": [
-          {
-            "key": "Bubble Sort",
-            "value": "Stable"
-          },
-          {
-            "key": "Insertion Sort",
-            "value": "Stable"
-          },
-          {
-            "key": "Selection Sort",
-            "value": "Unstable"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] Prefix Sum",
+        "explanation": "Ace: 'Convert counts into indices by doing a prefix sum. This tells you EXACTLY where the last occurrence of each value should go.'",
+        "encouragementText": "Pico: 'Sum them up! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "Preserving original relative order is called ___.",
-        "codeSnippet": "Property = ___ ;",
-        "correctAnswer": "stability"
+        "questionText": "Building the count array.",
+        "codeSnippet": "count[arr[i]] ___ ;",
+        "correctAnswer": "++",
+        "explanation": "Incrementing the frequency of each value found."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Stability is crucial when sorting complex birds with multiple traits (like size and age)! 🦜\""
+        "questionText": "[CORE GATE] Constraints",
+        "explanation": "Ace: 'Only works for integers and small ranges. If the range is 1 billion, your count array will be too big for RAM.'",
+        "encouragementText": "Ace: 'Range is the boundary of memory capacity.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Selection Sort is unstable because it might ___.",
-        "options": [
-          "Swap an element far across the array",
-          "Skip comparisons",
-          "Wait too long"
-        ],
-        "correctAnswer": "Swap an element far across the array"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Stable check.",
-        "codeSnippet": "if (arr[j] ___ key) break;",
-        "correctAnswer": "<="
+        "questionText": "Is Counting Sort stable?",
+        "options": ["Yes, if implemented with a back-to-front pass", "No", "Always", "Pico guess"],
+        "correctAnswer": "Yes, if implemented with a back-to-front pass",
+        "explanation": "By processing the original array from right to left, equal elements maintain their order."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Respecting history! 🦜\""
+        "questionText": "[SYNC] Space Cost",
+        "explanation": "Ace: 'Space complexity is O(K), where K is the range of values.'",
+        "encouragementText": "Pico: 'Big array! 100% 🦜'"
       },
       {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Do we keep the order?\"",
-        "options": [
-          "Stable pilots!",
-          "No.",
-          "0"
-        ],
-        "correctAnswer": "Stable pilots!"
+        "type": "programming_board",
+        "questionText": "Prefix sum logic.",
+        "codeSnippet": "count[i] += count[ ___ ];",
+        "correctAnswer": "i-1",
+        "explanation": "Accumulating counts to form positions."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Census Architect",
+        "explanation": "You have calculated the positions from the totals. Ace: 'The rank is absolute.'",
+        "encouragementText": "Pico: 'I count 100! 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Counting terms!",
+        "pairs": [
+          { "key": "No compare", "value": "Counting sort property" },
+          { "key": "K", "value": "Range of values" },
+          { "key": "Auxiliary", "value": "Extra array" }
+        ]
       }
     ]
   },
   {
     "order": 19,
-    "title": "The Shifting Branch",
-    "desc": "Search in a nearly sorted array.",
+    "title": "Unit 19: Nearly Sorted Array Search",
+    "desc": "Optimizing for local displacements.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Almost Home! Sometimes a bird is just one branch away from its correct spot in a sorted forest. This is a Nearly Sorted Array! 🦜\""
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"Strategy: An element at index `i` might actually be at `i-1` or `i+1`. We check all three neighbors using Binary Search logic! 🦜\"",
-        "codeSnippet": "if (arr[mid] == x) return mid;\nif (mid > low && arr[mid-1] == x) return mid-1;\nif (mid < high && arr[mid+1] == x) return mid+1;"
+        "questionText": "[MISSION LORE 1.19] The Shifting Branch",
+        "explanation": "Ace: 'In a nearly sorted array, an item at index `i` might be at `i-1` or `i+1`. We can still use Binary Search, but we must check all three neighbors at the middle step!' Pico: 'Wobbly seeds! 100% 🦜'",
+        "encouragementText": "Ace: 'Tolerance for displacement is the mark of a robust algorithm.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "In a nearly sorted array (within distance 1), how many positions can a target be relative to mid?",
-        "options": [
-          "3 (mid-1, mid, mid+1)",
-          "1 (only mid)",
-          "All of them"
-        ],
-        "correctAnswer": "3 (mid-1, mid, mid+1)"
+        "questionText": "How many indices do we check for Target in each BS step of a Nearly Sorted array?",
+        "options": ["1 (mid)", "3 (mid-1, mid, mid+1)", "All", "Pico rule"],
+        "correctAnswer": "3 (mid-1, mid, mid+1)",
+        "explanation": "Checking the immediate neighbors handles the 'Nearly' part of the sort."
       },
       {
-        "type": "match_following",
-        "questionText": "Match Nearly-Sorted!",
-        "pairs": [
-          {
-            "key": "Check mid",
-            "value": "Direct match"
-          },
-          {
-            "key": "Check mid-1",
-            "value": "Shifted left"
-          },
-          {
-            "key": "Check mid+1",
-            "value": "Shifted right"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] Boundary Check",
+        "explanation": "Ace: 'Always ensure `mid-1 >= low` and `mid+1 <= high` before checking neighbors.'",
+        "encouragementText": "Pico: 'Stay in bounds! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "Nearly sorted binary search skips ___ items already checked.",
-        "codeSnippet": "Shift = ___ ;",
-        "correctAnswer": "2"
+        "questionText": "Updating `low` after checking 3 neighbors.",
+        "codeSnippet": "if (target > arr[mid]) low = mid + ___ ;",
+        "correctAnswer": "2",
+        "explanation": "Since we already checked mid and mid+1, we skip them."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Time Complexity remains O(log N), but we gain robustness for small forest displacements! 🦜\""
+        "questionText": "[CORE GATE] Real-time sensors",
+        "explanation": "Ace: 'Used when data is mostly ordered but small transmission errors or timing jitters cause slight element swaps.'",
+        "encouragementText": "Ace: 'Search must adapt to the noise of the physical world.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "If `target > arr[mid+1]`, where do we search next?",
-        "options": [
-          "low = mid + 2",
-          "low = mid + 1",
-          "high = mid - 1"
-        ],
-        "correctAnswer": "low = mid + 2"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Narrow right side.",
-        "codeSnippet": "low = mid ___ 2;",
-        "correctAnswer": "+"
+        "questionText": "Complexity for nearly sorted search?",
+        "options": ["O(N)", "O(log N)", "O(log log N)", "Pico guess"],
+        "correctAnswer": "O(log N)",
+        "explanation": "Still logarithmic, just with slightly more constant work per step."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Flexible scouting! 🦜\""
+        "questionText": "[SYNC] Skip",
+        "explanation": "Ace: 'When moving boundaries, skip 2 elements because you've already verified the neighbors.'",
+        "encouragementText": "Pico: 'Jump 2! 100% 🦜'"
       },
       {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Can we find them?\"",
-        "options": [
-          "SQUAWK YES!",
-          "No.",
-          "0"
-        ],
-        "correctAnswer": "SQUAWK YES!"
+        "type": "programming_board",
+        "questionText": "Updating `high`.",
+        "codeSnippet": "if (target < arr[mid]) high = mid - ___ ;",
+        "correctAnswer": "2",
+        "explanation": "Skipping mid and mid-1."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Flex-Scout",
+        "explanation": "You have hunted through the shaking branches. Ace: 'The target is caught.'",
+        "encouragementText": "Pico: 'Got him! 100% 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Nearly terms!",
+        "pairs": [
+          { "key": "k-displacement", "value": "Nearly sorted property" },
+          { "key": "Skip 2", "value": "BS Optimization" },
+          { "key": "mid-1, mid, mid+1", "value": "Comparison window" }
+        ]
       }
     ]
   },
   {
     "order": 20,
-    "title": "Stage 1 Wings",
-    "desc": "Searching & Sorting Foundation Graduate.",
+    "title": "Unit 20: Stage 1 Graduation (The Scout Lord)",
+    "desc": "Foundational mastery achieved.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"GRADUATION! You have mastered the base ranks of searching and sorting. You can find birds, organize nests, and keep the forest stable! 🦜\""
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"From Linear Scans to Logarithmic Precision and O(N^2) Basics. Your foundational wings are strong. 🦜\""
-      },
-      {
-        "type": "multiple_choice",
-        "questionText": "Binary Search time complexity?",
-        "options": [
-          "O(log N)",
-          "O(N)",
-          "O(N^2)"
-        ],
-        "correctAnswer": "O(log N)"
+        "questionText": "[GRAND MISSION LORE 1.20] The Zenith of Foundations",
+        "explanation": "Ace: 'You have mastered the search of the forest, from the linear loop to the logarithmic dividide and the foundations of comparison sorting. You are no longer a fledgling.' Pico: 'Stage 1 Complete! 200 lessons of pure power! 100% 🦜'",
+        "encouragementText": "Ace: 'Foundation is the architect of the infinite.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Which sort is O(N) for sorted data?",
-        "options": [
-          "Insertion Sort",
-          "Selection Sort",
-          "Binary Sort"
-        ],
-        "correctAnswer": "Insertion Sort"
-      },
-      {
-        "type": "match_following",
-        "questionText": "Final Stage 1 Check!",
-        "pairs": [
-          {
-            "key": "Linear",
-            "value": "Check all"
-          },
-          {
-            "key": "Binary",
-            "value": "Check half"
-          },
-          {
-            "key": "Bubble",
-            "value": "Check neighbors"
-          }
-        ]
+        "questionText": "Complexity of Binary Search?",
+        "options": ["O(N)", "O(log N)", "O(N^2)", "Pico rule"],
+        "correctAnswer": "O(log N)",
+        "explanation": "The baseline for all elite searching."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Fly higher into Stage 2 for Divide & Conquer! 🦜\""
+        "questionText": "[SYNC] Progress Summary",
+        "explanation": "20 units, 200 lessons. This stage has equipped you with the search speed and basic order logic for the Academic Atlas. Ace: 'Fly with intent.'",
+        "encouragementText": "Pico: '20% to the 1,000-lesson gauntlet! 🦜'"
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "Adaptive sort that is O(N) for sorted data?",
+        "options": ["Bubble", "Selection", "Insertion", "Pico secret"],
+        "correctAnswer": "Insertion",
+        "explanation": "Insertion sort thrives on nearly sorted input."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[CORE GATE] Graduation Check",
+        "explanation": "Ace: 'Prove you can transition from Linear Scans to Logarithmic Bounds and Bubble Swaps to Bucket Distributions in your mental buffers.' Pico: 'I'm a Scout Lord now! 100% 🦜'",
+        "encouragementText": "Ace: 'The search reflects the scout through the lens of the index.'"
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "Benefit of Sentinel Search?",
+        "options": ["Less memory", "Fewer loop comparisons", "Sorting logic", "Pico guess"],
+        "correctAnswer": "Fewer loop comparisons",
+        "explanation": "Optimizes the hottest path of the linear search."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[FINAL SYNC] The 10x10x10 Path",
+        "explanation": "You are 20% through the ultimate journey. Your next target: **Stage 2: Divide & Conquer**. Ace: 'The Merge and Quick are waiting.'",
+        "encouragementText": "Pico: 'Stage 2 seeds are waiting! 100% 🦜'"
+      },
+      {
+        "type": "programming_board",
+        "questionText": "Final stage signal.",
+        "codeSnippet": "if (scout_lord == true) return ___ ;",
+        "correctAnswer": "GRADUATE",
+        "explanation": "You have successfully mastered the Foundations phase."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Scout Lord",
+        "explanation": "The first gate is passed. The foundation is set. You are a Stage 1 Graduate. Ace: 'Welcome to the inner circle.'",
+        "encouragementText": "Pico: 'Titan-Grade! 100% 🦜'"
+      },
+      {
+        "type": "programming_board",
+        "questionText": "[GRADUATION CHALLENGE] Output the status of your journey.",
+        "codeSnippet": "for(int i=1; i<=20; i++) verify_foundations(i);\nreturn ___ ;",
+        "correctAnswer": "COMPLETE",
+        "explanation": "The first 200 lessons of the 1,000-lesson curriculum for Search/Sort are verified."
       }
     ]
   }

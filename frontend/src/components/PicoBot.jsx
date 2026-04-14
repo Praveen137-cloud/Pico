@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
 import './PicoBot.css';
+import LivingCharacter from './LivingCharacter';
 
 const PICO_RESPONSES = {
   'array': 'Arrays are linear data structures that store elements in contiguous memory. They offer O(1) access time via index. Perfect for simple lists!',
@@ -96,9 +96,9 @@ const PicoBot = () => {
       ) : (
         <div className="pico-launcher" onClick={() => setIsOpen(true)}>
           <div className="pico-avatar">
-            <img src="/pico-bird.png" alt="Pico" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+            <LivingCharacter character="ace" size={80} state="levitating" />
           </div>
-          <div className="pico-badge">PICO</div>
+          <div className="pico-badge">ELITE ASST</div>
         </div>
       )}
     </div>

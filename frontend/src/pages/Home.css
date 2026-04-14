@@ -1,14 +1,13 @@
-/* 🌸 Seasonal Banner Responsiveness */
 .season-banner {
   margin: 16px;
-  padding: 60px 16px 20px 16px;
-  background-color: rgba(15, 18, 30, 0.8);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 60px 24px 24px 24px;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
   border-radius: 24px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  box-shadow: var(--glass-shadow);
   min-height: 160px;
   transition: all 0.3s ease;
 }
@@ -85,46 +84,60 @@
   gap: 15px;
 }
 
-.donate-btn-header {
-  background: linear-gradient(135deg, #FF4E50, #FC913A) !important;
-  color: #fff !important;
-  border: none !important;
-  padding: 6px 14px !important;
-  border-radius: 20px !important;
-  font-weight: 900 !important;
-  font-size: 11px !important;
-  letter-spacing: 1px !important;
-  cursor: pointer !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-  box-shadow: 0 4px 15px rgba(255, 78, 80, 0.3) !important;
-  transition: all 0.3s ease !important;
-  text-transform: uppercase !important;
+.char-indicator {
+  margin-right: 8px;
+  filter: drop-shadow(0 0 10px var(--theme-primary));
 }
 
-@media (max-width: 480px) {
-  .top-stats-bar {
-    padding: 8px 12px;
-    flex-direction: row;
-    justify-content: space-between;
-  }
+.premium-badge-v2 {
+  background: linear-gradient(135deg, #FFD700, #B8860B);
+  color: #000;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 900;
+  margin-left: 12px;
+  border: 1px solid #FFD700;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
 
-  .stats-group {
-    gap: 10px;
-  }
+.stage-badge-container {
+  display: flex;
+  align-items: center;
+  background: var(--theme-secondary);
+  padding: 6px 14px;
+  border-radius: 12px;
+  position: relative;
+  box-shadow: 0 4px 15px rgba(112, 0, 255, 0.4);
+  align-self: flex-start;
+}
 
-  .stats-group span {
-    font-size: 11px !important;
-  }
+.cyber-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--theme-primary), var(--theme-secondary), var(--tertiary-accent));
+  background-size: 200% 100%;
+  animation: meshGradient 3s linear infinite;
+  box-shadow: 0 0 15px var(--theme-primary);
+}
 
-  .stats-group div span:first-child {
-    font-size: 16px !important;
-  }
+.cyber-action-btn {
+  background: linear-gradient(135deg, var(--theme-primary), var(--theme-secondary));
+  color: #000;
+  border: none;
+  padding: 16px;
+  border-radius: 16px;
+  font-weight: 950;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  text-transform: uppercase;
+  box-shadow: 0 10px 30px rgba(0, 242, 255, 0.3);
+}
 
-  .donate-btn-header {
-    padding: 5px 10px !important;
-    font-size: 10px !important;
-    gap: 4px !important;
-  }
+.cyber-action-btn:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 15px 45px rgba(0, 242, 255, 0.5);
+  filter: brightness(1.1);
 }

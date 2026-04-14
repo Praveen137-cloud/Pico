@@ -6,6 +6,7 @@ import EmptyState from '../components/EmptyState';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import AdSenseBanner from '../components/AdSenseBanner';
+import LivingCharacter from '../components/LivingCharacter';
 import './Home.css';
 
 const Home = () => {
@@ -97,10 +98,13 @@ const Home = () => {
   if (isLoading) return <PreLoader />;
 
   return (
-    <div style={styles.page}>
-      <div style={styles.topSticky}>
+    <div style={styles.page} className="cyber-mesh-bg">
+      <div style={styles.topSticky} className="glass-panel" style={{ borderRadius: 0, borderTop: 'none' }}>
         <div className="top-stats-bar">
           <div className="stats-group">
+            <div className="char-indicator">
+               <LivingCharacter character="ace" size={50} state={user?.streak > 0 ? 'happy' : 'idle'} />
+            </div>
             <div style={{display: 'flex', alignItems: 'center', gap: 6}}>
                <span style={{fontSize: 18}}>🔥</span>
                <span style={{fontWeight: 800, fontSize: 13, letterSpacing: 1}}>{user?.streak || 0} DAY STREAK</span>
@@ -110,36 +114,10 @@ const Home = () => {
                <span style={{fontWeight: 800, fontSize: 13, letterSpacing: 1}}>{user?.xp || 0} TOTAL XP</span>
             </div>
             {user?.isPremium && (
-              <div style={{
-                backgroundColor: 'rgba(255, 179, 0, 0.1)', 
-                color: '#FFB300', 
-                padding: '4px 10px', 
-                borderRadius: '8px', 
-                fontSize: '11px', 
-                fontWeight: '900',
-                marginLeft: '12px',
-                border: '1px solid #FFB300',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px',
-                boxShadow: '0 0 10px rgba(255,179,0,0.2)'
-              }}>
+              <div className="premium-badge-v2">
                 💎 PREMIUM AGENT
               </div>
             )}
-            {/* Version Badge for verification */}
-            <div style={{
-              backgroundColor: 'var(--theme-primary)', 
-              color: '#000', 
-              padding: '2px 8px', 
-              borderRadius: '4px', 
-              fontSize: '10px', 
-              fontWeight: '900',
-              marginLeft: '12px',
-              animation: 'pulse 2s infinite'
-            }}>
-              DEPLOY v2.2: BUILD STABLE
-            </div>
           </div>
         </div>
         <SubjectNav activeSubject={activeSubject} onSelect={handleSelectSubject} />
@@ -166,26 +144,28 @@ const Home = () => {
             const progress = total > 0 ? (completed / total) * 100 : 0;
 
             return (
-              <div key={index} className={`extreme-card ${isVibrating ? 'vibrate-active' : ''}`} style={styles.sectionCard}>
+              <div key={index} className={`extreme-card glass-panel ${isVibrating ? 'vibrate-active' : ''}`} style={styles.sectionCard}>
                 <div style={styles.sectionHeader}>
-                  <div style={styles.badgeWrapper}>
+                  <div className="stage-badge-container">
                     <div style={styles.sectionNum}>STAGE {index + 1}</div>
+                    <LivingCharacter character="pico" size={30} state="idle" style={{ position: 'absolute', right: -10, top: -10 }} />
                   </div>
                   <h2 style={styles.sectionTitle}>{stage.title}</h2>
                 </div>
                 
                 <div style={styles.progressContainer}>
                   <div style={styles.progressBarWrapper}>
-                    <div style={{ ...styles.progressBar, width: `${progress}%` }} />
+                    <div className="cyber-progress-fill" style={{ width: `${progress}%` }} />
                   </div>
                   <span style={styles.unitCount}>{completed}/{total} MISSIONS</span>
                 </div>
                 
                 <button 
-                  style={styles.openPathBtn}
+                  className="btn-chunky cyan"
+                  style={{ marginTop: '-8px' }}
                   onClick={() => navigate(`/map/${subjects.find(s => s.name === activeSubject)._id}/${stage._id}`)}
                 >
-                  INITIALIZE MODULE
+                  INITIALIZE CORE
                 </button>
               </div>
             );

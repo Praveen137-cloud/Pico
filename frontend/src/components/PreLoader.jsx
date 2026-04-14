@@ -9,35 +9,42 @@ const PreLoader = ({ onReady }) => {
     let mounted = true;
 
     const performWakeUp = async () => {
-      // Small timeout to show "Waking up" message if engine is slow
-      const timer = setTimeout(() => {
-        if (mounted) {
-          setStatusMessage('SIGNAL WEAK... RE-ESTABLISHING LINK');
-          setIsWaking(true);
-        }
-      }, 5000);
+      // ⏱️ Start a series of status updates to keep the user engaged
+      const statusInterval = setInterval(() => {
+        if (!mounted) return;
+        const messages = [
+          'SIGNAL WEAK... RE-ESTABLISHING LINK',
+          'CALIBRATING SYNC...',
+          'BYPASSING FIREWALL...',
+          'CONNECTING TO CORE...',
+          'OPTIMIZING DATA FLOW...',
+          'STILL WAITING FOR ENGINE RESPONSE...'
+        ];
+        setStatusMessage(prev => {
+          const idx = messages.indexOf(prev);
+          return messages[(idx + 1) % messages.length] || messages[0];
+        });
+        setIsWaking(true);
+      }, 8000);
 
       const success = await wakeBackend();
-      clearTimeout(timer);
+      clearInterval(statusInterval);
 
       if (mounted) {
         if (success) {
           setStatusMessage('ENGINE ONLINE. ENTERING MATRIX...');
-          // Give a half second to see the success message
           setTimeout(() => {
-            if (onReady) onReady();
+            if (mounted && onReady) onReady();
           }, 800);
         } else {
           setStatusMessage('CRITICAL LATENCY DETECTED. RETRY SYNC.');
-          // 🔥 STRICT MODE: We DO NOT call onReady() here anymore.
-          // The user must wait or use the Fix button.
         }
       }
     };
 
     performWakeUp();
     return () => { mounted = false; };
-  }, [onReady]);
+  }, [onReady]); // Note: We still depend on onReady, but App.jsx will now pass a stable one.
 
   return (
     <div style={styles.overlay}>
@@ -58,13 +65,23 @@ const PreLoader = ({ onReady }) => {
           <div style={styles.progressFill} />
         </div>
 
-        {statusMessage.includes('LATENCY') && (
-          <button 
-            onClick={() => window.location.reload()}
-            style={styles.retryBtn}
-          >
-            REFRESH LINK
-          </button>
+        {(statusMessage.includes('LATENCY') || isWaking) && (
+          <div style={{ display: 'flex', gap: '12px' }}>
+            <button 
+              onClick={() => window.location.reload()}
+              style={styles.retryBtn}
+            >
+              REFRESH LINK
+            </button>
+            {statusMessage.includes('WAITING') && (
+              <button 
+                onClick={() => window.open('mailto:support@pico.api', '_blank')}
+                style={{ ...styles.retryBtn, borderColor: 'rgba(255,255,255,0.3)', color: 'rgba(255,255,255,0.5)' }}
+              >
+                REPORT DELAY
+              </button>
+            )}
+          </div>
         )}
       </div>
       </div>

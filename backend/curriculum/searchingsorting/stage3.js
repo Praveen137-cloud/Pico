@@ -1,1607 +1,1477 @@
 const stage3 = [
   {
     "order": 41,
-    "title": "Beyond Comparisons",
-    "desc": "Introduction to Non-Comparison Sorts.",
+    "title": "Unit 41: Radix Sort (LSD)",
+    "desc": "Sorting by digits from least significant to most.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"The Speed Limit! Comparison-based sorts (like Merge/Quick) have a fundamental speed limit of O(N log N). To fly faster, we must stop comparing birds! 🦜\""
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"Non-Comparison Sorts use properties of the birds (like their digits or value ranges) to reach O(N) time. They don't ask 'Who is bigger?', they ask 'What is your value?'! 🦜\""
+        "questionText": "[MISSION LORE 3.1] The Digit Scout",
+        "explanation": "Ace: 'Radix Sort avoids comparisons. It sorts by the individual digits of numbers, starting from the ones place, then tens, and so on. It assumes all values have the same number of digits.' Pico: 'Sorting by the small feathers first! 100% 🦜'",
+        "encouragementText": "Ace: 'Precision in the parts leads to alignment in the whole.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "What is the lower bound for comparison-based sorting?",
-        "options": [
-          "O(N log N)",
-          "O(N)",
-          "O(N^2)"
-        ],
-        "correctAnswer": "O(N log N)"
+        "questionText": "What stable sort is typically used as the subroutine for Radix Sort?",
+        "options": ["Quick Sort", "Counting Sort", "Selection Sort", "Pico rule"],
+        "correctAnswer": "Counting Sort",
+        "explanation": "Counting Sort is linear and stable, making it perfect for sorting individual digits (0-9)."
       },
       {
-        "type": "match_following",
-        "questionText": "Match the speed!",
-        "pairs": [
-          {
-            "key": "Quick Sort",
-            "value": "Comparison based"
-          },
-          {
-            "key": "Counting Sort",
-            "value": "Non-comparison"
-          },
-          {
-            "key": "Lower Bound",
-            "value": "O(N log N)"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] Complexity $O(d \cdot (n + k))$",
+        "explanation": "Ace: 'Here `d` is the number of digits and `k` is the range of digits (usually 10). For fixed precision, this is essentially O(N).'",
+        "encouragementText": "Pico: 'Fast counting! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "Non-comparison sorts can reach ___ time complexity.",
-        "codeSnippet": "IdealSpeed = ___ ;",
-        "correctAnswer": "linear"
+        "questionText": "Formula to get the digit at `exp` place (1, 10, 100...).",
+        "codeSnippet": "digit = (num / exp) ___ 10;",
+        "correctAnswer": "%",
+        "explanation": "Dividing by exp shifts the digit to the ones place, and modulo 10 isolates it."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Linear time (O(N)) is the ultimate flight speed. But it requires extra knowledge about the birds' values! 🦜\""
+        "questionText": "[CORE GATE] Constraints",
+        "explanation": "Ace: 'Only works for integers and strings. Sorting floats with Radix requires special bit-manipulation.'",
+        "encouragementText": "Ace: 'The type defines the sort.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Which of these is a non-comparison sort?",
-        "options": [
-          "Counting Sort",
-          "Selection Sort",
-          "Merge Sort"
-        ],
-        "correctAnswer": "Counting Sort"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Linear time.",
-        "codeSnippet": "Complexity = O( ___ );",
-        "correctAnswer": "N"
+        "questionText": "In LSD Radix Sort, which digit is processed LAST?",
+        "options": ["Ones place", "Most Significant Digit (MSD)", "None", "Pico guess"],
+        "correctAnswer": "Most Significant Digit (MSD)",
+        "explanation": "LSD starts at the right and moves left; MSD is the final pass."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Breaking the limit! 🦜\""
+        "questionText": "[SYNC] Stability",
+        "explanation": "Ace: 'If the digit-sort isn't stable, Radix Sort will fail to maintain the order established by previous digits.'",
+        "encouragementText": "Pico: 'Stay in line! 100% 🦜'"
       },
       {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Can we sort in O(N)?\"",
-        "options": [
-          "SQUAWK YES (with restrictions)!",
-          "No.",
-          "0"
-        ],
-        "correctAnswer": "SQUAWK YES (with restrictions)!"
+        "type": "programming_board",
+        "questionText": "Looping through digits of max number.",
+        "codeSnippet": "for (int exp = 1; max / exp > 0; exp *= ___ )",
+        "correctAnswer": "10",
+        "explanation": "Moving from ones to tens to hundreds."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Digit Master",
+        "explanation": "You have learned to sort by parts. Ace: 'The components are aligned.'",
+        "encouragementText": "Pico: 'Digitally sorted! 100% 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Radix terms!",
+        "pairs": [
+          { "key": "d", "value": "Number of digits" },
+          { "key": "k", "value": "Base (usually 10)" },
+          { "key": "LSD", "value": "Right-to-left" }
+        ]
       }
     ]
   },
   {
     "order": 42,
-    "title": "Counting the Beaks",
-    "desc": "Introduction to Counting Sort.",
+    "title": "Unit 42: Shell Sort (The Gap Sort)",
+    "desc": "Optimizing Insertion Sort with declining gaps.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"The Tally Sheet! Counting Sort works if the birds have small, whole-number values. We count how many birds have each value! 🦜\""
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"Example: If we have birds of size 1, 2, and 3. Just count how many 1s, how many 2s, and how many 3s. Then place them in order! 🦜\"",
-        "codeSnippet": "for(int x : arr) count[x]++;"
+        "questionText": "[MISSION LORE 3.2] The Long Jump",
+        "explanation": "Ace: 'Insertion sort is slow because it only moves items by one position. Shell Sort allows elements to \"Jump\" far distances using a gap sequence.' Pico: 'Long jumps in the forest! 100% 🦜'",
+        "encouragementText": "Ace: 'Distance is the shortcut to local alignment.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Counting Sort is best when the range of values (K) is ___.",
-        "options": [
-          "Small (K ≈ N)",
-          "Huge",
-          "Negative only"
-        ],
-        "correctAnswer": "Small (K ≈ N)"
+        "questionText": "What happens as the gap decreases to 1?",
+        "options": ["It becomes Bubble Sort", "It becomes standard Insertion Sort", "It stops", "Pico rule"],
+        "correctAnswer": "It becomes standard Insertion Sort",
+        "explanation": "A gap of 1 is just regular insertion sort, dealing with a mostly-sorted array."
       },
       {
-        "type": "match_following",
-        "questionText": "Match Counting steps!",
-        "pairs": [
-          {
-            "key": "Count Array",
-            "value": "Store frequencies"
-          },
-          {
-            "key": "Range",
-            "value": "Max element - Min element"
-          },
-          {
-            "key": "Complexity",
-            "value": "O(N + K)"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] Knuth Sequence",
+        "explanation": "Ace: 'The performance depends heavily on the gap sequence used. Knuth's sequence ($3k+1$) is a popular choice.'",
+        "encouragementText": "Pico: 'Magic numbers! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "Counting sort uses an array of size ___.",
-        "codeSnippet": "Size = ___ ;",
-        "correctAnswer": "max + 1"
+        "questionText": "Shell's original gap sequence starting point.",
+        "codeSnippet": "gap = n / ___ ;",
+        "correctAnswer": "2",
+        "explanation": "Starting by comparing elements half an array apart."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Time: O(N + K), where K is the range of values. If K is massive, this sort becomes very hungry for memory! 🦜\""
+        "questionText": "[CORE GATE] In-place Speed",
+        "explanation": "Ace: 'Shell sort is in-place and faster than simple O(N^2) sorts, making it useful for embedded systems without extra RAM.'",
+        "encouragementText": "Ace: 'Speed is relative to the constraints of the host.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "In [1, 4, 1, 2, 7], max count array index?",
-        "options": [
-          "7",
-          "5",
-          "1"
-        ],
-        "correctAnswer": "7"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Increment count.",
-        "codeSnippet": "count[arr[i]] ___ ;",
-        "correctAnswer": "++"
+        "questionText": "Is Shell Sort stable?",
+        "options": ["Yes", "No (Long jumps can swap equal items over far distances)", "Always", "Pico guess"],
+        "correctAnswer": "No (Long jumps can swap equal items over far distances)",
+        "explanation": "Far-reaching swaps destroy the relative order of equal elements."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Tallying order! 🦜\""
+        "questionText": "[SYNC] Pass Complexity",
+        "explanation": "Ace: 'Hard to analyze, but usually around $O(N^{1.3})$ to $O(N^2)$ depending on gaps.'",
+        "encouragementText": "Pico: 'A bit mysterious! 100% 🦜'"
       },
       {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Is it memory efficient for range 1 to 1,000,000,000?\"",
-        "options": [
-          "SQUAWK NO!",
-          "Yes.",
-          "0"
-        ],
-        "correctAnswer": "SQUAWK NO!"
+        "type": "programming_board",
+        "questionText": "Gap reduction loop.",
+        "codeSnippet": "for (int gap = n/2; gap > 0; gap /= ___ )",
+        "correctAnswer": "2",
+        "explanation": "Halving the gap in each major pass."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Gap Lord",
+        "explanation": "You have mastered the long-distance jump. Ace: 'The alignment is accelerated.'",
+        "encouragementText": "Pico: 'Jumped it! 100% 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Shell terms!",
+        "pairs": [
+          { "key": "Gap", "value": "Comparison distance" },
+          { "key": "Insertion", "value": "Final pass (gap=1)" },
+          { "key": "Unstable", "value": "Stability property" }
+        ]
       }
     ]
   },
   {
     "order": 43,
-    "title": "Mapping the Forest",
-    "desc": "Counting Sort: Prefix Sum logic.",
+    "title": "Unit 43: Heap Sort I (The Build)",
+    "desc": "Constructing the Binary Heap tree.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Finding the Nest! To know EXACTLY where a bird of size 2 should go, we sum up the counts of all smaller birds. This is the Prefix Sum! 🦜\""
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"Cumulative Count: `count[i] = count[i] + count[i-1]`. Now, `count[i]` tells us the number of birds less than or equal to `i`! 🦜\"",
-        "codeSnippet": "for(int i=1; i<=max; i++) count[i] += count[i-1];"
+        "questionText": "[MISSION LORE 3.3] The Royal Mound",
+        "explanation": "Ace: 'A Heap is a complete binary tree where every parent is larger (Max-Heap) than its children. To sort, we first transform an array into a Heap!' Pico: 'Building the mountain! 100% 🦜'",
+        "encouragementText": "Ace: 'Structure is the container of priority.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "What does the cumulative count at index 3 represent?",
-        "options": [
-          "Total birds with size <= 3",
-          "Total birds with size exactly 3",
-          "Pico's favorite number"
-        ],
-        "correctAnswer": "Total birds with size <= 3"
+        "questionText": "Time complexity to BUILD a heap from an unsorted array of size N?",
+        "options": ["O(N log N)", "O(N)", "O(N^2)", "Pico rule"],
+        "correctAnswer": "O(N)",
+        "explanation": "Using the 'bottom-up' buildHeap method is mathematicaly proven to be linear."
       },
       {
-        "type": "match_following",
-        "questionText": "Match Prefix logic!",
-        "pairs": [
-          {
-            "key": "count[i]",
-            "value": "End position of size i"
-          },
-          {
-            "key": "Initial Count",
-            "value": "Frequency"
-          },
-          {
-            "key": "Cumulative",
-            "value": "Position Mapping"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] Parent-Child Index",
+        "explanation": "Ace: 'For a node at index `i`, its left child is at `2*i + 1` and right child is at `2*i + 2`.'",
+        "encouragementText": "Pico: 'Family tree! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "Prefix sum converts frequencies into ___.",
-        "codeSnippet": "Result = ___ ;",
-        "correctAnswer": "positions"
+        "questionText": "Parent index of node `i`.",
+        "codeSnippet": "parent = (i - 1) / ___ ;",
+        "correctAnswer": "2",
+        "explanation": "Standard array representation of a binary tree."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"This mapping allows us to place each bird in its correct nest without comparing it to others! 🦜\""
+        "questionText": "[CORE GATE] Priority",
+        "explanation": "Ace: 'Heaps are the logic behind Priority Queues. They ensure the \"Most Important\" bird is always at the top.'",
+        "encouragementText": "Ace: 'Order starts with the most significant member.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "If count[2]=3 and count[3]=5, how many birds have size 3?",
-        "options": [
-          "2 (5 - 3)",
-          "5",
-          "3"
-        ],
-        "correctAnswer": "2 (5 - 3)"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Cumulative add.",
-        "codeSnippet": "count[i] += count[ ___ ];",
-        "correctAnswer": "i - 1"
+        "questionText": "Where is the largest element in a Max-Heap?",
+        "options": ["At a leaf", "At the root (index 0)", "In the middle", "Pico guess"],
+        "correctAnswer": "At the root (index 0)",
+        "explanation": "By definition of a Max-Heap."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Nest mapping! 🦜\""
+        "questionText": "[SYNC] Heapify",
+        "explanation": "Ace: 'Heapify cost $O(\log N)$. We call it for all non-leaf nodes to build the heap.'",
+        "encouragementText": "Pico: 'Fix the mountain! 100% 🦜'"
       },
       {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Do we know where they go?\"",
-        "options": [
-          "SQUAWK YES!",
-          "No.",
-          "0"
-        ],
-        "correctAnswer": "SQUAWK YES!"
+        "type": "programming_board",
+        "questionText": "Index of the last non-leaf node for N total nodes.",
+        "codeSnippet": "lastNonLeaf = (N / ___ ) - 1;",
+        "correctAnswer": "2",
+        "explanation": "The starting point for the bottom-up build."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Heap Builder",
+        "explanation": "You have organized the forest into a hierarchy. Ace: 'The mound is secure.'",
+        "encouragementText": "Pico: 'Ready to sort! 100% 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Heap terms!",
+        "pairs": [
+          { "key": "Root", "value": "Max element" },
+          { "key": "BuildHeap", "value": "O(N) operation" },
+          { "key": "Heapify", "value": "O(log N) repair" }
+        ]
       }
     ]
   },
   {
     "order": 44,
-    "title": "Stable Harvest",
-    "desc": "Stable implementation of Counting Sort.",
+    "title": "Unit 44: Heap Sort II (The Extraction)",
+    "desc": "Sorting by repeatedly removing the maximum.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Preserving History! To make Counting Sort stable, we process the birds from the BACK of the forest to the front. This keeps identical birds in their original relative order! 🦜\"",
-        "codeSnippet": "for(int i = n-1; i >= 0; i--) {\n  output[count[arr[i]] - 1] = arr[i];\n  count[arr[i]]--;\n}"
+        "questionText": "[MISSION LORE 3.4] The Harvest",
+        "explanation": "Ace: 'Once the Heap is built, swap the root with the last element. Shrink the heap size, and Heapify the new root. Repeat until empty!' Pico: 'Taking from the top! 100% 🦜'",
+        "encouragementText": "Ace: 'Order is extracted from the structure one piece at a time.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Why iterate backwards in the final step of Counting Sort?",
-        "options": [
-          "To maintain stability",
-          "It's faster",
-          "Reverse flight is cooler"
-        ],
-        "correctAnswer": "To maintain stability"
+        "questionText": "Complexity of full Heap Sort?",
+        "options": ["O(N log N)", "O(N)", "O(N^2)", "Pico rule"],
+        "correctAnswer": "O(N log N)",
+        "explanation": "We extract N elements, and each extraction costs O(log N) to repair the heap."
       },
       {
-        "type": "match_following",
-        "questionText": "Match Final steps!",
-        "pairs": [
-          {
-            "key": "Iteration",
-            "value": "Right to Left (n-1 to 0)"
-          },
-          {
-            "key": "Placement",
-            "value": "output[pos - 1]"
-          },
-          {
-            "key": "Update pos",
-            "value": "count[val]--"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] In-Place",
+        "explanation": "Ace: 'Heap Sort is in-place! We move the largest items to the end of the array, effectively sorting it from right to left.'",
+        "encouragementText": "Pico: 'No extra memory! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "Counting sort is NOT used if the data is ___.",
-        "codeSnippet": "InvalidData = ___ ;",
-        "correctAnswer": "decimal"
+        "questionText": "Extraction loop.",
+        "codeSnippet": "for (int i = n - 1; i ___ 0; i--) {\n  swap(arr[0], arr[i]);\n  heapify(arr, i, 0);\n}",
+        "correctAnswer": ">",
+        "explanation": "Moving the max to the back and rebuilding for the remaining elements."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Counting Sort is a building block for Radix Sort. It's the engine of elite linear sorting! 🦜\""
+        "questionText": "[CORE GATE] Comparison with QuickSort",
+        "explanation": "Ace: 'Heap Sort has a guaranteed O(N log N) worst-case. It is safer than Quick Sort, though usually slightly slower in practice.'",
+        "encouragementText": "Ace: 'Safety is the trade-off for raw velocity.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Final time complexity of Stable Counting Sort?",
-        "options": [
-          "O(N + K)",
-          "O(N log N)",
-          "O(N^2)"
-        ],
-        "correctAnswer": "O(N + K)"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Output placement.",
-        "codeSnippet": "output[ ___ [arr[i]] - 1] = arr[i];",
-        "correctAnswer": "count"
+        "questionText": "Is Heap Sort stable?",
+        "options": ["Yes", "No (Swaps between roots and leaves are long-range)", "Always", "Pico guess"],
+        "correctAnswer": "No (Swaps between roots and leaves are long-range)",
+        "explanation": "The tree structure does not preserve the original relative order of equal keys."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Stable harvest! 🦜\""
+        "questionText": "[SYNC] Final State",
+        "explanation": "Ace: 'At the end of the loop, the array is perfectly sorted in ascending order.'",
+        "encouragementText": "Pico: 'Freshly sorted seeds! 100% 🦜'"
       },
       {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Did we keep the order?\"",
-        "options": [
-          "SQUAWK YES!",
-          "No.",
-          "0"
-        ],
-        "correctAnswer": "SQUAWK YES!"
+        "type": "programming_board",
+        "questionText": "Next element to heapify after root swap.",
+        "codeSnippet": "heapify(arr, newSize, ___ );",
+        "correctAnswer": "0",
+        "explanation": "We always repair from the root down."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Harvest Lord",
+        "explanation": "You have extracted the order from the mound. Ace: 'The sorting is done.'",
+        "encouragementText": "Pico: 'I'm full of seeds! 100% 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match extraction terms!",
+        "pairs": [
+          { "key": "Swap", "value": "Move root to back" },
+          { "key": "Shrink", "value": "Reduce heap range" },
+          { "key": "Repair", "value": "Heapify(0)" }
+        ]
       }
     ]
   },
   {
     "order": 45,
-    "title": "The Digital Wing",
-    "desc": "Introduction to Radix Sort.",
+    "title": "Unit 45: Tree Sort (BST Sort)",
+    "desc": "Sorting by building a Binary Search Tree.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Bit by Bit! Radix Sort handles huge numbers by sorting them digit by digit, from the smallest place (ones) to the largest! 🦜\""
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"The Process: Use Counting Sort on the ones digit, then the tens, then hundreds. As long as Counting Sort is STABLE, the final result will be perfectly sorted! 🦜\""
+        "questionText": "[MISSION LORE 3.5] The Branching Path",
+        "explanation": "Ace: 'If you insert every element into a Binary Search Tree (BST) and then perform an \"In-Order Traversal\", you get the elements sorted!' Pico: 'Climbing the branches in order! 100% 🦜'",
+        "encouragementText": "Ace: 'Growth is the organic path to sequence.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "What property of Counting Sort is mandatory for Radix Sort?",
-        "options": [
-          "Stability",
-          "O(1) space",
-          "Bird names"
-        ],
-        "correctAnswer": "Stability"
+        "questionText": "Average time complexity to sort using a standard BST?",
+        "options": ["O(N log N)", "O(N)", "O(N^2)", "Pico rule"],
+        "correctAnswer": "O(N log N)",
+        "explanation": "Insert N items, each taking O(log N) on average."
       },
       {
-        "type": "match_following",
-        "questionText": "Match Radix logic!",
-        "pairs": [
-          {
-            "key": "Pass 1",
-            "value": "Sort by ones"
-          },
-          {
-            "key": "Pass 2",
-            "value": "Sort by tens"
-          },
-          {
-            "key": "Requirement",
-            "value": "Stable sub-sort"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] In-Order Traversal",
+        "explanation": "Ace: 'Visit Left, then Root, then Right. This naturally yields sorted values because of BST properties.'",
+        "encouragementText": "Pico: 'Left most first! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "Radix sort handles numbers digit by ___.",
-        "codeSnippet": "Method = ___ ;",
-        "correctAnswer": "digit"
+        "questionText": "Worst-case complexity if data is already sorted?",
+        "options": ["O(N log N)", "O(N^2) (The tree becomes a line)", "O(N)", "Pico secret"],
+        "correctAnswer": "O(N^2) (The tree becomes a line)",
+        "explanation": "Without balancing, a BST can degrade into a linked list."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Time Complexity: O(d * (N + K)), where `d` is the number of digits. For 32-bit integers, this is basically linear! 🦜\""
+        "questionText": "[CORE GATE] Self-Balancing",
+        "explanation": "Ace: 'To guarantee O(N log N), we use self-balancing trees like AVL or Red-Black trees for Tree Sort.'",
+        "encouragementText": "Ace: 'Balance is the correction of growth.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "How many digits in the number 123?",
-        "options": [
-          "3",
-          "2",
-          "1"
-        ],
-        "correctAnswer": "3"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Extract digit logic.",
-        "codeSnippet": "digit = (num / exp) ___ 10;",
-        "correctAnswer": "%"
+        "questionText": "Is Tree Sort stable?",
+        "options": ["Yes, if equal items go only to the right child", "No", "Always", "Pico guess"],
+        "correctAnswer": "Yes, if equal items go only to the right child",
+        "explanation": "Maintaining a strict insertion rule for duplicates preserves their relative order."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Digital flight! 🦜\""
+        "questionText": "[SYNC] Extra Space",
+        "explanation": "Ace: 'Tree sort uses O(N) extra space to store the actual tree nodes.'",
+        "encouragementText": "Pico: 'Lots of wood! 100% 🦜'"
       },
       {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Can it sort 1,000,000 large numbers efficiently?\"",
-        "options": [
-          "SQUAWK YES!",
-          "No.",
-          "0"
-        ],
-        "correctAnswer": "SQUAWK YES!"
+        "type": "programming_board",
+        "questionText": "In-order recursive step 1.",
+        "codeSnippet": "inOrder(node-> ___ );\nprint(node->val);\ninOrder(node->right);",
+        "correctAnswer": "left",
+        "explanation": "Visiting the smaller sub-tree first."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Branch Lord",
+        "explanation": "You have mapped the forest's growth to its rank. Ace: 'The traversal is complete.'",
+        "encouragementText": "Pico: 'I love trees! 100% 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Tree terms!",
+        "pairs": [
+          { "key": "Left-Root-Right", "value": "In-order traversal" },
+          { "key": "Balance", "value": "O(N log N) guarantee" },
+          { "key": "Space O(N)", "value": "Additional storage" }
+        ]
       }
     ]
   },
   {
     "order": 46,
-    "title": "Radix Implementation",
-    "desc": "How Radix Sort chains Counting Sort passes.",
+    "title": "Unit 46: Comb Sort (Bubble with a Gap)",
+    "desc": "The improved Bubble Sort using gap reduction.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"The Exponential Ladder! We start with `exp = 1` and multiply by 10 in each pass until we've covered the largest bird's digits! 🦜\"",
-        "codeSnippet": "for(int exp = 1; max/exp > 0; exp *= 10) {\n  countSort(arr, n, exp);\n}"
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"Each `countSort` call uses the stable logic and extracts the digit using `(arr[i] / exp) % 10`. 🦜\""
+        "questionText": "[MISSION LORE 3.6] The Sorting Comb",
+        "explanation": "Ace: 'Bubble Sort is slow because small values at the end (Turtles) take forever to move to the start. Comb Sort uses a gap (like Shell Sort) to eliminate turtles!' Pico: 'Combing the forest floor! 100% 🦜'",
+        "encouragementText": "Ace: 'Widening the reach eliminates the local drag.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "What is the base Case for Radix Sort on integers?",
-        "options": [
-          "Base 10",
-          "Base 2",
-          "Base Birds"
-        ],
-        "correctAnswer": "Base 10"
+        "questionText": "What is the standard 'Shrink Factor' for the gap in Comb Sort?",
+        "options": ["2.0", "1.3", "10", "Pico rule"],
+        "correctAnswer": "1.3",
+        "explanation": "Empirically discovered to be the most efficient ratio for shrinking the gap."
       },
       {
-        "type": "match_following",
-        "questionText": "Match Radix passes!",
-        "pairs": [
-          {
-            "key": "exp = 1",
-            "value": "Ones digit"
-          },
-          {
-            "key": "exp = 10",
-            "value": "Tens digit"
-          },
-          {
-            "key": "exp = 100",
-            "value": "Hundreds digit"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] Turtles",
+        "explanation": "Ace: 'Turtles are small values at high indices that move very slowly in standard Bubble Sort. Comb sort jumps them to the start quickly.'",
+        "encouragementText": "Pico: 'Wake up, turtles! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "In each pass, `exp` is multiplied by ___.",
-        "codeSnippet": "Multiplier = ___ ;",
-        "correctAnswer": "10"
+        "questionText": "Next gap calculation.",
+        "codeSnippet": "gap = (gap * 10) / ___ ;",
+        "correctAnswer": "13",
+        "explanation": "Representing the 1.3 shrink factor using integer math."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Radix Sort is great for fixed-length keys like strings and integers. It scales beautifully for massive, structured data! 🦜\""
+        "questionText": "[CORE GATE] Complexity",
+        "explanation": "Ace: 'Average case is O(N log N), but worst case is still O(N^2). It's a huge upgrade over Bubble Sort.'",
+        "encouragementText": "Ace: 'Optimization is the refinement of the baseline.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Space complexity of Radix Sort?",
-        "options": [
-          "O(N + K)",
-          "O(1)",
-          "O(N^2)"
-        ],
-        "correctAnswer": "O(N + K)"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Next pass prep.",
-        "codeSnippet": "exp ___= 10;",
-        "correctAnswer": "*"
+        "questionText": "Like Shell Sort, is Comb Sort stable?",
+        "options": ["Yes", "No", "Depends", "Pico guess"],
+        "correctAnswer": "No",
+        "explanation": "Large-gap swaps naturally break stability."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Exponential reach! 🦜\""
+        "questionText": "[SYNC] Swap count",
+        "explanation": "Ace: 'Like Bubble Sort, we continue as long as the gap > 1 OR at least one swap happened.'",
+        "encouragementText": "Pico: 'Swapped again! 100% 🦜'"
       },
       {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Is it stable?\"",
-        "options": [
-          "SQUAWK YES (must be)!",
-          "No.",
-          "0"
-        ],
-        "correctAnswer": "SQUAWK YES (must be)!"
+        "type": "programming_board",
+        "questionText": "Min gap size.",
+        "codeSnippet": "if (gap < ___ ) gap = 1;",
+        "correctAnswer": "1",
+        "explanation": "The last pass is always a standard bubble pass of gap 1."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Comb Scout",
+        "explanation": "You have smoothed the tangles of the forest. Ace: 'The sequence is brushed.'",
+        "encouragementText": "Pico: 'No more knots! 100% 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Comb terms!",
+        "pairs": [
+          { "key": "1.3", "value": "Shrink factor" },
+          { "key": "Turtles", "value": "Slow movers" },
+          { "key": "Gap", "value": "Jump distance" }
+        ]
       }
     ]
   },
   {
     "order": 47,
-    "title": "Birds in Buckets",
-    "desc": "Introduction to Bucket Sort.",
+    "title": "Unit 47: Cycle Sort (Minimal Writing)",
+    "desc": "Sorting by rotating elements in their cycles.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Scattering the Flock! Bucket Sort is perfect for birds with decimal values (like size 0.1, 0.5, 0.9). We scatter them into separate 'buckets' based on their value! 🦜\""
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"Logic: Split the range [0.0, 1.0) into N buckets. Put each bird into `n * arr[i]` bucket. Then sort buckets individually! 🦜\"",
-        "codeSnippet": "int bi = n * arr[i];\nbuckets[bi].add(arr[i]);"
+        "questionText": "[MISSION LORE 3.7] The Efficient Porter",
+        "explanation": "Ace: 'In many memory systems, WRITING data is expensive. Cycle Sort is unique because it makes the ABSOLUTE MINIMUM number of writes possible ($O(n)$).' Pico: 'Only moving things if I have to! 100% 🦜'",
+        "encouragementText": "Ace: 'Economy is the wisdom of movement.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Bucket Sort is most effective when the data is ___.",
-        "options": [
-          "Uniformly distributed",
-          "Concentrated at one value",
-          "Randomized"
-        ],
-        "correctAnswer": "Uniformly distributed"
+        "questionText": "If an item is already in its correct spot, does Cycle Sort write to memory?",
+        "options": ["Yes", "No", "Sometimes", "Pico rule"],
+        "correctAnswer": "No",
+        "explanation": "It only moves an element if it belongs elsewhere, and it moves it directly to its final spot."
       },
       {
-        "type": "match_following",
-        "questionText": "Match Bucket steps!",
-        "pairs": [
-          {
-            "key": "Scatter",
-            "value": "Put birds in buckets"
-          },
-          {
-            "key": "Sort",
-            "value": "Order each bucket"
-          },
-          {
-            "key": "Gather",
-            "value": "Join buckets back"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] Theoretical Minimum",
+        "explanation": "Ace: 'Every permutation can be decomposed into cycles. Cycle sort simply follows these cycles and places elements.'",
+        "encouragementText": "Pico: 'Round in circles! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "Bucket index for value 0.45 with 10 buckets.",
-        "codeSnippet": "Index = ___ ;",
-        "correctAnswer": "4"
+        "questionText": "Complexity of Cycle Sort?",
+        "options": ["O(N log N)", "O(N^2)", "O(N)", "Pico secret"],
+        "correctAnswer": "O(N^2)",
+        "explanation": "For each element, we scan the whole array to find its correct position."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Time Complexity (Average): O(N). Worst case (all birds in one bucket): O(N log N) or O(N^2). Distribution is key! 🦜\""
+        "questionText": "[CORE GATE] Use cases",
+        "explanation": "Ace: 'Perfect for sorting items in Flash memory where write cycles are limited.'",
+        "encouragementText": "Ace: 'Algorithm architecture must respect physical longevity.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Which sort is usually used to sort individual buckets?",
-        "options": [
-          "Insertion Sort",
-          "Bubble Sort",
-          "Selection Sort"
-        ],
-        "correctAnswer": "Insertion Sort"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Calculate index.",
-        "codeSnippet": "int index = n ___ arr[i];",
-        "correctAnswer": "*"
+        "questionText": "What is the count of WRITES to memory in Cycle Sort?",
+        "options": ["N log N", "N or less", "N^2", "Pico guess"],
+        "correctAnswer": "N or less",
+        "explanation": "Each element is written to its final destination exactly once (if not already there)."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Distributed order! 🦜\""
+        "questionText": "[SYNC] Rotation",
+        "explanation": "Ace: 'We pick an item, count how many items are smaller than it, and that count is its final index.'",
+        "encouragementText": "Pico: 'Count and jump! 100% 🦜'"
       },
       {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Does it work for Decimals?\"",
-        "options": [
-          "SQUAWK YES!",
-          "No.",
-          "0"
-        ],
-        "correctAnswer": "SQUAWK YES!"
+        "type": "programming_board",
+        "questionText": "Correct spot calculation.",
+        "codeSnippet": "for (int i=cur+1; i<n; i++) if (arr[i] < item) ___ ++;",
+        "correctAnswer": "pos",
+        "explanation": "Counting predecessors to find the final ranking."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Cycle Scout",
+        "explanation": "You have achieved order with the least exertion. Ace: 'The energy is conserved.'",
+        "encouragementText": "Pico: 'Lazy but smart! 100% 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Cycle terms!",
+        "pairs": [
+          { "key": "O(N) Writes", "value": "Optimal memory use" },
+          { "key": "O(N^2) Time", "value": "Scan cost" },
+          { "key": "Cycle", "value": "Permutation path" }
+        ]
       }
     ]
   },
   {
     "order": 48,
-    "title": "Gathering Buckets",
-    "desc": "Completing the Bucket Sort cycle.",
+    "title": "Unit 48: Pigeonhole Sort",
+    "desc": "Sorting by nesting elements in their labeled holes.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"The Grand Reunion! Once every bucket is sorted, we simply gather the birds from bucket 0 to bucket N-1 back into the main forest. 🦜\""
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"Gathering: Concatenate the contents of all non-empty buckets in order. 🦜\"",
-        "codeSnippet": "for(auto bucket : buckets) {\n  for(float bird : bucket) arr[k++] = bird;\n}"
+        "questionText": "[MISSION LORE 3.8] The Bird's Nest",
+        "explanation": "Ace: 'If you have N items and the range of values (Max - Min) is similar to N, you can use Pigeonhole Sort. It's like Counting Sort but stores actual objects.' Pico: 'Nesting in the right slot! 100% 🦜'",
+        "encouragementText": "Ace: 'Classification is the fast track to alignment.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "In Bucket Sort, what follows bucket sorting?",
-        "options": [
-          "Gathering",
-          "Dividing",
-          "Swapping"
-        ],
-        "correctAnswer": "Gathering"
+        "questionText": "When is Pigeonhole Sort better than Counting Sort?",
+        "options": ["Always", "When elements are complex objects (not just integers)", "Never", "Pico rule"],
+        "correctAnswer": "When elements are complex objects (not just integers)",
+        "explanation": "Pigeonholes (usually linked lists) can store full objects, while Counting Sort just marks frequencies."
       },
       {
-        "type": "match_following",
-        "questionText": "Match Bucket Gathering!",
-        "pairs": [
-          {
-            "key": "Bucket 0Birds",
-            "value": "Smallest range"
-          },
-          {
-            "key": "Bucket N-1 Birds",
-            "value": "Largest range"
-          },
-          {
-            "key": "Result Array",
-            "value": "Sorted whole"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] Gap mapping",
+        "explanation": "Ace: 'Hole Index = (Value - Min). This shifts the range to start at zero.'",
+        "encouragementText": "Pico: 'Shift the nest! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "Bucket sort is a ___ and gather algorithm.",
-        "codeSnippet": "Paradigm = ___ ;",
-        "correctAnswer": "scatter"
+        "questionText": "Ideal range for Pigeonhole sort.",
+        "codeSnippet": "Range = (Max - Min) + ___ ;",
+        "correctAnswer": "1",
+        "explanation": "The number of distinct possible values."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"If buckets are sorted, the gathered list is guaranteed to be sorted! 🦜\""
+        "questionText": "[CORE GATE] Distribution",
+        "explanation": "Ace: 'If the range is much larger than N, the number of empty pigeonholes will waste massive amounts of RAM.'",
+        "encouragementText": "Ace: 'Density defines spatial efficiency.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Can we use Bucket Sort for integers?",
-        "options": [
-          "Yes, with range mapping",
-          "No",
-          "0"
-        ],
-        "correctAnswer": "Yes, with range mapping"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Gathering loop.",
-        "codeSnippet": "for (float val : buckets[i]) arr[index ___ ] = val;",
-        "correctAnswer": "++"
+        "questionText": "Complexity of Pigeonhole sort?",
+        "options": ["O(N + Range)", "O(N log N)", "O(N^2)", "Pico guess"],
+        "correctAnswer": "O(N + Range)",
+        "explanation": "Linear in both input size and the value span."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Reunited order! 🦜\""
+        "questionText": "[SYNC] Linked Lists",
+        "explanation": "Ace: 'Each pigeonhole is often implemented as a list to handle duplicates.'",
+        "encouragementText": "Pico: 'Growing nests! 100% 🦜'"
       },
       {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Is it ready?\"",
-        "options": [
-          "SQUAWK YES!",
-          "No.",
-          "0"
-        ],
-        "correctAnswer": "SQUAWK YES!"
+        "type": "programming_board",
+        "questionText": "Backwards mapping.",
+        "codeSnippet": "item = holes[i].pop(); \narr[k++] = ___ ;",
+        "correctAnswer": "item",
+        "explanation": "Merging the contents of the holes back into the main array."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Nest Architect",
+        "explanation": "You have mapped the population to their specific homes. Ace: 'The alignment is natural.'",
+        "encouragementText": "Pico: 'Home sweet home! 100% 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Pigeon terms!",
+        "pairs": [
+          { "key": "Hole", "value": "Bucket for one value" },
+          { "key": "Range", "value": "Max - Min + 1" },
+          { "key": "Non-integer", "value": "Stored objects" }
+        ]
       }
     ]
   },
   {
     "order": 49,
-    "title": "Elite Comparators",
-    "desc": "Sorting with Custom Comparators.",
+    "title": "Unit 49: Pancake Sort",
+    "desc": "Sorting by flipping prefix stacks.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"The Rules of Engagement! What if we want to sort birds first by wingspan (descending), and if equal, by age (ascending)? We use Custom Comparators! 🦜\""
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"Custom Sort: A function that takes two birds (A, B) and returns `true` if A should come BEFORE B. 🦜\"",
-        "codeSnippet": "bool compare(Bird a, Bird b) {\n  if (a.span != b.span) return a.span > b.span;\n  return a.age < b.age;\n}"
+        "questionText": "[MISSION LORE 3.9] The Griddle Scout",
+        "explanation": "Ace: 'Imagine a stack of pancakes of different sizes. The ONLY operation you can do is a \"Flip\"—insert a spatula at index `i` and reverse everyone from 0 to `i`!' Pico: 'Flipping seeds in the pan! 100% 🦜'",
+        "encouragementText": "Ace: 'Constraint is the father of creative procedure.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "In a comparator, returning `true` for `a < b` results in which order?",
-        "options": [
-          "Ascending",
-          "Descending",
-          "Random"
-        ],
-        "correctAnswer": "Ascending"
+        "questionText": "To move the largest pancake (at index X) to the bottom of a stack (size N):",
+        "options": ["Wait", "Flip(X) to move it to top, then Flip(N-1) to move it to bottom", "Flip(N-1) directly", "Pico rule"],
+        "correctAnswer": "Flip(X) to move it to top, then Flip(N-1) to move it to bottom",
+        "explanation": "By flipping X, the max becomes the very first pancake. Then flipping the whole stack puts that first pancake at the very end."
       },
       {
-        "type": "match_following",
-        "questionText": "Match Comparator logic!",
-        "pairs": [
-          {
-            "key": "a < b",
-            "value": "Ascending Sort"
-          },
-          {
-            "key": "a > b",
-            "value": "Descending Sort"
-          },
-          {
-            "key": "False on match",
-            "value": "Stable check"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] Complexity $O(N)$ flips",
+        "explanation": "Ace: 'We use at most $2n - 3$ flips to sort any stack. It's a fun mathematical puzzle!'",
+        "encouragementText": "Pico: 'Twirl it! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "Comparators give you total ___ over the order.",
-        "codeSnippet": "Control = ___ ;",
-        "correctAnswer": "complete"
+        "questionText": "Reversing an array fragment [0...i].",
+        "codeSnippet": "void flip(arr, i) { for(j=0; j < i/2; j++) swap(arr[j], arr[ ___ -j]); }",
+        "correctAnswer": "i",
+        "explanation": "The standard two-pointer array reverse."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Elite scouts use custom rules to organize complex forests! 🦜\""
+        "questionText": "[CORE GATE] Real World",
+        "explanation": "Ace: 'Used in bioinformatics for DNA resequencing where \"Reversal\" mutations are common.'",
+        "encouragementText": "Ace: 'Metaphor meets the organic code.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "What happens if a comparator is not 'strict' (returns true for equal)?",
-        "options": [
-          "Possible crash or infinite loop",
-          "It's fine",
-          "0"
-        ],
-        "correctAnswer": "Possible crash or infinite loop"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Comparator return.",
-        "codeSnippet": "return a.value ___ b.value;",
-        "correctAnswer": "<"
+        "questionText": "Complexity in time (comparisons)?",
+        "options": ["O(N^2)", "O(N log N)", "O(N)", "Pico guess"],
+        "correctAnswer": "O(N^2)",
+        "explanation": "We search for the max N times, each taking O(N)."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Custom rules! 🦜\""
+        "questionText": "[SYNC] Step by Step",
+        "explanation": "Ace: 'Find current max, flip to top, flip to current bottom, ignore that bottom, repeat for smaller stack.'",
+        "encouragementText": "Pico: 'Shrinking pan! 100% 🦜'"
       },
       {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Can we sort anything?\"",
-        "options": [
-          "SQUAWK YES!",
-          "No.",
-          "0"
-        ],
-        "correctAnswer": "SQUAWK YES!"
+        "type": "programming_board",
+        "questionText": "Finding the max index in [0...curr_size].",
+        "codeSnippet": "max_idx = findMax(arr, ___ );",
+        "correctAnswer": "curr_size",
+        "explanation": "Focusing the search on the unsorted remainder."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Griddle Master",
+        "explanation": "You have mastered the flip. The stack is ordered. Ace: 'The breakfast is served.'",
+        "encouragementText": "Pico: 'Tasty sorting! 100% 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Pancake terms!",
+        "pairs": [
+          { "key": "Flip(i)", "value": "Reverse [0...i]" },
+          { "key": "2n - 3", "value": "Upper bound flips" },
+          { "key": "Top pancake", "value": "Index 0" }
+        ]
       }
     ]
   },
   {
     "order": 50,
-    "title": "Grid Search Elite",
-    "desc": "Searching in a sorted 2D Matrix.",
+    "title": "Unit 50: Half-way Graduation II (The Heap Lord)",
+    "desc": "Claiming the 50% threshold: Mastery of heaps, radix, and exotic flips.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"The Matrix Hunt! If every row and every column of a bird-grid is sorted, we can search it faster than checking every tree! 🦜\""
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"Step-wise Search: Start at the TOP-RIGHT corner. If bird > target, move LEFT. If bird < target, move DOWN! 🦜\"",
-        "codeSnippet": "int r = 0, c = m-1;\nwhile(r < n && c >= 0) {\n  if(mat[r][c] == x) return true;\n  if(mat[r][c] > x) c--; else r++;\n}"
+        "questionText": "[GRAND MISSION LORE 3.10] The Summit of Logic",
+        "explanation": "Ace: '500 Lessons. You have built mountains from arrays, sorted by digits, and flipped pancakes into rank. You are a Heap Lord.' Pico: 'Stage 3 Milestone! 500 lessons! Halfway there! 100% 🦜'",
+        "encouragementText": "Ace: 'Consistency is the bridge to the impossible.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Complexity of Step-wise search in an N x M matrix?",
-        "options": [
-          "O(N + M)",
-          "O(N * M)",
-          "O(log N * log M)"
-        ],
-        "correctAnswer": "O(N + M)"
+        "questionText": "Time complexity to BUILD a heap?",
+        "options": ["O(N log N)", "O(N)", "O(N^2)", "Pico guess"],
+        "correctAnswer": "O(N)",
+        "explanation": "The linear foundation of the heap mound."
       },
       {
-        "type": "match_following",
-        "questionText": "Match Matrix moves!",
-        "pairs": [
-          {
-            "key": "Current > Target",
-            "value": "Move Left (Column --)"
-          },
-          {
-            "key": "Current < Target",
-            "value": "Move Down (Row ++)"
-          },
-          {
-            "key": "Start Position",
-            "value": "Top-Right or Bottom-Left"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] Progress Summary",
+        "explanation": "10 units, 100 lessons in this module. From Radix digit-logic to Cycle-write counts and Pancake flips. Ace: 'Search with precision.'",
+        "encouragementText": "Pico: '50% through the 1,000-lesson gauntlet! 🦜'"
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "Stable linear sort for integers?",
+        "options": ["QuickSort", "Radix Sort with Counting Sort", "Selection", "Pico secret"],
+        "correctAnswer": "Radix Sort with Counting Sort",
+        "explanation": "The LSD variant is the king of stable integer sorting."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[CORE GATE] Graduation Check",
+        "explanation": "Ace: 'Prove you can transition from Heap mounds to Radix passes and Pigeonhole nesting in your mental buffers.' Pico: 'I'm a Heap Lord now! 100% 🦜'",
+        "encouragementText": "Ace: 'The mound reflects the peak through the lens of the root.'"
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "Benefit of Cycle Sort?",
+        "options": ["Fastest", "Least memory writes", "Simplest", "Pico guess"],
+        "correctAnswer": "Least memory writes",
+        "explanation": "O(N) writes is theoretically optimal."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[FINAL SYNC] The 10x10x10 Path",
+        "explanation": "You are 50% through the ultimate journey. Your next target: **Stage 3 (Extended): Bitwise & Hybrid Elite**. Ace: 'Introsort and SleepSort are waiting.'",
+        "encouragementText": "Pico: 'Unit 51 seeds are waiting! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "Starting at top-right works because row is sorted ___ and column is sorted down.",
-        "codeSnippet": "Direction = ___ ;",
-        "correctAnswer": "leftward"
+        "questionText": "Final stage signal.",
+        "codeSnippet": "if (heap_lord == true) return ___ ;",
+        "correctAnswer": "GRADUATE",
+        "explanation": "You have successfully mastered the Priority Strategy phase."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Linear time 2D search! Much faster than the O(N * M) brute force scan. 🦜\""
+        "questionText": "[MISSION LOG] The Heap Lord",
+        "explanation": "The fifth gate is passed. The mound is yours. You are a Stage 3 Graduate. Ace: 'Welcome to the inner circle.'",
+        "encouragementText": "Pico: 'Titan-Grade! 100% 🦜'"
       },
       {
-        "type": "multiple_choice",
-        "questionText": "Can we start at the TOP-LEFT corner?",
-        "options": [
-          "No (Both directions increase)",
-          "Yes",
-          "Only for owls"
-        ],
-        "correctAnswer": "No (Both directions increase)"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Move down.",
-        "codeSnippet": "else r ___ ;",
-        "correctAnswer": "++"
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"Grid locked! 🦜\""
-      },
-      {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Did we find it in 2D?\"",
-        "options": [
-          "SQUAWK YES!",
-          "No.",
-          "0"
-        ],
-        "correctAnswer": "SQUAWK YES!"
+        "type": "programming_board",
+        "questionText": "[FINAL CHALLENGE] Output the status of your journey.",
+        "codeSnippet": "for(int i=41; i<=50; i++) verify_heap_logic(i);\nreturn ___ ;",
+        "correctAnswer": "COMPLETE",
+        "explanation": "The first 500 lessons of the 1,000-lesson curriculum for Sort/Search are verified."
       }
     ]
   },
   {
     "order": 51,
-    "title": "Rotation Count",
-    "desc": "How many times was the array rotated?",
+    "title": "Unit 51: Gnome Sort (The Garden Hunt)",
+    "desc": "Sorting like a garden gnome moving flower pots.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"The Missing Spin! To find how many times a sorted forest was rotated, just find the index of the MINIMUM bird! 🦜\""
+        "questionText": "[MISSION LORE 3.11] The Garden Gnome",
+        "explanation": "Ace: 'A gnome looks at two adjacent pots. If they are in order, he moves one step forward. If not, he swaps them and moves one step BACKWARD to check the previous pair.' Pico: 'A little bird hopping back and forth! 100% 🦜'",
+        "encouragementText": "Ace: 'Retreat is often the only way to verify order.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "In [4, 5, 0, 1, 2], what is the rotation count?",
-        "options": [
-          "2",
-          "4",
-          "0"
-        ],
-        "correctAnswer": "2",
-        "explanation": "Min is at index 2."
+        "questionText": "Complexity of Gnome Sort?",
+        "options": ["O(N)", "O(N^2)", "O(log N)", "Pico rule"],
+        "correctAnswer": "O(N^2)",
+        "explanation": "In the worst case (reversed array), it behaves like Insertion Sort with lots of extra hopping."
       },
       {
-        "type": "match_following",
-        "questionText": "Match Rotation counts!",
-        "pairs": [
-          {
-            "key": "Index of Min",
-            "value": "Rotation Count"
-          },
-          {
-            "key": "Sorted Count",
-            "value": "0 (Min at index 0)"
-          },
-          {
-            "key": "Max Rotation",
-            "value": "N - 1"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] Simplicity",
+        "explanation": "Ace: 'Gnome sort is conceptually simple: only one loop and one index variable needed.'",
+        "encouragementText": "Pico: 'Only one pot to hold! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "Rotation count is the ___ of the pivot.",
-        "codeSnippet": "Value = ___ ;",
-        "correctAnswer": "index"
+        "questionText": "Moving forward.",
+        "codeSnippet": "if (arr[i] >= arr[i-1]) i ___ ;",
+        "correctAnswer": "++",
+        "explanation": "If correct, the gnome moves to the next pair."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Find the valley, find the spin! O(log N). 🦜\""
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Return index.",
-        "codeSnippet": "return ___ ; // index of min",
-        "correctAnswer": "ans"
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"Spin identified! 🦜\""
+        "questionText": "[CORE GATE] Adaptive Properties",
+        "explanation": "Ace: 'Like Insertion Sort, Gnome sort is O(N) for already sorted data. It is highly adaptive.'",
+        "encouragementText": "Ace: 'Presence of order accelerates the gnome.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "By Pico: \"Is it logarithmic?\"",
-        "options": [
-          "SQUAWK YES!",
-          "No.",
-          "0"
-        ],
-        "correctAnswer": "SQUAWK YES!"
+        "questionText": "Moving backward after a swap?",
+        "options": ["i++", "i--", "i = 0", "Pico guess"],
+        "correctAnswer": "i--",
+        "explanation": "The gnome must check if the swapped element is also out of order with its new previous neighbor."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[SYNC] Stability",
+        "explanation": "Ace: 'Gnome sort is Stable as long as it only swaps strictly smaller elements backwards.'",
+        "encouragementText": "Pico: 'Gentle gnome! 100% 🦜'"
+      },
+      {
+        "type": "programming_board",
+        "questionText": "Starting position.",
+        "codeSnippet": "int i = ___ ; // Start at second element",
+        "correctAnswer": "1",
+        "explanation": "You need at least two elements to compare."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Garden Scout",
+        "explanation": "You have smoothed the flower beds. Ace: 'The rank is ready.'",
+        "encouragementText": "Pico: 'Hop hop hop! 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Gnome terms!",
+        "pairs": [
+          { "key": "i++", "value": "Forward movement" },
+          { "key": "i--", "value": "Backward check" },
+          { "key": "O(N^2)", "value": "Worst case" }
+        ]
       }
     ]
   },
   {
     "order": 52,
-    "title": "Ternary Search",
-    "desc": "Searching in a unimodal function.",
+    "title": "Unit 52: Stooge Sort (The Humor Sort)",
+    "desc": "Sorting by extreme overkill recursion.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"The Three-Way Split! Ternary search divides the range into THREE equal parts using two midpoints (`m1` and `m2`). Perfect for finding the maximum of a unimodal forest! 🦜\""
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"Logic: If `f(m1) < f(m2)`, the peak is definitely not in the first third. If `f(m1) > f(m2)`, it's not in the last third! 🦜\"",
-        "codeSnippet": "m1 = l + (r-l)/3;\nm2 = r - (r-l)/3;\nif(f(m1) < f(m2)) l = m1 + 1;\nelse r = m2 - 1;"
+        "questionText": "[MISSION LORE 3.12] The Three Stooges",
+        "explanation": "Ace: 'Stooge Sort is a recursive algorithm that sorts the first 2/3, then the last 2/3, then the first 2/3 AGAIN. It is famously inefficient!' Pico: 'Three silly birds doing extra work! 100% 🦜'",
+        "encouragementText": "Ace: 'Inefficiency is a mathematical curiosity.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "How many parts does Ternary Search divide the array into?",
-        "options": [
-          "3",
-          "2",
-          "4"
-        ],
-        "correctAnswer": "3"
+        "questionText": "Time complexity of Stooge Sort?",
+        "options": ["O(N^2)", "O(N^2.709)", "O(N log N)", "Pico rule"],
+        "correctAnswer": "O(N^2.709)",
+        "explanation": "Calculated by $T(n) = 3T(2n/3) + O(1)$. It is slower than even Bubble Sort!"
       },
       {
-        "type": "match_following",
-        "questionText": "Match Ternary search!",
-        "pairs": [
-          {
-            "key": "Midpoints",
-            "value": "m1 and m2"
-          },
-          {
-            "key": "Complexity",
-            "value": "O(log3 N)"
-          },
-          {
-            "key": "Use case",
-            "value": "Unimodal functions"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] Overkill",
+        "explanation": "Ace: 'It is never used in real software. It exists to teach students how NOT to design a recursive split.'",
+        "encouragementText": "Pico: 'Don't do it! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "Ternary search is often used to find the ___ of a function.",
-        "codeSnippet": "Target = ___ ;",
-        "correctAnswer": "maximum"
+        "questionText": "Initial check.",
+        "codeSnippet": "if (arr[low] > arr[high]) ___ (arr[low], arr[high]);",
+        "correctAnswer": "swap",
+        "explanation": "The only direct comparison made in each call."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"While O(log3 N) sounds faster, it actually does more comparisons per step than binary search. Use it only when the slope changes! 🦜\""
+        "questionText": "[CORE GATE] Recession Pass",
+        "explanation": "Ace: 'The three recursive calls ensure that the absolute maximum finds its way to the back and minimum to the front.'",
+        "encouragementText": "Ace: 'Brute force eventually triumphs through repetition.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Can Ternary Search find a target in a sorted array?",
-        "options": [
-          "Yes, but Binary Search is usually better",
-          "No",
-          "0"
-        ],
-        "correctAnswer": "Yes, but Binary Search is usually better"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Divide factor.",
-        "codeSnippet": "m1 = l + (r - l) / ___ ;",
-        "correctAnswer": "3"
+        "questionText": "What fraction of the array is sorted in each step?",
+        "options": ["1/2", "2/3", "1/3", "Pico guess"],
+        "correctAnswer": "2/3",
+        "explanation": "Stooge sort splits into two-thirds."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Triple precision! 🦜\""
+        "questionText": "[SYNC] Stability",
+        "explanation": "Ace: 'It is stable, but nobody cares because it's so slow!'",
+        "encouragementText": "Pico: 'Stable but sleepy! 100% 🦜'"
       },
       {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Is it 3-way?\"",
-        "options": [
-          "SQUAWK YES!",
-          "No.",
-          "0"
-        ],
-        "correctAnswer": "SQUAWK YES!"
+        "type": "programming_board",
+        "questionText": "Recursive call count.",
+        "codeSnippet": "stooge(L, H); stooge(L, H); stooge(L, H); Total = ___ ;",
+        "correctAnswer": "3",
+        "explanation": "Three full calls per level."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Silly Scout",
+        "explanation": "You have witnessed the slowest descent into order. Ace: 'The array is eventually sorted.'",
+        "encouragementText": "Pico: 'Finally done! 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Stooge terms!",
+        "pairs": [
+          { "key": "2/3", "value": "Split ratio" },
+          { "key": "3 calls", "value": "Recursive burden" },
+          { "key": "O(N^2.71)", "value": "Complexity" }
+        ]
       }
     ]
   },
   {
     "order": 53,
-    "title": "Median Elite",
-    "desc": "Advanced Binary Search: K-th element of two sorted arrays.",
+    "title": "Unit 53: Bogosort (The Luck Sort)",
+    "desc": "Sorting by throwing seeds into the air.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"The K-th Master! Find the K-th smallest bird across two sorted forests without ever merging them. 🦜\""
+        "questionText": "[MISSION LORE 3.13] The Lucky Bird",
+        "explanation": "Ace: 'Bogosort (or Random Sort) is the ultimate joke algorithm. It shuffles the array and checks if it happens to be sorted. If not, it shuffles again.' Pico: 'Throwing seeds and hoping! 100% 🦜'",
+        "encouragementText": "Ace: 'Hope is not a strategy, but it is an algorithm.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "This problem is a general version of which other problem?",
-        "options": [
-          "Median of Two Sorted Arrays",
-          "Quick Sort",
-          "Binary Search"
-        ],
-        "correctAnswer": "Median of Two Sorted Arrays"
+        "questionText": "Average time complexity of Bogosort?",
+        "options": ["O(N!)", "O(N * N!)", "Infinity", "Pico rule"],
+        "correctAnswer": "O(N * N!)",
+        "explanation": "There are N! permutations. For each, we take O(N) to check if it's sorted."
       },
       {
-        "type": "match_following",
-        "questionText": "Match K-th logic!",
-        "pairs": [
-          {
-            "key": "Search Array",
-            "value": "Smaller of the two"
-          },
-          {
-            "key": "Partition sum",
-            "value": "K"
-          },
-          {
-            "key": "Range",
-            "value": "Max(0, K-N2) to Min(K, N1)"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] Probability",
+        "explanation": "Ace: 'For N=10, there are 3.6 million permutations. You might get lucky, but usually search will run for years.'",
+        "encouragementText": "Pico: 'Gambling for seeds! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "Binary Search on K-th element takes O(___) time.",
-        "codeSnippet": "Complexity = ___ ;",
-        "correctAnswer": "log(min(N, M))"
+        "questionText": "The loop condition.",
+        "codeSnippet": "while ( ___ (arr) == false) shuffle(arr);",
+        "correctAnswer": "isSorted",
+        "explanation": "Continuously checking for a lucky miracle."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Careful with the range! If K > N2, we MUST take at least `K-N2` birds from the first array. 🦜\""
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Lower bound constraint.",
-        "codeSnippet": "low = max(0, k ___ n2);",
-        "correctAnswer": "-"
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"Precision K-th! 🦜\""
+        "questionText": "[CORE GATE] Convergence",
+        "explanation": "Ace: 'Bogosort is not guaranteed to ever finish in a finite time, unlike deterministic sorts.'",
+        "encouragementText": "Ace: 'Randomness lacks a termination memory.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "By Pico: \"Is the cut clean?\"",
-        "options": [
-          "SQUAWK YES!",
-          "No.",
-          "0"
-        ],
-        "correctAnswer": "SQUAWK YES!"
+        "questionText": "What if the bird is super lucky?",
+        "options": ["O(N)", "O(1)", "O(N!)", "Pico guess"],
+        "correctAnswer": "O(N)",
+        "explanation": "Best case: Array is already sorted (takes O(N) to check)."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[SYNC] Bozosort",
+        "explanation": "Ace: 'A variant called Bozosort picks two random elements and swaps them. Still O(N!).'",
+        "encouragementText": "Pico: 'Silly birds! 100% 🦜'"
+      },
+      {
+        "type": "programming_board",
+        "questionText": "Shuffle mechanism.",
+        "codeSnippet": "random_ ___ (arr.begin(), arr.end());",
+        "correctAnswer": "shuffle",
+        "explanation": "Using standard randomness to generate a new permutation."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Gambler",
+        "explanation": "You have seen the face of chaos. Ace: 'The order was a fluke.'",
+        "encouragementText": "Pico: 'I won! (maybe) 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Bogo terms!",
+        "pairs": [
+          { "key": "isSorted", "value": "Verification check" },
+          { "key": "Shuffle", "value": "Permutation jump" },
+          { "key": "N!", "value": "The math of doom" }
+        ]
       }
     ]
   },
   {
     "order": 54,
-    "title": "The Chaos Metric",
-    "desc": "Introduction to Inversion Count.",
+    "title": "Unit 54: Sleep Sort (The Timeline Sort)",
+    "desc": "Sorting using the operating system's sleep timer.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"The Measure of Chaos! An inversion is a pair of birds (A, B) such that A appears before B, but A is LARGER than B. It measures how far the forest is from being sorted! 🦜\""
+        "questionText": "[MISSION LORE 3.14] The Napping Bird",
+        "explanation": "Ace: 'Sleep Sort is a creative (and terrible) idea: For every number X, start a thread that sleeps for X seconds, then prints X. Small numbers wake up first!' Pico: 'Sleeping until it's my turn! 100% 🦜'",
+        "encouragementText": "Ace: 'Time is the ultimate dimension of order.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "In [2, 4, 1, 3, 5], how many inversions?",
-        "options": [
-          "3 ( (2,1), (4,1), (4,3) )",
-          "5",
-          "0"
-        ],
-        "correctAnswer": "3 ( (2,1), (4,1), (4,3) )"
+        "questionText": "When does Sleep Sort fail?",
+        "options": ["Negative numbers", "Values that are very close together (Timing jitter)", "Large numbers (takes too long)", "All of the above"],
+        "correctAnswer": "All of the above",
+        "explanation": "It relies on OS scheduling, which is not precise enough for small differences."
       },
       {
-        "type": "match_following",
-        "questionText": "Match Inversion states!",
-        "pairs": [
-          {
-            "key": "Sorted Count",
-            "value": "0"
-          },
-          {
-            "key": "Reverse Sorted",
-            "value": "N*(N-1)/2"
-          },
-          {
-            "key": "Goal",
-            "value": "Count pairs (i < j) where A[i] > A[j]"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] OS Scheduling",
+        "explanation": "Ace: 'It effectively turns the CPU's scheduler into a sorting engine. Extremely inefficient but conceptually brilliant.'",
+        "encouragementText": "Pico: 'Zzzzz... 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "Inversion count is related to the number of ___ needed in Bubble Sort.",
-        "codeSnippet": "Metric = ___ ;",
-        "correctAnswer": "swaps"
+        "questionText": "Thread command.",
+        "codeSnippet": "sleep(x); ___ << x;",
+        "correctAnswer": "cout",
+        "explanation": "Printing the number after its designated nap time."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Elite scouts count chaos in O(N log N) time using a modified Merge Sort! 🦜\""
+        "questionText": "[CORE GATE] Complexity",
+        "explanation": "Ace: 'It is O(MaxVal + N). The time depends more on the size of the numbers than the number of items!'",
+        "encouragementText": "Ace: 'Wait-time is the cost of the sequence.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Complexity of brute-force Inversion Count?",
-        "options": [
-          "O(N^2)",
-          "O(N)",
-          "O(N log N)"
-        ],
-        "correctAnswer": "O(N^2)"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Chaos pair condition.",
-        "codeSnippet": "if (i < j && arr[i] ___ arr[j]) inversions++;",
-        "correctAnswer": ">"
+        "questionText": "Sorting [10, 1] with Sleep Sort takes how many seconds?",
+        "options": ["1", "10", "11", "Pico guess"],
+        "correctAnswer": "10",
+        "explanation": "The largest number determines the total time."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Chaos mapped! 🦜\""
+        "questionText": "[SYNC] Multithreading",
+        "explanation": "Ace: 'You need N threads running in parallel for this to even attempt to work.'",
+        "encouragementText": "Pico: 'So many birds sleeping! 100% 🦜'"
       },
       {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Is a sorted array 0?\"",
-        "options": [
-          "SQUAWK YES!",
-          "No.",
-          "0"
-        ],
-        "correctAnswer": "SQUAWK YES!"
+        "type": "programming_board",
+        "questionText": "Precision issues.",
+        "codeSnippet": "Delay = x * ___ ; // Scaling factor for safety",
+        "correctAnswer": "100",
+        "explanation": "Multiplying the sleep time to reduce the chance of small numbers waking up out of order."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Dreamer",
+        "explanation": "You have sorted through the sands of time. Ace: 'The sequence woke up.'",
+        "encouragementText": "Pico: 'Rise and shine! 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Sleep terms!",
+        "pairs": [
+          { "key": "Sleep(x)", "value": "Temporal delay" },
+          { "key": "Thread", "value": "Execution unit" },
+          { "key": "Jitter", "value": "Timing error" }
+        ]
       }
     ]
   },
   {
     "order": 55,
-    "title": "Divide and Count",
-    "desc": "Inversion Count implementation using Merge Sort.",
+    "title": "Unit 55: Bitwise Radix Sort",
+    "desc": "Sorting by bits (0s and 1s).",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"The Merge Logic! During the Merge step, if a bird from the RIGHT array is smaller than a bird from the LEFT, then it is smaller than ALL remaining birds in the left array! 🦜\""
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"The Formula: `inversions += (mid - i + 1)`. This counts all pairs in one wing-beat! 🦜\"",
-        "codeSnippet": "if(L[i] <= R[j]) arr[k++] = L[i++];\nelse { arr[k++] = R[j++]; inversions += (mid - i + 1); }"
+        "questionText": "[MISSION LORE 3.15] The Binary Scout",
+        "explanation": "Ace: 'Computers are binary. Sorting by individual bits (Radix with Base 2) is often extremely fast and requires very small counting arrays (only 2 slots!).' Pico: 'Sorting by zeroes and ones! 100% 🦜'",
+        "encouragementText": "Ace: 'Power lies in the base of the machine.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "When do we add to the inversion count in Merge Sort?",
-        "options": [
-          "When we pick from the right array",
-          "When we pick from the left array",
-          "When splitting"
-        ],
-        "correctAnswer": "When we pick from the right array"
+        "questionText": "How many passes are needed to bit-sort 32-bit integers?",
+        "options": ["1", "32", "10", "Pico rule"],
+        "correctAnswer": "32",
+        "explanation": "One pass for every bit position."
       },
       {
-        "type": "match_following",
-        "questionText": "Match Inversion steps!",
-        "pairs": [
-          {
-            "key": "Left Inversions",
-            "value": "Recursive call 1"
-          },
-          {
-            "key": "Right Inversions",
-            "value": "Recursive call 2"
-          },
-          {
-            "key": "Split Inversions",
-            "value": "Cross-array pairs (counted in Merge)"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] Bitmask",
+        "explanation": "Ace: 'Use `(val >> i) & 1` to get the i-th bit from the right.'",
+        "encouragementText": "Pico: 'Scan the bits! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "Efficient Inversion count complexity.",
-        "codeSnippet": "Speed = O( ___ );",
-        "correctAnswer": "n log n"
+        "questionText": "Isolating the bit.",
+        "codeSnippet": "bit = (num >> i) ___ 1;",
+        "correctAnswer": "&",
+        "explanation": "Bitwise AND with 1 extracts the LSB after the shift."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"This is the fastest way to measure forest disorder! 🦜\""
+        "questionText": "[CORE GATE] Hybrid power",
+        "explanation": "Ace: 'Bitwise radix is used in \"High Performance Computing\" to sort massive datasets of pointers or integers.'",
+        "encouragementText": "Ace: 'Hardware alignment is the final ceiling of speed.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Base case inversion count for size 1 array?",
-        "options": [
-          "0",
-          "1",
-          "N"
-        ],
-        "correctAnswer": "0"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Add count.",
-        "codeSnippet": "invCount += (mid ___ i + 1);",
-        "correctAnswer": "-"
+        "questionText": "Stability in Bit-sort?",
+        "options": ["Doesn't matter", "Mandatory (Uses stable Counting Sort on bits)", "None", "Pico guess"],
+        "correctAnswer": "Mandatory (Uses stable Counting Sort on bits)",
+        "explanation": "Like all Radix sorts, stability is the glue that keeps previous passes valid."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Chaos solved! 🦜\""
+        "questionText": "[SYNC] MSD variant",
+        "explanation": "Ace: 'Binary MSD Radix sort is essentially QuickSort where the pivot is always the middle of the current power-of-2 range!'",
+        "encouragementText": "Pico: 'Pivot bits! 100% 🦜'"
       },
       {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Is it O(N log N)?\"",
-        "options": [
-          "SQUAWK YES!",
-          "No.",
-          "0"
-        ],
-        "correctAnswer": "SQUAWK YES!"
+        "type": "programming_board",
+        "questionText": "Shift value for 4th bit.",
+        "codeSnippet": "bit = (num >> ___ ) & 1;",
+        "correctAnswer": "3",
+        "explanation": "Bit positions are zero-indexed."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Bit Lord",
+        "explanation": "You have spoken the language of the machine. Ace: 'The binary is ordered.'",
+        "encouragementText": "Pico: '101010 sorted! 100% 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Bit terms!",
+        "pairs": [
+          { "key": ">>", "value": "Right shift" },
+          { "key": "& 1", "value": "Extraction" },
+          { "key": "32", "value": "Standard int passes" }
+        ]
       }
     ]
   },
   {
     "order": 56,
-    "title": "The Minimum Write",
-    "desc": "Introduction to Cycle Sort.",
+    "title": "Unit 56: Binary Insertion Sort",
+    "desc": "Optimizing search in Insertion Sort.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Respect the Nest! Cycle Sort is unique because it makes the MINIMUM possible number of writes to the array. Perfect if changing a bird's nest is very expensive! 🦜\""
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"Logic: Find the correct position for each bird by counting how many birds are smaller than it. Then, cycle the bird into its spot and continue! 🦜\""
+        "questionText": "[MISSION LORE 3.16] The Hybrid Scout",
+        "explanation": "Ace: 'In normal Insertion Sort, we use Linear Search to find where to put the next element. Why not use Binary Search? It reduces the number of comparisons!' Pico: 'Logarithmic card organizing! 100% 🦜'",
+        "encouragementText": "Ace: 'Knowledge of the sorted segment allows for faster insertion point discovery.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Which sort is best for minimizing memory writes?",
-        "options": [
-          "Cycle Sort",
-          "Quick Sort",
-          "Bubble Sort"
-        ],
-        "correctAnswer": "Cycle Sort"
+        "questionText": "Does Binary Insertion Sort improve the complexity class?",
+        "options": ["Yes, to O(N log N)", "No, still O(N^2) due to shifting", "Only O(N)", "Pico rule"],
+        "correctAnswer": "No, still O(N^2) due to shifting",
+        "explanation": "While finding the spot is O(log N), moving elements to make room still takes O(N) in the worst case."
       },
       {
-        "type": "match_following",
-        "questionText": "Match Cycle logic!",
-        "pairs": [
-          {
-            "key": "Writes",
-            "value": "Minimum (O(N))"
-          },
-          {
-            "key": "Comparisons",
-            "value": "O(N^2)"
-          },
-          {
-            "key": "In-place",
-            "value": "Yes"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] Complexity $O(N^2)$",
+        "explanation": "Ace: 'Comparisons: $O(N \log N)$. Swaps/Shifts: $O(N^2)$. Total: $O(N^2)$. Useful when comparisons are much more expensive than shifts.'",
+        "encouragementText": "Pico: 'Shifting is hard work! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "Cycle sort identifies separate ___ in the array.",
-        "codeSnippet": "Structure = ___ ;",
-        "correctAnswer": "cycles"
+        "questionText": "Binary Search range for item i.",
+        "codeSnippet": "pos = binarySearch(arr, 0, ___ , item);",
+        "correctAnswer": "i-1",
+        "explanation": "The search is restricted to the already-sorted part of the array."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Use this when you're sorting on Flash memory or expensive hardware where every write counts! 🦜\""
+        "questionText": "[CORE GATE] Expensive Compare",
+        "explanation": "Ace: 'Used when comparing two items takes a long time (e.g. comparing long DNA strings) but moving them is fast.'",
+        "encouragementText": "Ace: 'Minimize the heaviest operation.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Time complexity of Cycle Sort?",
-        "options": [
-          "O(N^2)",
-          "O(N)",
-          "O(N log N)"
-        ],
-        "correctAnswer": "O(N^2)"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Find pos.",
-        "codeSnippet": "for(int j=i+1; j<n; j++) if(arr[j] < item) ___ ++;",
-        "correctAnswer": "pos"
+        "questionText": "Is Binary Insertion Sort stable?",
+        "options": ["Yes (Use Upper Bound to find position)", "No", "Always", "Pico guess"],
+        "correctAnswer": "Yes (Use Upper Bound to find position)",
+        "explanation": "By inserting after the last equal element, stability is preserved."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Cycle complete! 🦜\""
+        "questionText": "[SYNC] Upper Bound",
+        "explanation": "Ace: 'Upper Bound finds the first position where the element can be placed while keeping it stable.'",
+        "encouragementText": "Pico: 'Tight fit! 100% 🦜'"
       },
       {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Are writes minimal?\"",
-        "options": [
-          "SQUAWK YES!",
-          "No.",
-          "0"
-        ],
-        "correctAnswer": "SQUAWK YES!"
+        "type": "programming_board",
+        "questionText": "After finding `pos`, shift from i-1 down to ___ .",
+        "codeSnippet": "while (j >= ___ ) { arr[j+1] = arr[j]; j--; }",
+        "correctAnswer": "pos",
+        "explanation": "Making a hole at the target insertion index."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Hybrid Organizer",
+        "explanation": "You have combined search and sort for local efficiency. Ace: 'The insertion is surgical.'",
+        "encouragementText": "Pico: 'Clean slot! 100% 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Binary-Ins terms!",
+        "pairs": [
+          { "key": "O(log N)", "value": "Comparison cost" },
+          { "key": "O(N)", "value": "Shifting cost" },
+          { "key": "Upper Bound", "value": "Insertion point" }
+        ]
       }
     ]
   },
   {
     "order": 57,
-    "title": "Shell Flight",
-    "desc": "Introduction to Shell Sort.",
+    "title": "Unit 57: Strand Sort",
+    "desc": "Sorting by pulling sorted strands out of the dataset.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Bridging the Gap! Shell Sort is an optimized Insertion Sort. It compares birds far apart initially, then gradually reduces the 'gap' between comparisons! 🦜\""
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"The Gap: Using a gap of N/2, then N/4... until gap=1. It moves distant birds quickly to their general area! 🦜\"",
-        "codeSnippet": "for(int gap = n/2; gap > 0; gap /= 2) {\n  for(int i = gap; i < n; i++) {\n    int temp = arr[i]; int j;\n    for(j=i; j >= gap && arr[j-gap] > temp; j -= gap) arr[j] = arr[j-gap];\n    arr[j] = temp;\n  }\n}"
+        "questionText": "[MISSION LORE 3.17] The Silk Weaver",
+        "explanation": "Ace: 'Strand Sort finds a sorted \"Strand\" in the remaining items, pulls it out, and merges it into a final sorted list. Repeat until empty.' Pico: 'Pulling the straightest branches! 100% 🦜'",
+        "encouragementText": "Ace: 'Patterns in chaos are the materials of rank.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Shell Sort is an optimization of which algorithm?",
-        "options": [
-          "Insertion Sort",
-          "Selection Sort",
-          "Quick Sort"
-        ],
-        "correctAnswer": "Insertion Sort"
+        "questionText": "Average complexity of Strand Sort?",
+        "options": ["O(N log N)", "O(N^2)", "O(N)", "Pico rule"],
+        "correctAnswer": "O(N^2)",
+        "explanation": "On average, you do multiple passes over the remaining list to extract strands."
       },
       {
-        "type": "match_following",
-        "questionText": "Match Shell logic!",
-        "pairs": [
-          {
-            "key": "Initial Gap",
-            "value": "Large (move fast)"
-          },
-          {
-            "key": "Final Gap",
-            "value": "1 (Standard Insertion)"
-          },
-          {
-            "key": "Stability",
-            "value": "Unstable"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] Linked Lists",
+        "explanation": "Ace: 'Strand sort is best implemented using Linked Lists to make removing \"Strands\" easy (O(1) removal).'",
+        "encouragementText": "Pico: 'Fast cut! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "Shell sort improves on the O(N^2) complexity of ___.",
-        "codeSnippet": "SourceAlgorithm = ___ ;",
-        "correctAnswer": "insertion"
+        "questionText": "Building a strand.",
+        "codeSnippet": "if (item > last_in_strand) ___ .push_back(item);",
+        "correctAnswer": "strand",
+        "explanation": "Only take items that maintain the sorted order of the current strand."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Complexity depends on the gap sequence, often around O(N^1.5) or better. A fast, old-school flyer! 🦜\""
+        "questionText": "[CORE GATE] Adaptive Power",
+        "explanation": "Ace: 'If the data is ALREADY sorted, it pull the entire list in ONE strand ($O(N)$). Highly adaptive!'",
+        "encouragementText": "Ace: 'Presence of order is rewarded with linear speed.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Is Shell Sort stable?",
-        "options": [
-          "No (Gaps skip birds)",
-          "Yes",
-          "0"
-        ],
-        "correctAnswer": "No (Gaps skip birds)"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Reduce gap.",
-        "codeSnippet": "gap ___= 2;",
-        "correctAnswer": "/"
+        "questionText": "Complexity if the array is reversed?",
+        "options": ["O(N)", "O(N^2)", "O(log N)", "Pico guess"],
+        "correctAnswer": "O(N^2)",
+        "explanation": "Every strand will only have one element, leading to N merges."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Shell speed! 🦜\""
+        "questionText": "[SYNC] Merge",
+        "explanation": "Ace: 'After extracting a strand, we use the standard O(N) Merge logic to join it with the master list.'",
+        "encouragementText": "Pico: 'Join the threads! 100% 🦜'"
       },
       {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Is it faster than O(N^2)?\"",
-        "options": [
-          "SQUAWK YES!",
-          "No.",
-          "0"
-        ],
-        "correctAnswer": "SQUAWK YES!"
+        "type": "programming_board",
+        "questionText": "Merging result.",
+        "codeSnippet": "result = merge(result, ___ );",
+        "correctAnswer": "strand",
+        "explanation": "Combining the newly found sorted sequence with the previous ones."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Weaver",
+        "explanation": "You have woven the strands of the forest into a single tapestry. Ace: 'The weaving is complete.'",
+        "encouragementText": "Pico: 'Silky smooth! 100% 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Strand terms!",
+        "pairs": [
+          { "key": "Strand", "value": "A sub-sorted list" },
+          { "key": "Merge", "value": "The join step" },
+          { "key": "O(N)", "value": "Best case" }
+        ]
       }
     ]
   },
   {
     "order": 58,
-    "title": "Parallel Dreams",
-    "desc": "Introduction to Bitonic Sort.",
+    "title": "Unit 58: Introsort (The Defensive Hybrid)",
+    "desc": "QuickSort with a HeapSort fallback.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Synchronized Wings! Bitonic Sort is a parallel sorting algorithm. It creates a 'Bitonic sequence' (increases then decreases) and then resolves it into a fully sorted forest! 🦜\""
+        "questionText": "[MISSION LORE 3.18] The Elite Shield",
+        "explanation": "Ace: 'Introsort is the standard sort in C++ (std::sort). It starts with QuickSort, but if it detects a deep recursion (potential O(N^2)), it switches to HeapSort to guarantee speed!' Pico: 'Never getting stuck! 100% 🦜'",
+        "encouragementText": "Ace: 'Intelligence is knowing when to change strategy.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Bitonic Sort is designed for use on ___.",
-        "options": [
-          "Parallel processors / GPUs",
-          "Single core CPUs",
-          "Pen and Paper"
-        ],
-        "correctAnswer": "Parallel processors / GPUs"
+        "questionText": "What is the Worst-case complexity of Introsort?",
+        "options": ["O(N^2)", "O(N log N)", "O(N)", "Pico rule"],
+        "correctAnswer": "O(N log N)",
+        "explanation": "HeapSort ensures the $O(N^2)$ nightmare of QuickSort never happens."
       },
       {
-        "type": "match_following",
-        "questionText": "Match Bitonic logic!",
-        "pairs": [
-          {
-            "key": "Bitonic Sequence",
-            "value": "Up-Down profile"
-          },
-          {
-            "key": "Complexity",
-            "value": "O(log^2 N) on parallel"
-          },
-          {
-            "key": "Input Size",
-            "value": "Power of 2"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] Depth Limit",
+        "explanation": "Ace: 'The depth limit is usually set to $2 \cdot \log_2 N$. If reached, swap to HeapSort.'",
+        "encouragementText": "Pico: 'Too deep! Swap! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "Input size for Bitonic sort must be a ___ of 2.",
-        "codeSnippet": "Constraint = ___ ;",
-        "correctAnswer": "power"
+        "questionText": "Introsort decision.",
+        "codeSnippet": "if (depth_limit == 0) ___ (arr, low, high);",
+        "correctAnswer": "heapSort",
+        "explanation": "The safety net activates when recursion is too deep."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Complexity on a single core is O(N log^2 N). Slower than Quick Sort, but a beast on a GPU! 🦜\""
+        "questionText": "[CORE GATE] Triple Hybrid",
+        "explanation": "Ace: 'Modern Introsort also switches to Insertion Sort for very small ranges (e.g. N < 16) for final polishing.'",
+        "encouragementText": "Ace: 'The tool adapts to the scale of the task.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Can Bitonic sort be used for any size N?",
-        "options": [
-          "Requires padding to power of 2",
-          "No",
-          "0"
-        ],
-        "correctAnswer": "Requires padding to power of 2"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Swap logic.",
-        "codeSnippet": "if (dir == (arr[i] ___ arr[j])) swap(arr[i], arr[j]);",
-        "correctAnswer": ">"
+        "questionText": "Is std::sort (Introsort) stable?",
+        "options": ["Yes", "No (QuickSort and HeapSort are unstable)", "Always", "Pico guess"],
+        "correctAnswer": "No (QuickSort and HeapSort are unstable)",
+        "explanation": "C++ developers use `std::stable_sort` (usually Mergesort) if order preservation is needed."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Parallel flight! 🦜\""
+        "questionText": "[SYNC] Three ingredients",
+        "explanation": "Ace: 'Introsort = QuickSort + HeapSort + InsertionSort. It is the best practical sort for random data.'",
+        "encouragementText": "Pico: 'Tasty mix! 100% 🦜'"
       },
       {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Is it for GPUs?\"",
-        "options": [
-          "SQUAWK YES!",
-          "No.",
-          "0"
-        ],
-        "correctAnswer": "SQUAWK YES!"
+        "type": "programming_board",
+        "questionText": "Smallest size check.",
+        "codeSnippet": "if (high - low < ___ ) insertionSort(low, high);",
+        "correctAnswer": "16",
+        "explanation": "Commonly used threshold for the final pass."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Elite Shield",
+        "explanation": "You have mastered the standard of the modern coder. Ace: 'The performance is guaranteed.'",
+        "encouragementText": "Pico: 'Bulletproof sorting! 100% 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Intro terms!",
+        "pairs": [
+          { "key": "log N", "value": "Depth limit" },
+          { "key": "HeapSort", "value": "Safety net" },
+          { "key": "QuickSort", "value": "Starting engine" }
+        ]
       }
     ]
   },
   {
     "order": 59,
-    "title": "Massive Forests",
-    "desc": "Introduction to External Sorting.",
+    "title": "Unit 59: Pigeonhole Sort (Advanced Objects)",
+    "desc": "Sorting by complex bucketing.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"The Global Migration! What if the birds are so numerous they don't fit in your nest (RAM)? We use External Sorting! 🦜\""
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"Method: 1. Sort small 'runs' in RAM. 2. Write them to Disk. 3. Merge the sorted runs using Multi-way Merge! 🦜\""
+        "questionText": "[MISSION LORE 3.19] The Named Nest",
+        "explanation": "Ace: 'We normally sort by value, but what if we need to sort BIRDS by their AGE? Pigeonhole sort uses the age as the hole index, and puts the actual bird object in!' Pico: 'More than just numbers! 100% 🦜'",
+        "encouragementText": "Ace: 'Identity is preserved through the classification.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "External sorting is used when data is too large for ___.",
-        "options": [
-          "RAM (Main Memory)",
-          "The Disk",
-          "The Cloud"
-        ],
-        "correctAnswer": "RAM (Main Memory)"
+        "questionText": "Stability in Pigeonhole Sort?",
+        "options": ["Impossible", "Always stable if using a Queue for each hole", "Random", "Pico rule"],
+        "correctAnswer": "Always stable if using a Queue for each hole",
+        "explanation": "FIFO (First-In, First-Out) ensures birds of the same age maintain their relative arrival order."
       },
       {
-        "type": "match_following",
-        "questionText": "Match External steps!",
-        "pairs": [
-          {
-            "key": "Sort Run",
-            "value": "In-memory sorting"
-          },
-          {
-            "key": "Merge Runs",
-            "value": "Multi-way merging on disk"
-          },
-          {
-            "key": "Buffer",
-            "value": "Chunk of data in RAM"
-          }
-        ]
+        "type": "teaching",
+        "questionText": "[SYNC] Object Mapping",
+        "explanation": "Ace: 'Perfect for sorting records in memory when the set of keys is small and dense.'",
+        "encouragementText": "Pico: 'Age sorting! 100% 🦜'"
       },
       {
         "type": "programming_board",
-        "questionText": "The merge step of External sorting uses a ___ to speed up multi-way merge.",
-        "codeSnippet": "DataStructure = ___ ;",
-        "correctAnswer": "min-heap"
+        "questionText": "Placing the bird.",
+        "codeSnippet": "holes[bird.age - min_age]. ___ (bird);",
+        "correctAnswer": "push",
+        "explanation": "Stashing the full object into its category."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"O(N log N) but limited by Disk I/O speed. The migration continues! 🦜\""
+        "questionText": "[CORE GATE] Memory management",
+        "explanation": "Ace: 'Unlike Counting Sort, we aren't just incrementing integers; we are managing lists of pointers.'",
+        "encouragementText": "Ace: 'Complexity of data requires complexity of storage.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Which algorithm is the foundation for External Sort?",
-        "options": [
-          "Merge Sort",
-          "Quick Sort",
-          "Selection Sort"
-        ],
-        "correctAnswer": "Merge Sort"
-      },
-      {
-        "type": "code_fill_in",
-        "questionText": "Merge logic choice.",
-        "codeSnippet": "Use ___ -way Merge for external sorting.",
-        "correctAnswer": "k"
+        "questionText": "Wait, is this just Bucket Sort?",
+        "options": ["Yes, with bucket size 1", "No", "Exactly the same", "Pico guess"],
+        "correctAnswer": "Yes, with bucket size 1",
+        "explanation": "Pigeonhole sort is a special case of bucket sort where each bucket represents a single value."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Massive migration! 🦜\""
+        "questionText": "[SYNC] Extraction",
+        "explanation": "Ace: 'Traverse holes from 0 to Range. For each non-empty hole, print all birds inside.'",
+        "encouragementText": "Pico: 'The babies are ready! 100% 🦜'"
       },
       {
-        "type": "multiple_choice",
-        "questionText": "By Pico: \"Does it handle Tera-birds?\"",
-        "options": [
-          "SQUAWK YES!",
-          "No.",
-          "0"
-        ],
-        "correctAnswer": "SQUAWK YES!"
+        "type": "programming_board",
+        "questionText": "Range check.",
+        "codeSnippet": "Range = ___ - min + 1;",
+        "correctAnswer": "max",
+        "explanation": "Total number of containers needed."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Object Master",
+        "explanation": "You have sorted the forest by its attributes. Ace: 'The classification is complete.'",
+        "encouragementText": "Pico: 'Everyone in their home! 🦜'"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Advanced terms!",
+        "pairs": [
+          { "key": "Queue", "value": "Stable hole storage" },
+          { "key": "Dense Keys", "value": "Ideal dataset" },
+          { "key": "O(N + R)", "value": "Complexity" }
+        ]
       }
     ]
   },
   {
     "order": 60,
-    "title": "Grand Search Master",
-    "desc": "Searching & Sorting Curriculum Graduate.",
+    "title": "Unit 60: Stage 3 Graduation (The Ace Graduate)",
+    "desc": "Claiming the 60% threshold: The technical elite.",
     "lessons": [
       {
         "type": "teaching",
-        "questionText": "By Pico: \"LEGENDARY! You have completed the 60-unit march through Searching and Sorting. From the simple Linear hunt to the massive External migration! 🦜\""
-      },
-      {
-        "type": "teaching",
-        "questionText": "By Pico: \"You are now a Grand Scout. You can organize any forest and find any bird, no matter how hidden or rotated! 🦜\""
-      },
-      {
-        "type": "multiple_choice",
-        "questionText": "Fastest sorting algorithm for integers with a small range?",
-        "options": [
-          "Counting Sort",
-          "Quick Sort",
-          "Merge Sort"
-        ],
-        "correctAnswer": "Counting Sort"
+        "questionText": "[GRAND MISSION LORE 3.20] The Zenith of Order",
+        "explanation": "Ace: '600 Lessons. You have navigated the machine's bits, built standard library hybrids, and survived the humor of Bogosort. You are now an Ace Graduate.' Pico: 'Stage 3 Complete! 600 lessons! SQUAWK! 100% 🦜'",
+        "encouragementText": "Ace: 'Rigor is the shield of the technical elite.'"
       },
       {
         "type": "multiple_choice",
-        "questionText": "Which search finds the MAX of a parabolic hill?",
-        "options": [
-          "Ternary Search",
-          "Binary Search",
-          "Linear Search"
-        ],
-        "correctAnswer": "Ternary Search"
-      },
-      {
-        "type": "match_following",
-        "questionText": "Final Graduation Check!",
-        "pairs": [
-          {
-            "key": "Radix",
-            "value": "Digit by Digit"
-          },
-          {
-            "key": "Inversion",
-            "value": "Chaos metric"
-          },
-          {
-            "key": "Median 2D",
-            "value": "Grid Search"
-          }
-        ]
+        "questionText": "Which algorithm is the default in C++ (std::sort)?",
+        "options": ["QuickSort", "Introsort", "MergeSort", "Pico guess"],
+        "correctAnswer": "Introsort",
+        "explanation": "Because it combines speed and worst-case safety."
       },
       {
         "type": "teaching",
-        "questionText": "By Pico: \"Your feathers are golden. The mission path is complete! 🦜\""
+        "questionText": "[SYNC] Progress Summary",
+        "explanation": "20 units, 200 lessons in this stage. From Radix digit-logic to Introsort depth and Pancake flips. Ace: 'Fly with precision.'",
+        "encouragementText": "Pico: '60% through the 1,000-lesson gauntlet! 🦜'"
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "Worst-case for HeapSort?",
+        "options": ["O(N^2)", "O(N log N)", "O(N)", "Pico secret"],
+        "correctAnswer": "O(N log N)",
+        "explanation": "HeapSort is one of the few with a guaranteed log-linear worst case."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[CORE GATE] Graduation Check",
+        "explanation": "Ace: 'Prove you can transition from Bit-shifts to Hybrid-switches and Strand-merges in your mental buffers.' Pico: 'I'm an Ace Graduate now! 100% 🦜'",
+        "encouragementText": "Ace: 'The elite reflects the logic through the lens of the hybrid.'"
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "Complexity to find 2D Peak?",
+        "options": ["O(N log M)", "O(N*M)", "O(log N)", "Pico guess"],
+        "correctAnswer": "O(N log M)",
+        "explanation": "Dividing columns while scanning for a vertical maximum."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[FINAL SYNC] The 10x10x10 Path",
+        "explanation": "You are 60% through the ultimate journey. Your next target: **Stage 4: Massive Constraints**. Ace: 'Parallel sorts and sparse search are waiting.'",
+        "encouragementText": "Pico: 'Stage 4 seeds are waiting! 100% 🦜'"
+      },
+      {
+        "type": "programming_board",
+        "questionText": "Final stage signal.",
+        "codeSnippet": "if (ace_graduate == true) return ___ ;",
+        "correctAnswer": "GRADUATE",
+        "explanation": "You have successfully mastered the Advanced Hybrid phase."
+      },
+      {
+        "type": "teaching",
+        "questionText": "[MISSION LOG] The Ace Graduate",
+        "explanation": "The sixth gate is passed. The order is yours. You are a Stage 3 Graduate. Ace: 'Welcome to the inner circle.'",
+        "encouragementText": "Pico: 'Titan-Grade! 100% 🦜'"
+      },
+      {
+        "type": "programming_board",
+        "questionText": "[FINAL CHALLENGE] Output the status of your journey.",
+        "codeSnippet": "for(int i=41; i<=60; i++) verify_ace_logic(i);\nreturn ___ ;",
+        "correctAnswer": "COMPLETE",
+        "explanation": "The first 600 lessons of the 1,000-lesson curriculum for Search/Sort are verified."
       }
     ]
   }

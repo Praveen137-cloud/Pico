@@ -5,6 +5,7 @@ import { AuthContext } from '../context/AuthContext';
 import { AudioContext } from '../App';
 import TypingEffect from '../components/TypingEffect';
 import TieredHint from '../components/TieredHint';
+import LivingCharacter from '../components/LivingCharacter';
 import AdSenseBanner from '../components/AdSenseBanner';
 import _Editor from 'react-simple-code-editor';
 const Editor = _Editor.default || _Editor;
@@ -155,9 +156,17 @@ const Lesson = () => {
     return msgs[Math.floor(Math.random() * msgs.length)];
   };
 
+  const normalizeAnswer = (str) => {
+    if (!str) return "";
+    return str
+      .replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, '$1') // Remove comments
+      .replace(/\s+/g, ' ')                                  // Collapse whitespace
+      .trim();                                              // Trim (Case-sensitive for code)
+  };
+
   const checkAnswer = () => {
     if (currentLesson.type === 'multiple_choice') {
-      if (currentLesson.correctAnswer === selectedOption) {
+      if (normalizeAnswer(currentLesson.correctAnswer) === normalizeAnswer(selectedOption)) {
         setFeedback('correct');
         playSound(true);
       } else {
@@ -165,7 +174,6 @@ const Lesson = () => {
         playSound(false);
       }
     } else if (currentLesson.type === 'programming_board') {
-      // STRICT validation: no case folding or trimming
       const answers = Object.values(boardAnswers);
       const expected = currentLesson.correctAnswer.split(',');
       
@@ -177,7 +185,7 @@ const Lesson = () => {
         firstMismatch = { expected: expected[0], actual: answers[0] || "[MISSING]" };
       } else {
         for(let i=0; i<expected.length; i++) {
-          if (expected[i] !== answers[i]) { 
+          if (normalizeAnswer(expected[i]) !== normalizeAnswer(answers[i])) { 
             isCorrect = false; 
             firstMismatch = { expected: expected[i], actual: answers[i] || "[EMPTY]" };
             break; 
@@ -423,7 +431,12 @@ const Lesson = () => {
         <h2 style={styles.unitTitle}>{unit.title}</h2>
         {currentLesson.type !== 'teaching' && (
           <div style={styles.mascotArea}>
-            <div style={styles.speechBubble}>
+            <LivingCharacter 
+              character="pico" 
+              size={120} 
+              state={feedback === 'correct' ? 'happy' : feedback === 'wrong' ? 'thinking' : 'idle'} 
+            />
+            <div className="speech-bubble-v2 glass-panel">
               <TypingEffect text={currentLesson.questionText} />
               <button 
                 className="tts-btn-mini"
@@ -481,14 +494,17 @@ const Lesson = () => {
             {currentLesson.options.map(opt => (
               <button 
                 key={opt}
-                style={{
-                  ...styles.optionBtn, 
-                  borderColor: selectedOption === opt ? 'var(--theme-primary)' : 'var(--divider)',
-                  backgroundColor: selectedOption === opt ? '#1DD28B22' : 'var(--bg-card)'
-                }}
+                className={`btn-chunky ${selectedOption === opt ? 'cyan' : 'gray'}`}
+                style={{ width: '100%', textAlign: 'left', justifyContent: 'flex-start' }}
                 onClick={() => setSelectedOption(opt)}
                 disabled={feedback === 'correct'}
               >
+                <div style={{
+                   width: 30, height: 30, borderRadius: 8, background: 'rgba(0,0,0,0.2)', 
+                   display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '900'
+                }}>
+                  {String.fromCharCode(65 + currentLesson.options.indexOf(opt))}
+                </div>
                 {opt}
               </button>
             ))}
@@ -605,7 +621,7 @@ const Lesson = () => {
         {feedback === 'correct' && (
           <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%'}}>
             <h3 style={{color: '#1DD28B', margin: 0, fontSize: '14px', fontWeight: 900}}>{getSuccessMsg()}</h3>
-            <button style={{...styles.btnPrimary, width: 'auto', backgroundColor: '#1DD28B', padding: '12px 32px', borderRadius: '12px', border: 'none', fontWeight: 900}} onClick={handleNext}>NEXT PHASE</button>
+            <button className="btn-chunky cyan" style={{ width: 'auto', padding: '12px 40px' }} onClick={handleNext}>CONTINUE</button>
           </div>
         )}
 
@@ -634,7 +650,7 @@ const Lesson = () => {
                 <span style={{color: '#fff', fontFamily: 'monospace', fontSize: 13}}>{currentLesson.correctAnswer}</span>
               </div>
             )}
-            <button style={{...styles.btnPrimary, width: '100%', backgroundColor: 'var(--divider)', color: '#fff', padding: '12px 32px', borderRadius: '12px', border: 'none', fontWeight: 900, marginTop: 8}} onClick={handleNext}>SYNC & CONTINUE</button>
+            <button className="btn-chunky purple" style={{ width: '100%', marginTop: 8 }} onClick={handleNext}>GOT IT</button>
           </div>
         )}
       </div>

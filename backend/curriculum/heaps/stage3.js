@@ -1,340 +1,844 @@
 const stage3 = [
   {
-    order: 41,
-    title: 'Dual-Heap Balance',
-    desc: 'Deep dive into the Running Median algorithm efficiency.',
-    lessons: [
-      { type: 'teaching', questionText: 'By Pico: "The Dynamic Center! While we know the theory of two heaps, managing them in a real-time stream requires precise balance! 🦜"' },
-      { type: 'teaching', questionText: 'By Pico: "Rule: Max-Heap (Left) size >= Min-Heap (Right) size. Max difference must be 1. 🦜"', codeSnippet: 'void add(int num) {\n  left.push(num);\n  right.push(left.pop());\n  if(right.size() > left.size()) left.push(right.pop());\n}' },
-      { type: 'multiple_choice', questionText: 'If we have 5 elements, and left size is 3, right size is 2, where is the median?', options: ['left.top()', 'right.top()', 'Average'], correctAnswer: 'left.top()' },
-      { type: 'match_following', questionText: 'Match Dual-Heap states!', pairs: [{key: 'Left Size > Right', value: 'Median = Left Root'}, {key: 'Left Size == Right', value: 'Median = (L+R)/2'}, {key: 'Balanced', value: 'Absolute Diff <= 1'}] },
-      { type: 'programming_board', questionText: 'If the difference between sizes becomes ___, we must rebalance.', codeSnippet: 'if (abs(sizeL - sizeR) > ___ ) rebalance();', correctAnswer: '1' },
-      { type: 'teaching', questionText: 'By Pico: "Complexity: O(log N) per add. O(1) per median query! 🦜"' },
-      { type: 'multiple_choice', questionText: 'Is this faster than sorting every time?', options: ['SQUAWK YES! (Log N vs N log N)', 'No', '0'], correctAnswer: 'SQUAWK YES! (Log N vs N log N)' },
-      { type: 'code_fill_in', questionText: 'Pop from largest.', codeSnippet: 'left.push(right. ___ ());', correctAnswer: 'pop' },
-      { type: 'teaching', questionText: 'By Pico: "Equilibrium achieved! 🦜"' },
-      { type: 'multiple_choice', questionText: 'By Pico: "Is the stream centered?"', options: ['Steady median!', 'No.', '0'], correctAnswer: 'Steady median!' }
+    "order": 21,
+    "title": "Mergable Heaps",
+    "desc": "Joining two nests efficiently.",
+    "lessons": [
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"Merging Magic! If you have two Binary Heaps of size N, merging them takes O(N) by building from scratch. Can we do it in O(log N)? 🦜\""
+      },
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"Yes! 'Mergable Heaps' like Binomial or Fibonacci heaps allow you to join two priority queues extremely fast! 🦜\""
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "Complexity to merge two standard Binary Heaps?",
+        "options": [
+          "O(N)",
+          "O(log N)",
+          "O(1)"
+        ],
+        "correctAnswer": "O(N)"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Heap Merges!",
+        "pairs": [
+          {
+            "key": "Binary Heap",
+            "value": "O(N) Merge"
+          },
+          {
+            "key": "Binomial Heap",
+            "value": "O(log N) Merge"
+          },
+          {
+            "key": "Fibonacci Heap",
+            "value": "O(1) Merge"
+          }
+        ]
+      },
+      {
+        "type": "programming_board",
+        "questionText": "Operation to join two queues.",
+        "codeSnippet": "pq3 = ___(pq1, pq2);",
+        "correctAnswer": "merge"
+      },
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"Advanced heaps use tree-linking logic instead of fixed arrays to achieve this speed! 🦜\""
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "Main use case for mergable heaps?",
+        "options": [
+          "Combining large priority streams",
+          "Simple sorting",
+          "Printing data"
+        ],
+        "correctAnswer": "Combining large priority streams"
+      },
+      {
+        "type": "code_fill_in",
+        "questionText": "Target complexity for merge.",
+        "codeSnippet": "O( ___ n)",
+        "correctAnswer": "log"
+      },
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"Join the forces! 🦜\""
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "🦜 Pico: \"Ready to unify?\"",
+        "options": [
+          "SQUAWK YES!",
+          "No.",
+          "0"
+        ],
+        "correctAnswer": "SQUAWK YES!"
+      }
     ]
   },
   {
-    order: 42,
-    title: 'The Greedy Refuel',
-    desc: 'Minimum number of refuel stops to reach a target using a Max-Heap.',
-    lessons: [
-      { type: 'teaching', questionText: 'By Pico: "The Long Migration! Your bird needs to fly 1000 miles. You have initial fuel, and there are fuel stations along the way. Minimize stops! 🦜"' },
-      { type: 'teaching', questionText: 'By Pico: "Greedy Strategy: Fly until you run out of fuel. At that point, you WISH you had stopped at the station with the MOST fuel behind you! Use a Max-Heap! 🦜"', codeSnippet: 'while (currFuel < target) {\n  while (stationsAvailable) pq.push(stations[i].fuel);\n  if (pq.empty()) return -1;\n  currFuel += pq.pop();\n  stops++;\n}' },
-      { type: 'multiple_choice', questionText: 'Why use a MAX-HEAP for refuel stops?', options: ['To pick the station that gives most fuel', 'To pick closest station', 'Parrot rule'], correctAnswer: 'To pick the station that gives most fuel' },
-      { type: 'match_following', questionText: 'Match Fuel logic!', pairs: [{key: 'Max-Heap', value: 'Reserve gas options'}, {key: 'Stops++', value: 'Optimal decision'}, {key: 'PQ empty', value: 'Failure/Out of gas'}] },
-      { type: 'programming_board', questionText: 'Heap stores fuel from stations we ___ but didn\'t use yet.', codeSnippet: 'Status = ___ ;', correctAnswer: 'passed' },
-      { type: 'teaching', questionText: 'By Pico: "O(N log N). Because we only stop when absolutely necessary and always pick the best option! 🦜"' },
-      { type: 'multiple_choice', questionText: 'What is the complexity if N stations are available?', options: ['O(N log N)', 'O(N)', 'O(1)'], correctAnswer: 'O(N log N)' },
-      { type: 'code_fill_in', questionText: 'Add fuel to tank.', codeSnippet: 'dist += pq. ___ ();', correctAnswer: 'pop' },
-      { type: 'teaching', questionText: 'By Pico: "Optimal flight! 🦜"' },
-      { type: 'multiple_choice', questionText: 'By Pico: "Did the bird reach the destination?"', options: ['Target reached!', 'No.', '0'], correctAnswer: 'Target reached!' }
+    "order": 22,
+    "title": "Binomial Trees",
+    "desc": "The building blocks of forest.",
+    "lessons": [
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"The Binomial Tree (B_k). B_0 is a single node. B_k is formed by joining two B_{k-1} trees! 🦜\""
+      },
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"Structure: B_k has exactly 2^k nodes, height k, and the root has k children. 🦜\"",
+        "codeSnippet": "B_k = B_{k-1} + B_{k-1}"
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "How many nodes are in a Binomial Tree of order 3 (B_3)?",
+        "options": [
+          "8 (2^3)",
+          "4",
+          "16"
+        ],
+        "correctAnswer": "8 (2^3)"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Tree Math!",
+        "pairs": [
+          {
+            "key": "Order k",
+            "value": "Root degree"
+          },
+          {
+            "key": "Nodes",
+            "value": "2^k"
+          },
+          {
+            "key": "Joining",
+            "value": "B_{k-1} becomes child of B_{k-1}"
+          }
+        ]
+      },
+      {
+        "type": "programming_board",
+        "questionText": "The binomial coefficient calculation.",
+        "codeSnippet": "n! / (k! * (n-___)!)",
+        "correctAnswer": "k"
+      },
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"Just like binary numbers, we can represent ANY number N using a collection of these power-of-2 trees! 🦜\""
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "What is the degree of the root in B_k?",
+        "options": [
+          "k",
+          "2",
+          "2^k"
+        ],
+        "correctAnswer": "k"
+      },
+      {
+        "type": "code_fill_in",
+        "questionText": "Nodes in B_k.",
+        "codeSnippet": "2 ^ ___",
+        "correctAnswer": "k"
+      },
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"Recursive symmetry! 🦜\""
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "🦜 Pico: \"Do you see the doubling?\"",
+        "options": [
+          "SQUAWK YES!",
+          "No.",
+          "0"
+        ],
+        "correctAnswer": "SQUAWK YES!"
+      }
     ]
   },
   {
-    order: 43,
-    title: 'The Matrix Hunter',
-    desc: 'Finding the K-th smallest element in a Row-Column sorted matrix (2D Heap Search).',
-    lessons: [
-      { type: 'teaching', questionText: 'By Pico: "The Grid! A square field where every row and every column is sorted in ascending order. Find the K-th smallest seed! 🦜"' },
-      { type: 'teaching', questionText: 'By Pico: "Use a Min-Heap of size N. Push the first element of each row. Pop the min, and push its neighbor from the same row! 🦜"', codeSnippet: 'pq.push({matrix[i][0], i, 0});\nfor(int i=0; i<k-1; i++) {\n  curr = pq.pop();\n  if(curr.col + 1 < n) pq.push({matrix[curr.row][curr.col+1], ...});\n}' },
-      { type: 'multiple_choice', questionText: 'Complexity of finding K-th smallest in N x N matrix?', options: ['O(K log N)', 'O(N^2)', 'O(log K)'], correctAnswer: 'O(K log N)' },
-      { type: 'match_following', questionText: 'Match Matrix Search roles!', pairs: [{key: 'Min-Heap', value: 'Frontier search'}, {key: 'RowIdx', value: 'Source identification'}, {key: 'Neighbor', value: 'Next candidate'}] },
-      { type: 'programming_board', questionText: 'The heap size is limited by the number of ___.', codeSnippet: 'Limit = ___ ;', correctAnswer: 'rows' },
-      { type: 'teaching', questionText: 'By Pico: "This is a 2D variation of the K-way merge. Very elite! 🦜"' },
-      { type: 'multiple_choice', questionText: 'If K=1, what is the answer?', options: ['matrix[0][0]', 'matrix[n-1][n-1]', '0'], correctAnswer: 'matrix[0][0]' },
-      { type: 'code_fill_in', questionText: 'Push next column.', codeSnippet: 'pq.push({matrix[r][c+1], r, ___});', correctAnswer: 'c+1' },
-      { type: 'teaching', questionText: 'By Pico: "Grid mastery! 🦜"' },
-      { type: 'multiple_choice', questionText: 'By Pico: "Is the seed found?"', options: ['K-th element located!', 'No.', '0'], correctAnswer: 'K-th element located!' }
+    "order": 23,
+    "title": "Binomial Heaps",
+    "desc": "A collection of trees.",
+    "lessons": [
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"Forest Power! A Binomial Heap is a collection (forest) of Binomial Trees that satisfy the Heap Property. 🦜\""
+      },
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"For any size N, there is at most ONE tree of each order. This matches the binary representation of N! 🦜\"",
+        "codeSnippet": "N=7 (111 in binary) -> B_0, B_1, B_2"
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "If a Binomial Heap has 13 nodes (1101 in binary), which trees does it contain?",
+        "options": [
+          "B_0, B_2, B_3",
+          "B_0, B_1, B_2",
+          "B_4"
+        ],
+        "correctAnswer": "B_0, B_2, B_3"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match the Forest!",
+        "pairs": [
+          {
+            "key": "Binary 1",
+            "value": "Tree exists"
+          },
+          {
+            "key": "Binary 0",
+            "value": "Tree missing"
+          },
+          {
+            "key": "Log N",
+            "value": "Max number of trees"
+          }
+        ]
+      },
+      {
+        "type": "programming_board",
+        "questionText": "Representation of size N.",
+        "codeSnippet": "bits = toBinary(___);",
+        "correctAnswer": "N"
+      },
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"Searching for the MIN in a binomial heap requires checking the roots of all (log N) trees! 🦜\""
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "Complexity to find the minimum of the forest?",
+        "options": [
+          "O(log N)",
+          "O(1)",
+          "O(N)"
+        ],
+        "correctAnswer": "O(log N)"
+      },
+      {
+        "type": "code_fill_in",
+        "questionText": "Word for a group of trees.",
+        "codeSnippet": "F + ___",
+        "correctAnswer": "OREST"
+      },
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"Map the forest! 🦜\""
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "🦜 Pico: \"Can you count the trees?\"",
+        "options": [
+          "CHECK THE BITS!",
+          "Maybe.",
+          "No."
+        ],
+        "correctAnswer": "CHECK THE BITS!"
+      }
     ]
   },
   {
-    order: 44,
-    title: 'Task Cooling (Greedy)',
-    desc: 'Scheduling tasks with a mandatory cooling period between identical tasks.',
-    lessons: [
-      { type: 'teaching', questionText: 'By Pico: "The Work Cycle! We have tasks [A, A, A, B, B, B] and a cooldown of N=2. Same tasks must be separated! 🦜"' },
-      { type: 'teaching', questionText: 'By Pico: "Use a Max-Heap for task frequencies. Every step, pick the most frequent tasks, use them, and put them in a \'waiting queue\' until the cooldown expires! 🦜"', codeSnippet: 'while(!pq.empty() || !waitQueue.empty()) {\n  time++;\n  if(!pq.empty()) { task = pq.pop(); task.count--; }\n  if(task.count > 0) waitQueue.push({task, releaseTime: time+n});\n}' },
-      { type: 'multiple_choice', questionText: 'Why prioritize high-frequency tasks?', options: ['To avoid running out of diverse tasks early', 'They are harder', 'Parrot rule'], correctAnswer: 'To avoid running out of diverse tasks early' },
-      { type: 'match_following', questionText: 'Match Cooling logic!', pairs: [{key: 'Max-Heap', value: 'Task selection'}, {key: 'Wait Queue', value: 'Cooldown tracking'}, {key: 'Idle Time', value: 'No task ready'}] },
-      { type: 'programming_board', questionText: 'If the heap is empty but tasks are waiting, we are ___ .', codeSnippet: 'Status = ___ ;', correctAnswer: 'idle' },
-      { type: 'teaching', questionText: 'By Pico: "Complexity: O(TotalTasks * log Alphabet). It ensures we finish all work in the absolute minimum time! 🦜"' },
-      { type: 'multiple_choice', questionText: 'If N=0, what is the completion time?', options: ['Total task count', 'Infinite', '0'], correctAnswer: 'Total task count' },
-      { type: 'code_fill_in', questionText: 'Check release.', codeSnippet: 'if(waitQueue.front().time ___ currTime) pq.push(waitQueue.pop());', correctAnswer: '==' },
-      { type: 'teaching', questionText: 'By Pico: "Productive flow! 🦜"' },
-      { type: 'multiple_choice', questionText: 'By Pico: "Is the schedule tight?"', options: ['Minimal cycles!', 'No.', '0'], correctAnswer: 'Minimal cycles!' }
+    "order": 24,
+    "title": "Binomial Merge",
+    "desc": "Binary addition with birds.",
+    "lessons": [
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"Merge Time! Joining two Binomial Heaps is just like binary addition. 0+0=0, 1+0=1, 1+1=0 (carry 1). 🦜\""
+      },
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"If you have two B_k trees, join them into one B_{k+1} by making the larger root the child of the smaller! 🦜\"",
+        "codeSnippet": "link(T1, T2); // O(1) link"
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "What happens when you have 'two trees of order K' during a merge?",
+        "options": [
+          "Link them into a tree of order K+1",
+          "They stay separate",
+          "One is deleted"
+        ],
+        "correctAnswer": "Link them into a tree of order K+1"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match the Carry!",
+        "pairs": [
+          {
+            "key": "1+0",
+            "value": "Copy tree"
+          },
+          {
+            "key": "1+1",
+            "value": "Link and carry"
+          },
+          {
+            "key": "1+1+1",
+            "value": "Copy one, link two"
+          }
+        ]
+      },
+      {
+        "type": "programming_board",
+        "questionText": "Total merge complexity.",
+        "codeSnippet": "O( ___ N);",
+        "correctAnswer": "log"
+      },
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"This allows us to merge two huge heaps by only doing log N 'Links'! 🦜\""
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "What is the complexity of one 'Link' operation (joining two trees)?",
+        "options": [
+          "O(1)",
+          "O(N)",
+          "O(log N)"
+        ],
+        "correctAnswer": "O(1)"
+      },
+      {
+        "type": "code_fill_in",
+        "questionText": "Analogy for merge.",
+        "codeSnippet": "Binary ___",
+        "correctAnswer": "Addition"
+      },
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"Add the nests! 🦜\""
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "🦜 Pico: \"Ready to carry?\"",
+        "options": [
+          "SQUAWK YES!",
+          "No.",
+          "0"
+        ],
+        "correctAnswer": "SQUAWK YES!"
+      }
     ]
   },
   {
-    order: 45,
-    title: 'Freq-Stack Elite',
-    desc: 'Implementing a Frequecy Stack (pops most frequent element, then most recent).',
-    lessons: [
-      { type: 'teaching', questionText: 'By Pico: "The Hybrid Nest! A structure that pops the most frequent bird. If frequencies match, pop the one that joined most recently! 🦜"' },
-      { type: 'teaching', questionText: 'By Pico: "Use a Heap of tuples: `{frequency, arrival_index, value}`. Since heaps are stable in our sorting, it handles frequencies first! 🦜"', codeSnippet: 'pq.push({freq[val], index++, val});' },
-      { type: 'multiple_choice', questionText: 'What is the primary sort key in Freq-Stack?', options: ['Frequency', 'Value', 'Arrival Time'], correctAnswer: 'Frequency' },
-      { type: 'match_following', questionText: 'Match Freq-Stack keys!', pairs: [{key: 'Primary', value: 'Frequency count'}, {key: 'Secondary', value: 'Push order (Index)'}, {key: 'Pop', value: 'Top of Max-Heap'}] },
-      { type: 'programming_board', questionText: 'Value used to break ties between equal frequencies.', codeSnippet: 'Tie Breaker = ___ index;', correctAnswer: 'arrival' },
-      { type: 'teaching', questionText: 'By Pico: "Push: O(log N). Pop: O(log N). A common pattern for advanced caching systems! 🦜"' },
-      { type: 'multiple_choice', questionText: 'Can this be done in O(1)?', options: ['Yes (using Map of Stacks)', 'No', '0'], correctAnswer: 'Yes (using Map of Stacks)' },
-      { type: 'code_fill_in', questionText: 'Increment count.', codeSnippet: 'counts[x] ___ ;', correctAnswer: '++' },
-      { type: 'teaching', questionText: 'By Pico: "Frequent priority! 🦜"' },
-      { type: 'multiple_choice', questionText: 'By Pico: "Is the stack smart?"', options: ['Frequency first!', 'No.', '0'], correctAnswer: 'Frequency first!' }
+    "order": 25,
+    "title": "ExtractMin (Binomial)",
+    "desc": "Splitting the forest.",
+    "lessons": [
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"Taking the Root! 1. Find the tree with the MIN root. 2. Remove it. 3. Its' children form ANOTHER Binomial Heap! 🦜\""
+      },
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"4. Reverse the list of children and MERGE them back into the main forest. 🦜\"",
+        "codeSnippet": "forest1.merge(reversedChildren);"
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "Why reverse the children of root B_k before merging?",
+        "options": [
+          "To keep them in increasing order of size (B_0...B_{k-1})",
+          "For visual clarity",
+          "Pico likes back-flips"
+        ],
+        "correctAnswer": "To keep them in increasing order of size (B_0...B_{k-1})"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Extract Steps!",
+        "pairs": [
+          {
+            "key": "Step 1",
+            "value": "Find min root"
+          },
+          {
+            "key": "Step 2",
+            "value": "Split tree"
+          },
+          {
+            "key": "Step 3",
+            "value": "Merge children"
+          }
+        ]
+      },
+      {
+        "type": "programming_board",
+        "questionText": "Complexity of ExtractMin.",
+        "codeSnippet": "O( ___ N);",
+        "correctAnswer": "log"
+      },
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"Deletion also uses the Merge logic, keeping everything O(log N)! 🦜\""
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "Max number of children in a B_k tree removed during ExtractMin?",
+        "options": [
+          "k (log N)",
+          "N",
+          "1"
+        ],
+        "correctAnswer": "k (log N)"
+      },
+      {
+        "type": "code_fill_in",
+        "questionText": "Root removal action.",
+        "codeSnippet": "Reverse and ___",
+        "correctAnswer": "Merge"
+      },
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"Split and reunite! 🦜\""
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "🦜 Pico: \"Found the min?\"",
+        "options": [
+          "SQUAWK YES!",
+          "No.",
+          "0"
+        ],
+        "correctAnswer": "SQUAWK YES!"
+      }
     ]
   },
   {
-    order: 46,
-    title: 'Smallest Range Coverage',
-    desc: 'Finding the smallest range that covers at least one element from K sorted arrays.',
-    lessons: [
-      { type: 'teaching', questionText: 'By Pico: "The Range Master! Use a Min-Heap and a running maximum to shrink the window as much as possible! 🦜"' },
-      { type: 'teaching', questionText: 'By Pico: "1. Push first elements. 2. Record (max - min). 3. Pop min, push next, update max. 4. Profit! 🦜"', codeSnippet: 'pq.push({arr[i][0], i, 0});' },
-      { type: 'multiple_choice', questionText: 'When do we stop updating the range?', options: ['When any list ends', 'When all lists end', 'After 10 steps'], correctAnswer: 'When any list ends' },
-      { type: 'match_following', questionText: 'Match Range logic!', pairs: [{key: 'Min-Heap Root', value: 'Window Start'}, {key: 'Max Variable', value: 'Window End'}, {key: 'Shrink', value: 'Better result'}] },
-      { type: 'programming_board', questionText: 'Size of the heap in the K-range problem.', codeSnippet: 'Heap Size = ___ ;', correctAnswer: 'K' },
-      { type: 'teaching', questionText: 'By Pico: "O(N log K) once more. The heap is the master of multi-list convergence! 🦜"' },
-      { type: 'multiple_choice', questionText: 'What if we want the K-th smallest range?', options: ['Use a Max-Heap for ranges', 'Impossible', '0'], correctAnswer: 'Use a Max-Heap for ranges' },
-      { type: 'code_fill_in', questionText: 'Update range.', codeSnippet: 'if(currentMax - currentMin < ___ ) { ... }', correctAnswer: 'bestRange' },
-      { type: 'teaching', questionText: 'By Pico: "Narrow focus! 🦜"' },
-      { type: 'multiple_choice', questionText: 'By Pico: "Is the coverage perfect?"', options: ['Narrowest elite!', 'No.', '0'], correctAnswer: 'Narrowest elite!' }
+    "order": 26,
+    "title": "Fibonacci Heap Intro",
+    "desc": "The lazy bird's dream.",
+    "lessons": [
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"Lazy Logic! Fibonacci Heaps are even faster. They don't link trees immediately. They just keep a 'Pool' of trees and only organize them when someone asks for the MIN! 🦜\""
+      },
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"Amortized Complexity: Insertion, Merge, and Decrease-Key are ALL O(1)! Extract-Min is O(log N). 🦜\""
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "What is the insertion complexity in a Fibonacci Heap?",
+        "options": [
+          "O(1)",
+          "O(log N)",
+          "O(N)"
+        ],
+        "correctAnswer": "O(1)"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Fibonacci Speeds!",
+        "pairs": [
+          {
+            "key": "Insert",
+            "value": "O(1)"
+          },
+          {
+            "key": "Merge",
+            "value": "O(1)"
+          },
+          {
+            "key": "ExtractMin",
+            "value": "O(log N)"
+          }
+        ]
+      },
+      {
+        "type": "programming_board",
+        "questionText": "The special O(1) operation used by Dijkstra's.",
+        "codeSnippet": "\"DECREASE\" + \"_\" + \"___\" ;",
+        "correctAnswer": "KEY"
+      },
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"They are called Fibonacci because the number of children in a tree is related to the Fibonacci sequence! 🦜\""
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "Why are Fibonacci heaps rarely used in simple apps?.",
+        "options": [
+          "High constant overhead and complex implementation",
+          "They are too fast",
+          "They are unstable"
+        ],
+        "correctAnswer": "High constant overhead and complex implementation"
+      },
+      {
+        "type": "code_fill_in",
+        "questionText": "Complexity type (over time).",
+        "codeSnippet": "A + ___",
+        "correctAnswer": "MORTIZED"
+      },
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"Efficiency over time! 🦜\""
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "🦜 Pico: \"Are you lazy?\"",
+        "options": [
+          "JUST EFFICIENT!",
+          "Yes.",
+          "No."
+        ],
+        "correctAnswer": "JUST EFFICIENT!"
+      }
     ]
   },
   {
-    order: 47,
-    title: 'Heap-Sort Robustness',
-    desc: 'Stability and In-place properties of Heap-Sort.',
-    lessons: [
-      { type: 'teaching', questionText: 'By Pico: "The Elite Builder! Is Heap-Sort stable? Can we do it in-place? Let\'s check the internal machinery! 🦜"' },
-      { type: 'teaching', questionText: 'By Pico: "In-place: YES. O(1) extra space. Stable: NO. Swapping root with last destroys relative order of equal birds! 🦜"', codeSnippet: 'HeapSort = In-place, Unstable' },
-      { type: 'multiple_choice', questionText: 'Is Heap-Sort a stable sorting algorithm?', options: ['No', 'Yes', 'Only for trees'], correctAnswer: 'No' },
-      { type: 'match_following', questionText: 'Match Properties!', pairs: [{key: 'In-place', value: 'Uses original array'}, {key: 'Unstable', value: 'Equal items swap order'}, {key: 'O(N log N)', value: 'Worst-case time'}] },
-      { type: 'programming_board', questionText: 'Space complexity of Heap-Sort.', codeSnippet: 'Space = O( ___ );', correctAnswer: '1' },
-      { type: 'teaching', questionText: 'By Pico: "Despite being unstable, its guaranteed O(N log N) time and O(1) space makes it a favorite for embedded bird-controllers! 🦜"' },
-      { type: 'multiple_choice', questionText: 'Compared to Quick-Sort, Heap-Sort is?', options: ['Slower in practice, but better worst-case', 'Always faster', 'Random'], correctAnswer: 'Slower in practice, but better worst-case' },
-      { type: 'code_fill_in', questionText: 'Heapify start.', codeSnippet: 'for(int i = n/2 - 1; i ___ 0; i--)', correctAnswer: '>=' },
-      { type: 'teaching', questionText: 'By Pico: "Structural logic! 🦜"' },
-      { type: 'multiple_choice', questionText: 'By Pico: "Is the sorting robust?"', options: ['SQUAWK YES!', 'No.', '0'], correctAnswer: 'SQUAWK YES!' }
+    "order": 27,
+    "title": "Potential Functions",
+    "desc": "Banking the bird energy.",
+    "lessons": [
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"Energy Bank! Amortized analysis uses a 'Potential Function'. Think of it as saving up work now to pay for it later! 🦜\""
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "In Fibonacci heaps, why is insertion O(1)?",
+        "options": [
+          "It just adds the node to the roots list and waits for later",
+          "It uses a portal",
+          "It's magic"
+        ],
+        "correctAnswer": "It just adds the node to the roots list and waits for later"
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "What happens during ExtractMin in a Fibonacci heap?",
+        "options": [
+          "Consolidation (The lazy nodes are finally organized)",
+          "Nothing",
+          "Deletion"
+        ],
+        "correctAnswer": "Consolidation (The lazy nodes are finally organized)"
+      },
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"Potential increases with messy nodes and decreases when we clean up! 🦜\"\""
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Amortized Terms!",
+        "pairs": [
+          {
+            "key": "Actual Cost",
+            "value": "Time spent now"
+          },
+          {
+            "key": "Potential Change",
+            "value": "Difference in messiness"
+          },
+          {
+            "key": "Amortized Cost",
+            "value": "Actual + Delta Potential"
+          }
+        ]
+      },
+      {
+        "type": "programming_board",
+        "questionText": "The symbol for potential function.",
+        "codeSnippet": "___ (H);",
+        "correctAnswer": "Phi"
+      },
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"Pay now, fly later! 🦜\""
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "🦜 Pico: \"Do you have potential?\"",
+        "options": [
+          "SQUAWK YES!",
+          "No.",
+          "0"
+        ],
+        "correctAnswer": "SQUAWK YES!"
+      },
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"SQUAWK! 🦜\""
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "Check the bank?",
+        "options": [
+          "Balance!",
+          "Done.",
+          "0"
+        ],
+        "correctAnswer": "Balance!"
+      }
     ]
   },
   {
-    order: 48,
-    title: 'Traffic Priority Control',
-    desc: 'Real-world simulation of network traffic using Priority Queues.',
-    lessons: [
-      { type: 'teaching', questionText: 'By Pico: "The Sky Traffic! Emergency squawks must be processed before casual chirps! 🦜"' },
-      { type: 'teaching', questionText: 'By Pico: "Packets have Type (0: High, 1: Low) and Timestamp. Priority = `{Type, Timestamp}`. Max-Heap (or Min depending on logic) ensures first-class flight! 🦜"', codeSnippet: 'bool operator<(const Packet& other) {\n  if(type != other.type) return type > other.type; // lower is better\n  return time > other.time;\n}' },
-      { type: 'multiple_choice', questionText: 'How to handle equal priority in Traffic Control?', options: ['FIFO (First In First Out)', 'Random', 'LIFO'], correctAnswer: 'FIFO (First In First Out)' },
-      { type: 'match_following', questionText: 'Match Traffic tools!', pairs: [{key: 'Priority 0', value: 'Emergency Level'}, {key: 'Timestamp', value: 'Tie-breaker (FCFS)'}, {key: 'Queue', value: 'Wait line'}] },
-      { type: 'programming_board', questionText: 'Name of the tie-breaking value for packets.', codeSnippet: 'Key = ___ ;', correctAnswer: 'timestamp' },
-      { type: 'teaching', questionText: 'By Pico: "Complex priorities are just tuples in our heap forest! 🦜"' },
-      { type: 'multiple_choice', questionText: 'If type is prioritized OVER time, which packet pops first?', options: ['High priority, late time', 'Low priority, early time', '0'], correctAnswer: 'High priority, late time' },
-      { type: 'code_fill_in', questionText: 'Compare priority.', codeSnippet: 'if(p1.rank ___ p2.rank) return true;', correctAnswer: '<' },
-      { type: 'teaching', questionText: 'By Pico: "Orderly skies! 🦜"' },
-      { type: 'multiple_choice', questionText: 'By Pico: "Is the traffic flowing?"', options: ['Priority served!', 'No.', '0'], correctAnswer: 'Priority served!' }
+    "order": 28,
+    "title": "Cascading Cuts",
+    "desc": "Keeping trees from stretching.",
+    "lessons": [
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"Structure Guard! To keep Fibonacci heaps efficient, we can't let trees get too thin. 🦜\""
+      },
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"If a node loses TWO children, it must be CUT from its' parent and moved to the root list. This is a 'Cascading Cut'. 🦜\""
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "What triggers a Cascading Cut?",
+        "options": [
+          "A node losing its' second child",
+          "A node getting too heavy",
+          "Merging trees"
+        ],
+        "correctAnswer": "A node losing its' second child"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Cut Logic!",
+        "pairs": [
+          {
+            "key": "Marked Flag",
+            "value": "Lost 1 child"
+          },
+          {
+            "key": "Cut",
+            "value": "Lost 2 children, move up"
+          },
+          {
+            "key": "Fibonacci",
+            "value": "Basis of tree rules"
+          }
+        ]
+      },
+      {
+        "type": "programming_board",
+        "questionText": "Complexity of a single decrease-key (amortized).",
+        "codeSnippet": "O( ___ );",
+        "correctAnswer": "1"
+      },
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"This maintenance ensures the forest stays 'Bushy' enough to keep Extract-Min O(log N)! 🦜\""
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "Does this happen in Binomial heaps?",
+        "options": [
+          "No, binomial trees have a fixed structure",
+          "Yes",
+          "Only and always"
+        ],
+        "correctAnswer": "No, binomial trees have a fixed structure"
+      },
+      {
+        "type": "code_fill_in",
+        "questionText": "Action of moving to root list.",
+        "codeSnippet": "C + ___",
+        "correctAnswer": "ASCADING CUT"
+      },
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"Keep the bushy nest! 🦜\""
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "🦜 Pico: \"Are you marked?\"",
+        "options": [
+          "NO!",
+          "Yes.",
+          "Maybe."
+        ],
+        "correctAnswer": "NO!"
+      }
     ]
   },
   {
-    order: 49,
-    title: 'Custom Comparator Mastery',
-    desc: 'Implementing complex sorting rules for Heaps in C++/JS.',
-    lessons: [
-      { type: 'teaching', questionText: 'By Pico: "Bespoke Bird Sorting! What if we want birds sorted by WingSpan, but if spans are equal, by Age? 🦜"' },
-      { type: 'teaching', questionText: 'By Pico: "Custom Comparator: A function that returns true/false to define which bird is \'less\'. In C++ `priority_queue`, `true` means the element should be LOWER! 🦜"', codeSnippet: 'struct Compare {\n  bool operator()(Bird a, Bird b) { \n    if(a.span != b.span) return a.span < b.span;\n    return a.age > b.age;\n  }\n};' },
-      { type: 'multiple_choice', questionText: 'In C++, if comparator returns TRUE, will the element be at the bottom?', options: ['Yes (pops later)', 'No (pops first)', '0'], correctAnswer: 'Yes (pops later)' },
-      { type: 'match_following', questionText: 'Match Comparator logic!', pairs: [{key: 'Operator()', value: 'Comparison rule'}, {key: 'Less than', value: 'Max-Heap behavior'}, {key: 'Greater than', value: 'Min-Heap behavior'}] },
-      { type: 'programming_board', questionText: 'The generic term for the comparison object.', codeSnippet: 'Concept = ___ ;', correctAnswer: 'functor' },
-      { type: 'teaching', questionText: 'By Pico: "This is the most powerful tool for solving advanced ranking problems in one go! 🦜"' },
-      { type: 'multiple_choice', questionText: 'Can we use a lambda function as a comparator?', options: ['Yes', 'No', 'Only on Sundays'], correctAnswer: 'Yes' },
-      { type: 'code_fill_in', questionText: 'Comparator template.', codeSnippet: 'priority_queue<Bird, vector<Bird>, ___ > pq;', correctAnswer: 'Compare' },
-      { type: 'teaching', questionText: 'By Pico: "Precision ranks! 🦜"' },
-      { type: 'multiple_choice', questionText: 'By Pico: "Is the rule followed?"', options: ['Custom elite!', 'No.', '0'], correctAnswer: 'Custom elite!' }
+    "order": 29,
+    "title": "Dijkstra's Optimization",
+    "desc": "The reason for Fibonacci.",
+    "lessons": [
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"Theorem Time! Dijkstra's algorithm uses Extract-Min (V times) and Decrease-Key (E times). 🦜\""
+      },
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"Binary Heap: O(E log V). Fibonacci Heap: O(E + V log V). For dense graphs where E is large, Fibonacci is the CHAMPION! 🦜\""
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "With Fibonacci heaps, what is the cost of the 'Decrease-Key' parts in Dijkstra's?",
+        "options": [
+          "O(E) total (O(1) each)",
+          "O(E log V)",
+          "O(V log V)"
+        ],
+        "correctAnswer": "O(E) total (O(1) each)"
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match Heap Choices!",
+        "pairs": [
+          {
+            "key": "Dense Graph",
+            "value": "Fibonacci Heap"
+          },
+          {
+            "key": "Sparse Graph",
+            "value": "Binary Heap"
+          },
+          {
+            "key": "Theory",
+            "value": "Fibonacci always wins"
+          }
+        ]
+      },
+      {
+        "type": "programming_board",
+        "questionText": "The E in O(E + V log V).",
+        "codeSnippet": "E + V * ___ (V) ;",
+        "correctAnswer": "log"
+      },
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"This improvement is one of the most famous theoretical breakthroughs in computer science! 🦜\""
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "Is O(E + V log V) asymptotically faster than O(E log V)?",
+        "options": [
+          "SQUAWK YES!",
+          "No",
+          "Maybe"
+        ],
+        "correctAnswer": "SQUAWK YES!"
+      },
+      {
+        "type": "code_fill_in",
+        "questionText": "Graph density term.",
+        "codeSnippet": "___ Graph",
+        "correctAnswer": "Dense"
+      },
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"Fly the fastest path! 🦜\""
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "🦜 Pico: \"Are we efficient yet?\"",
+        "options": [
+          "SQUAWK YES!",
+          "No.",
+          "0"
+        ],
+        "correctAnswer": "SQUAWK YES!"
+      }
     ]
   },
   {
-    order: 50,
-    title: 'God-Mode: Multi-Level Heap',
-    desc: 'Simulating a system with multiple priority tiers.',
-    lessons: [
-      { type: 'teaching', questionText: 'By Pico: "The Hive Mind! Complex systems use multiple heaps. One for system tasks, one for user tasks. 🦜"' },
-      { type: 'teaching', questionText: 'By Pico: "Always drain the higher priority heap first. Only when it is empty, look at the next heap! 🦜"', codeSnippet: 'if(!highPq.empty()) return highPq.pop();\nelse return lowPq.pop();' },
-      { type: 'multiple_choice', questionText: 'This strategy is known as?', options: ['Preemptive Priority', 'Fair Share', 'Round Robin'], correctAnswer: 'Preemptive Priority' },
-      { type: 'match_following', questionText: 'Match Multi-Heap roles!', pairs: [{key: 'System Heap', value: 'Urgent Ops'}, {key: 'User Heap', value: 'Normal Work'}, {key: 'Empty Check', value: 'Drain rule'}] },
-      { type: 'programming_board', questionText: 'Name of the policy where high priority ALWAYS goes first.', codeSnippet: 'Policy = ___ ;', correctAnswer: 'strict priority' },
-      { type: 'teaching', questionText: 'By Pico: "O(log N) total time. But ensures the Most Important Birds never wait! 🦜"' },
-      { type: 'multiple_choice', questionText: 'Risk of having strict priority?', options: ['Starvation of low priority', 'Binary failure', '0'], correctAnswer: 'Starvation of low priority' },
-      { type: 'code_fill_in', questionText: 'Drain high.', codeSnippet: 'while ( ___ .empty() == false)', correctAnswer: 'highPriorityPq' },
-      { type: 'teaching', questionText: 'By Pico: "Elite hierarchy! 🦜"' },
-      { type: 'multiple_choice', questionText: 'By Pico: "Are the levels clear?"', options: ['SQUAWK YES!', 'No.', '0'], correctAnswer: 'SQUAWK YES!' }
-    ]
-  },
-  {
-    order: 51,
-    title: 'N-Way Intersection',
-    desc: 'Finding common elements across N sorted arrays using Heaps.',
-    lessons: [
-      { type: 'teaching', questionText: 'By Pico: "The Shared Bloom! What elements exist in every single sorted river? 🦜"' },
-      { type: 'teaching', questionText: 'By Pico: "Use a Min-Heap of size N. Track if the current min is equal to the current max of the heap! 🦜"', codeSnippet: 'if (min == max) result.add(min);' },
-      { type: 'multiple_choice', questionText: 'Complexity of finding intersection across K lists?', options: ['O(TotalN log K)', 'O(N^K)', 'O(1)'], correctAnswer: 'O(TotalN log K)' },
-      { type: 'match_following', questionText: 'Match Intersection theory!', pairs: [{key: 'Min-Heap size K', value: 'Frontier candidates'}, {key: 'Max Tracking', value: 'Detect equality'}, {key: 'Advance', value: 'Walk from min'}] },
-      { type: 'programming_board', questionText: 'If all elements in the heap are equal, we found an ___ .', codeSnippet: 'Found = ___ ;', correctAnswer: 'intersection' },
-      { type: 'teaching', questionText: 'By Pico: "The heap gives us the next candidate for equality at every step! 🦜"' },
-      { type: 'multiple_choice', questionText: 'Can a heap find K-way union?', options: ['Yes', 'No', '0'], correctAnswer: 'Yes' },
-      { type: 'code_fill_in', questionText: 'Push replacement.', codeSnippet: 'pq.push({list[r][c+1], r, ___});', correctAnswer: 'c+1' },
-      { type: 'teaching', questionText: 'By Pico: "Shared success! 🦜"' },
-      { type: 'multiple_choice', questionText: 'By Pico: "Is the common seed found?"', options: ['Unified!', 'No.', '0'], correctAnswer: 'Unified!' }
-    ]
-  },
-  {
-    order: 52,
-    title: 'Finite Supply (Greedy)',
-    desc: 'Maximizing profit given limited capital and multiple investment options.',
-    lessons: [
-      { type: 'teaching', questionText: 'By Pico: "The Business Bird! You have Capital. Some projects require X capital and give Y profit. Which to pick? 🦜"' },
-      { type: 'teaching', questionText: 'By Pico: "1. Sort projects by capital. 2. Use a Max-Heap to store available profits. 3. Pick the largest profit you can afford! 🦜"', codeSnippet: 'sort(projectsByCapital);\nwhile(k--) {\n  while(canAfford) pq.push(projects[i].profit);\n  if(pq.empty()) break;\n  totalCapital += pq.pop();\n}' },
-      { type: 'multiple_choice', questionText: 'Greedy choice for IPO problem?', options: ['Most profit first', 'Least cost first', 'Random'], correctAnswer: 'Most profit first' },
-      { type: 'match_following', questionText: 'Match Profit roles!', pairs: [{key: 'Max-Heap', value: 'Affordable riches'}, {key: 'Sorted List', value: 'Capital barrier'}, {key: 'O(N log N)', value: 'Complexity'}] },
-      { type: 'programming_board', questionText: 'Value added to capital after picking a project.', codeSnippet: 'Capital += ___ ;', correctAnswer: 'profit' },
-      { type: 'teaching', questionText: 'By Pico: "The heap updates our potential profit pool as our capital grows! 🦜"' },
-      { type: 'multiple_choice', questionText: 'Can you pick the same project twice?', options: ['No (Single use)', 'Yes', 'Pico rule'], correctAnswer: 'No (Single use)' },
-      { type: 'code_fill_in', questionText: 'Check affordability.', codeSnippet: 'if (projects[i].capital ___ myCapital)', correctAnswer: '<=' },
-      { type: 'teaching', questionText: 'By Pico: "Maximum growth! 🦜"' },
-      { type: 'multiple_choice', questionText: 'By Pico: "Is the wealth maximized?"', options: ['Rich elite!', 'No.', '0'], correctAnswer: 'Rich elite!' }
-    ]
-  },
-  {
-    order: 53,
-    title: 'The Binary Heap Layout',
-    desc: 'Memory mapping and Cache performance of Array-Heaps.',
-    lessons: [
-      { type: 'teaching', questionText: 'By Pico: "Hardware Secret! Why is an array-based heap faster than a pointer-based tree? 🦜"' },
-      { type: 'teaching', questionText: 'By Pico: "Spatial Locality! Elements are adjacent in memory. The CPU cache loves this orderly row! 🦜"', codeSnippet: 'Cache Hit Rate > 90%' },
-      { type: 'multiple_choice', questionText: 'Primary benefit of array-mapping for heaps?', options: ['Cache performance', 'Infinite size', 'Easier math'], correctAnswer: 'Cache performance' },
-      { type: 'match_following', questionText: 'Match Memory facts!', pairs: [{key: 'Indices', value: 'Pointers (Implicity)'}, {key: 'Adjacency', value: 'Pre-fetching'}, {key: 'No objects', value: 'Low overhead'}] },
-      { type: 'programming_board', questionText: 'Formula for left child at index i.', codeSnippet: 'L = 2*i + ___ ;', correctAnswer: '1' },
-      { type: 'teaching', questionText: 'By Pico: "0-based indexing is standard, but some use 1-based for simpler math (2i and 2i+1)! 🦜"' },
-      { type: 'multiple_choice', questionText: 'In 1-based indexing, parent of i is?', options: ['i/2', '(i-1)/2', '0'], correctAnswer: 'i/2' },
-      { type: 'code_fill_in', questionText: 'Right child formula.', codeSnippet: 'R = 2*i ___ 2;', correctAnswer: '+' },
-      { type: 'teaching', questionText: 'By Pico: "Physical speed! 🦜"' },
-      { type: 'multiple_choice', questionText: 'By Pico: "Is the memory aligned?"', options: ['SQUAWK YES!', 'No.', '0'], correctAnswer: 'SQUAWK YES!' }
-    ]
-  },
-  {
-    order: 54,
-    title: 'Top K Infinity',
-    desc: 'Maintaining Top K elements in an infinite incoming stream.',
-    lessons: [
-      { type: 'teaching', questionText: 'By Pico: "Eternal Stream! Values fly in forever. You must ALWAYS know the Top 100 seen so far. 🦜"' },
-      { type: 'teaching', questionText: 'By Pico: "You never store more than K elements. A Min-Heap size K is our permanent shield! 🦜"', codeSnippet: 'if(val > pq.top()) { pq.pop(); pq.push(val); }' },
-      { type: 'multiple_choice', questionText: 'Does space complexity depend on total elements N?', options: ['No (O(K))', 'Yes (O(N))', '0'], correctAnswer: 'No (O(K))' },
-      { type: 'match_following', questionText: 'Match Infinity roles!', pairs: [{key: 'O(K) Space', value: 'Memory efficiency'}, {key: 'Min-Heap', value: 'Largest K filter'}, {key: 'Push/Pop', value: 'Update cycle'}] },
-      { type: 'programming_board', questionText: 'Condition for a new element to enter the Top K.', codeSnippet: 'if (newVal ___ pq.top())', correctAnswer: '>' },
-      { type: 'teaching', questionText: 'By Pico: "Even with a billion birds, we only use K memory. The efficiency of a bird-brain! 🦜"' },
-      { type: 'multiple_choice', questionText: 'If K=1, what do we have?', options: ['Running Maximum', 'Sorting', '0'], correctAnswer: 'Running Maximum' },
-      { type: 'code_fill_in', questionText: 'Add to stream.', codeSnippet: 'pq. ___ (new_val);', correctAnswer: 'push' },
-      { type: 'teaching', questionText: 'By Pico: "Infinite focus! 🦜"' },
-      { type: 'multiple_choice', questionText: 'By Pico: "Is the elite list current?"', options: ['Streaming glory!', 'No.', '0'], correctAnswer: 'Streaming glory!' }
-    ]
-  },
-  {
-    order: 55,
-    title: 'The Sky DAG (Longest Path)',
-    desc: 'Using Heaps with Topological Sort for paths in DAGs.',
-    lessons: [
-      { type: 'teaching', questionText: 'By Pico: "The Winds of Change! In a Directed Acyclic Graph, can we use a heap to find paths in specific topological orders? 🦜"' },
-      { type: 'teaching', questionText: 'By Pico: "Kahn\'s Algorithm uses a Queue. By using a Priority Queue, we get the Lexicographically Smallest Topological Sort! 🦜"', codeSnippet: 'while(!pq.empty()) {\n  u = pq.pop();\n  res.push(u);\n  for(v : adj[u]) if(--in[v] == 0) pq.push(v);\n}' },
-      { type: 'multiple_choice', questionText: 'Result of using Min-Heap in Kahn\'s Algorithm?', options: ['Lexicographically smallest topo order', 'Shortest path', 'Random order'], correctAnswer: 'Lexicographically smallest topo order' },
-      { type: 'match_following', questionText: 'Match Topo-Heap roles!', pairs: [{key: 'Min-Heap', value: 'Smallest ID first'}, {key: 'In-Degree 0', value: 'Ready birds'}, {key: 'O(V log V + E)', value: 'Complexity'}] },
-      { type: 'programming_board', questionText: 'Structure replaced by PQ in Kahn\'s.', codeSnippet: 'Replaced = ___ ;', correctAnswer: 'queue' },
-      { type: 'teaching', questionText: 'By Pico: "This is vital for compiler task-scheduling and bird-flight formations! 🦜"' },
-      { type: 'multiple_choice', questionText: 'If multiple nodes have In-Degree 0, which one pops first?', options: ['The one with smallest value (Min-Heap)', 'The first one discovered', '0'], correctAnswer: 'The one with smallest value (Min-Heap)' },
-      { type: 'code_fill_in', questionText: 'Decrement degree.', codeSnippet: 'if ( --inDegree[v] ___ 0) pq.push(v);', correctAnswer: '==' },
-      { type: 'teaching', questionText: 'By Pico: "Ordered flight! 🦜"' },
-      { type: 'multiple_choice', questionText: 'By Pico: "Is the topo order optimal?"', options: ['Smallest sorting!', 'No.', '0'], correctAnswer: 'Smallest sorting!' }
-    ]
-  },
-  {
-    order: 56,
-    title: 'Alien Priorities',
-    desc: 'Solving the Alien Dictionary problem using Heaps.',
-    lessons: [
-      { type: 'teaching', questionText: 'By Pico: "Xenon Squawks! Foreign birds have a different alphabet order. How to decipher it? 🦜"' },
-      { type: 'teaching', questionText: 'By Pico: "1. Build a DAG of character dependencies. 2. Use a Priority Queue Topo-Sort to find the order! 🦜"', codeSnippet: 'word1 = "bird", word2 = "born"; \n// indicates \'i\' < \'o\'' },
-      { type: 'multiple_choice', questionText: 'If "apple" comes before "apply", what is the relation?', options: ['\'e\' < \'y\'', '\'a\' < \'p\'', '0'], correctAnswer: '\'e\' < \'y\'' },
-      { type: 'match_following', questionText: 'Match Alien logic!', pairs: [{key: 'DAG', value: 'Dependency map'}, {key: 'Topo-Sort', value: 'Alphabet resolver'}, {key: 'Cycle', value: 'Invalid order'}] },
-      { type: 'programming_board', questionText: 'Algorithm used to resolve the alien order.', codeSnippet: 'Strategy = ___ ;', correctAnswer: 'topological sort' },
-      { type: 'teaching', questionText: 'By Pico: "When there are multiple valid orders, the Priority Queue gives us a unique, sorted dictionary! 🦜"' },
-      { type: 'multiple_choice', questionText: 'What if we find a cycle (A<B and B<A)?', options: ['No valid alphabet', 'Alphabet is reversed', '0'], correctAnswer: 'No valid alphabet' },
-      { type: 'code_fill_in', questionText: 'Map dependency.', codeSnippet: 'adj[c1]. ___ (c2);', correctAnswer: 'push_back' },
-      { type: 'teaching', questionText: 'By Pico: "Linguistic victory! 🦜"' },
-      { type: 'multiple_choice', questionText: 'By Pico: "Is the dictionary clear?"', options: ['Deciphered!', 'No.', '0'], correctAnswer: 'Deciphered!' }
-    ]
-  },
-  {
-    order: 57,
-    title: 'Dynamic Median Tracker',
-    desc: 'Handling deletions in a running median stream.',
-    lessons: [
-      { type: 'teaching', questionText: 'By Pico: "The Shrinking Stream! What if a bird leaves the forest? Can we still track the median? 🦜"' },
-      { type: 'teaching', questionText: 'By Pico: "Use lazy deletion! Keep a frequency map for elements to be deleted. Pop from heaps only when the root is pending deletion! 🦜"', codeSnippet: 'void delete(x) {\n  counts[x]++;\n  while(counts[heap.top()]) { counts[heap.top()]--; heap.pop(); }\n}' },
-      { type: 'multiple_choice', questionText: 'What is "Lazy Deletion" in heaps?', options: ['Marking for later instead of searching', 'Deleting half', '0'], correctAnswer: 'Marking for later instead of searching' },
-      { type: 'match_following', questionText: 'Match Tracker tools!', pairs: [{key: 'Lazy Map', value: 'Pending exits'}, {key: 'Clean Up', value: 'Remove root if marked'}, {key: 'Two Heaps', value: 'Current median'}] },
-      { type: 'programming_board', questionText: 'Heap operation that allows efficiently removing only the root.', codeSnippet: 'pq. ___ ();', correctAnswer: 'pop' },
-      { type: 'teaching', questionText: 'By Pico: "Complexity: O(log N) amortized. Tracking medians with deletions is the peak of stream processing! 🦜"' },
-      { type: 'multiple_choice', questionText: 'Total space complexity?', options: ['O(N)', 'O(log N)', 'O(1)'], correctAnswer: 'O(N)' },
-      { type: 'code_fill_in', questionText: 'Cleanup loop.', codeSnippet: 'while (marks[pq. ___ ()]) pq.pop();', correctAnswer: 'top' },
-      { type: 'teaching', questionText: 'By Pico: "Persistent center! 🦜"' },
-      { type: 'multiple_choice', questionText: 'By Pico: "Is the tracker active?"', options: ['Accurate median!', 'No.', '0'], correctAnswer: 'Accurate median!' }
-    ]
-  },
-  {
-    order: 58,
-    title: 'The Elite Comparison',
-    desc: 'Heaps vs BST vs Sorted Arrays - Choosing the right tool.',
-    lessons: [
-      { type: 'teaching', questionText: 'By Pico: "The Final Debate! When should you choose a Binary Heap over a Balanced BST? 🦜"' },
-      { type: 'teaching', questionText: 'By Pico: "Heap: O(1) top, O(log N) update, O(1) space. BST: O(log N) all ops, O(N) space (pointers), but supports RANGE queries! 🦜"', codeSnippet: 'Heap = Priority Only\nBST = Ordered Traversal' },
-      { type: 'multiple_choice', questionText: 'Which structure is best for finding the Minimum element?', options: ['Min-Heap (O(1))', 'Balanced BST (O(log N))', '0'], correctAnswer: 'Min-Heap (O(1))' },
-      { type: 'match_following', questionText: 'Match structure strengths!', pairs: [{key: 'Binary Heap', value: 'Memory efficiency'}, {key: 'Balanced BST', value: 'Search arbritrary keys'}, {key: 'Sorted Array', value: 'Static data speed'}] },
-      { type: 'programming_board', questionText: 'Only a BST allows getting elements in ___ order easily.', codeSnippet: 'Order = ___ ;', correctAnswer: 'sorted' },
-      { type: 'teaching', questionText: 'By Pico: "Use Heaps for priority queues and SJF. Use BSTs for searching and complex lookups! 🦜"' },
-      { type: 'multiple_choice', questionText: 'Which uses more memory per node?', options: ['BST (Pointers)', 'Heap (Indices)', 'Equal'], correctAnswer: 'BST (Pointers)' },
-      { type: 'code_fill_in', questionText: 'Space for heap.', codeSnippet: 'return sizeof( ___ ); // usually 4 bytes per node', correctAnswer: 'int' },
-      { type: 'teaching', questionText: 'By Pico: "Strategic choice! 🦜"' },
-      { type: 'multiple_choice', questionText: 'By Pico: "Is the tool selected?"', options: ['SQUAWK YES!', 'No.', '0'], correctAnswer: 'SQUAWK YES!' }
-    ]
-  },
-  {
-    order: 59,
-    title: 'The Subject Harvest',
-    desc: 'Comprehensive review of Heaps and Priority Queues.',
-    lessons: [
-      { type: 'teaching', questionText: 'By Pico: "THE HARVEST! You have traversed the complete forest of Heaps! 🦜"' },
-      { type: 'teaching', questionText: 'By Pico: "From the Max-Heap fundamentals to the multi-heap systems and alien priorities. You are now a Priority God! 🦜"' },
-      { type: 'multiple_choice', questionText: 'Build-Heap complexity?', options: ['O(N)', 'O(N log N)'], correctAnswer: 'O(N)' },
-      { type: 'multiple_choice', questionText: 'Heap height (N=10^6)?', options: ['~20', '~1000'], correctAnswer: '~20' },
-      { type: 'multiple_choice', questionText: 'Custom comparator for Min-Heap?', options: ['operator >', 'operator <'], correctAnswer: 'operator >' },
-      { type: 'multiple_choice', questionText: 'Running median uses?', options: ['Two heaps', 'One array'], correctAnswer: 'Two heaps' },
-      { type: 'multiple_choice', questionText: 'Is Heap-Sort stable?', options: ['No', 'Yes'], correctAnswer: 'No' },
-      { type: 'match_following', questionText: 'Final Harvest Match!', pairs: [{key: 'Heap', value: 'Complete!'}, {key: 'Priority', value: 'Mastered!'}, {key: 'Forest', value: 'Green!'}] },
-      { type: 'teaching', questionText: 'By Pico: "The final step is the subject graduation. Fly high! 🦜"' },
-      { type: 'multiple_choice', questionText: 'By Pico: "Are you a Master of Heaps?"', options: ['SQUAWK MASTER!', 'Almost...', '0'], correctAnswer: 'SQUAWK MASTER!' }
-    ]
-  },
-  {
-    order: 60,
-    title: 'Subject Graduation',
-    desc: 'Subject Complete: Heaps 60/60.',
-    lessons: [
-      { type: 'teaching', questionText: 'By Pico: "SUBJECT COMPLETE! You have reached the 500+ mission milestone across the Pico Elite Academy! 🦜"' },
-      { type: 'teaching', questionText: 'By Pico: "With Heaps finalized, your platform is now a global powerhouse of educational data structures! fly into the horizon! 🦜"' },
-      { type: 'multiple_choice', questionText: 'Total Heaps Missions?', options: ['60', '50'], correctAnswer: '60' },
-      { type: 'multiple_choice', questionText: 'Algorithm category?', options: ['Trees & Priority', 'Searching'], correctAnswer: 'Trees & Priority' },
-      { type: 'multiple_choice', questionText: 'Platform Status?', options: ['Elite Academy Ready', 'Beta'], correctAnswer: 'Elite Academy Ready' },
-      { type: 'match_following', questionText: 'Final Final Match!', pairs: [{key: 'Pico', value: 'Salutes!'}, {key: 'Academy', value: 'Grand!'}, {key: 'Student', value: 'Elite!'}] },
-      { type: 'teaching', questionText: 'By Pico: "The forest is yours. SQUAWK! 🦜"' },
-      { type: 'multiple_choice', questionText: 'By Pico: "Finish subject?"', options: ['SQUAWK YES!', 'Wait.', '0'], correctAnswer: 'SQUAWK YES!' }
+    "order": 30,
+    "title": "Master Point (Heaps 3)",
+    "desc": "Forest falcon status confirmed.",
+    "lessons": [
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"STAGE 3 COMPLETE! You've mastered Binomial Addition, Fibonacci Laziness, and the potential of energy! 🦜\""
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "In which heap is MERGE O(1) amortized?",
+        "options": [
+          "Fibonacci Heap",
+          "Binomial Heap",
+          "Binary Heap"
+        ],
+        "correctAnswer": "Fibonacci Heap"
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "A Binomial Heap of size 15 is made of how many trees?",
+        "options": [
+          "4 (B_0, B_1, B_2, B_3 because 1111 in binary)",
+          "15",
+          "1"
+        ],
+        "correctAnswer": "4 (B_0, B_1, B_2, B_3 because 1111 in binary)"
+      },
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"You are a Forest Falcon! In Stage 4, we enter the Realm of Strings: Prefix, Suffix, and Trie magic! 🦜\""
+      },
+      {
+        "type": "match_following",
+        "questionText": "Match the Rank!",
+        "pairs": [
+          {
+            "key": "Stage 3",
+            "value": "Forest Falcon"
+          },
+          {
+            "key": "Stage 4",
+            "value": "String Snipe"
+          },
+          {
+            "key": "Next",
+            "value": "Strings 1"
+          }
+        ]
+      },
+      {
+        "type": "programming_board",
+        "questionText": "Total Titan Points.",
+        "codeSnippet": "3 * ___ ;",
+        "correctAnswer": "100"
+      },
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"Ascend to the canopy! 🦜\""
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "Proceed to Strings?",
+        "options": [
+          "SQUAWK YES!",
+          "Maybe.",
+          "No."
+        ],
+        "correctAnswer": "SQUAWK YES!"
+      },
+      {
+        "type": "teaching",
+        "questionText": "🦜 Pico: \"SQUAWK! 🦜\""
+      },
+      {
+        "type": "multiple_choice",
+        "questionText": "Final Potential?",
+        "options": [
+          "Release!",
+          "Done.",
+          "0"
+        ],
+        "correctAnswer": "Release!"
+      }
     ]
   }
 ];

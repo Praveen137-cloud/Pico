@@ -1,7 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
 import './Landing.css';
+import LivingCharacter from '../components/LivingCharacter';
 
 const FEATURES = [
   {
@@ -136,9 +134,9 @@ const Landing = () => {
       <canvas ref={canvasRef} className="landing-canvas" />
 
       {/* NAV */}
-      <nav className="landing-nav">
+      <nav className="landing-nav glass-panel">
         <div className="landing-nav-logo">
-          <img src="/electric-bird.png" alt="Pico Logo" className="landing-nav-bird" />
+          <LivingCharacter character="electric" size={40} state="happy" />
           <span className="landing-nav-title">PICO ELITE ACADEMY</span>
         </div>
         <div className="landing-nav-links">
@@ -150,22 +148,29 @@ const Landing = () => {
       </nav>
 
       {/* HERO */}
-      <section className="landing-hero">
-        <div className="landing-hero-badge">🔥 FREE TO START — NO CREDIT CARD</div>
+      <section className="landing-hero cyber-mesh-bg">
+        <div className="hero-character-left">
+           <LivingCharacter character="pico" size={220} state="levitating" />
+        </div>
+        <div className="hero-character-right">
+           <LivingCharacter character="ace" size={280} state="happy" />
+        </div>
+        
+        <div className="landing-hero-badge">🔥 THE ELITE TRAINING MATRIX — VERSION 3.0</div>
         <h1 className="landing-hero-heading">
           Master DSA.<br />
-          <span className="landing-hero-gradient">Crack Any Interview.</span>
+          <span className="landing-hero-gradient">Enter the Matrix.</span>
         </h1>
         <p className="landing-hero-sub">
-          An elite, AI-powered technical training matrix with 40,000+ lessons across 15 subjects.
-          Built for developers who want to level up fast.
+          A cinematic, AI-powered codebase with 40,000+ interactive modules. 
+          The ultimate research phase for elite engineers starts here.
         </p>
         <div className="landing-hero-actions">
           <Link to="/auth" className="landing-cta-primary" id="landing-start-btn">
-            🚀 Start Training — Free
+            🚀 Access the Core — Free
           </Link>
-          <a href="#features" className="landing-cta-secondary" id="landing-features-btn">
-            Explore Features →
+          <a href="#features" className="landing-cta-secondary" id="landing-features-btn" style={{ backdropFilter: 'blur(10px)' }}>
+            System Reveal →
           </a>
         </div>
 

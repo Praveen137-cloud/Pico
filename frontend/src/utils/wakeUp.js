@@ -7,6 +7,12 @@ const listeners = new Set();
 
 export const getIsEngineReady = () => isEngineReady;
 
+export const resetEngineStatus = () => {
+  isEngineReady = false;
+  isWaking = false;
+  console.log('[WakeUp] Engine status reset. Ready for re-sync.');
+};
+
 export const subscribeToEngineStatus = (callback) => {
   listeners.add(callback);
   return () => listeners.delete(callback);

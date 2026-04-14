@@ -36,13 +36,21 @@ export const AuthProvider = ({ children }) => {
           api.get('/api/curriculum/subjects', { signal: controller.signal })
         ]);
         if (!controller.signal.aborted) {
+          console.log(`[Auth] Sync success! Agent: ${userRes.data?.name || 'Unknown'}`);
           setUser(userRes.data);
-          setSubjects(subRes.data);
+          setSubjects(subRes.data || []);
         }
       } catch (err) {
         if (err.name === 'CanceledError' || err.name === 'AbortError') return; // Normal cleanup
-        console.error('[Auth Error] Session sync failed:', err);
-        // 401 handled by interceptor → clears token & redirects
+        console.error('[Auth Error] Session sync failed:', err.message);
+        
+        // If it's a 401, the interceptor handles it. 
+        // If it's a network error/timeout during wake-up, we might want to retry once or just wait.
+        // For now, let's ensure we don't leave things in an inconsistent state.
+        if (!controller.signal.aborted) {
+          setUser(null);
+          setSubjects([]);
+        }
       } finally {
         if (!controller.signal.aborted) setLoading(false);
       }

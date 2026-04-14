@@ -13,7 +13,7 @@ console.log(`[Pico API] Base URL: ${baseURL}`);
 
 const api = axios.create({
   baseURL,
-  timeout: 10000 // 10s timeout to prevent infinite loading
+  timeout: 30000 // 30s timeout to accommodate backend cold starts on Render free-tier
 });
 
 // ✅ Token key — must match AuthContext.jsx

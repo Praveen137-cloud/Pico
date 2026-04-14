@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'r
 import Navigation from './components/Navigation';
 import { AuthProvider, AuthContext } from './context/AuthContext';
 import PicoBot from './components/PicoBot';
+import GlobalHUD from './components/GlobalHUD';
 import DigitalBackground from './components/DigitalBackground';
 import PreLoader from './components/PreLoader';
 import { wakeBackend } from './utils/wakeUp';
@@ -67,7 +68,8 @@ const MainLayout = ({ children }) => {
   
   return (
     <>
-      <div className={`main-content ${hideNav ? 'no-nav' : ''}`}>
+      {!hideNav && <GlobalHUD />}
+      <div className={`main-content ${hideNav ? 'no-nav' : ''}`} style={{ paddingTop: !hideNav ? '80px' : '0' }}>
         {children}
       </div>
       {!hideNav && <Navigation />}
@@ -89,14 +91,20 @@ function App() {
   const [interacted, setInteracted] = useState(false);
   const [engineReady, setEngineReady] = useState(false);
   
+  const handleEngineReady = React.useCallback(() => {
+    setEngineReady(true);
+  }, []);
+
   useEffect(() => {
     // Start warming up the backend immediately
-    wakeBackend().then(() => setEngineReady(true));
-  }, []);
+    wakeBackend().then(success => {
+      if (success) handleEngineReady();
+    });
+  }, [handleEngineReady]);
   
   const bgmRef = React.useRef(new Audio('https://cdn.pixabay.com/download/audio/2021/08/09/audio_82136e053a.mp3')); 
-  const sfxRef = React.useRef(new Audio('https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8b7f7ebb7.mp3')); 
-  const successRef = React.useRef(new Audio('https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3'));
+  const sfxRef = React.useRef(new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3')); /* Bubbly Pop */
+  const successRef = React.useRef(new Audio('https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3')); /* Ding */
   const errorRef = React.useRef(new Audio('https://assets.mixkit.co/active_storage/sfx/1110/1110-preview.mp3'));
   const fanfareRef = React.useRef(new Audio('https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3'));
   
@@ -155,6 +163,17 @@ function App() {
     playClick();
   };
 
+  // 🔒 GLOBAL ENGINE GATE: If the backend is cold, block the app with PreLoader
+  if (!engineReady) {
+    return (
+      <AuthProvider>
+        <DigitalBackground />
+        <div className="crt-overlay" />
+        <PreLoader onReady={handleEngineReady} />
+      </AuthProvider>
+    );
+  }
+
   return (
     <AudioContext.Provider value={{ playClick, playSuccess, playError, playFanfare, bgmMuted, setBgmMuted }}>
       <AuthProvider>
@@ -162,7 +181,7 @@ function App() {
         <div className="crt-overlay" />
         <GlobalPremiumWrapper onClick={handleGlobalClick}>
           <Router>
-            <Suspense fallback={<PreLoader onReady={() => {}} />}>
+            <Suspense fallback={<PreLoader onReady={handleEngineReady} />}>
               <Routes>
                 {/* Public Routes */}
                 <Route path="/" element={<Landing />} />
