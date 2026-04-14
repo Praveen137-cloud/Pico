@@ -188,17 +188,26 @@ const Map = () => {
                   className={`adventure-node btn-chunky ${!isUnlocked ? 'locked' : ''} ${isDone ? 'completed' : 'cyan'}`}
                   onClick={() => isUnlocked && navigate(`/lesson/${subjectId}/${sectionId}/${unit._id}`)}
                 >
-                  <span style={{ fontSize: '32px' }}>
+                  {isDone && isChocolateTheme && (
+                    <>
+                      <div className="node-wing-left" />
+                      <div className="node-wing-right" />
+                    </>
+                  )}
+
+                  <span style={{ fontSize: '32px', zIndex: 10, position: 'relative' }}>
                     {icon}
                   </span>
 
                   {isCurrent && (
                     <>
+                      <div className="expanding-ripples" />
                       <div className="current-node-pulse" />
                       <div style={styles.currentIndicator}>NEXT BITE</div>
                     </>
                   )}
                 </div>
+
 
                 <div className="node-label">
                   {unit.title}
