@@ -110,14 +110,16 @@ const GlobalHUD = () => {
         }
 
         .hud-premium-tag {
-          font-size: 10px;
+          font-size: 16px;
           font-weight: 900;
           color: #FFD700;
           background: rgba(255, 215, 0, 0.1);
           border: 1px solid rgba(255, 215, 0, 0.3);
-          padding: 3px 8px;
+          padding: 2px 6px;
           border-radius: 8px;
-          letter-spacing: 1px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
         }
 
