@@ -231,7 +231,7 @@ const Landing = () => {
       {/* FOOTER */}
       <footer className="landing-footer">
         <div className="landing-footer-logo">
-          <img src="/happy-horse.png" alt="Pico" width={28} />
+          <img src="/happy-lion.png" alt="Pico" width={28} />
           <span>Pico Elite Academy</span>
         </div>
         <p className="landing-footer-copy">© {new Date().getFullYear()} Pico Elite Academy. Built with ⚡ for developers.</p>

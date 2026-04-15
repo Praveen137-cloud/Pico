@@ -273,7 +273,7 @@ const stage6 = [
         "type": "teaching",
         "questionText": "[SYNC] Galloping Search",
         "explanation": "Ace: 'This is also known as Galloping Search, famously used to find split points in Merge Sort optimizations.'",
-        "encouragementText": "Pico: 'Gallop like a horse bird! 100% 🦜'"
+        "encouragementText": "Pico: 'Roar like a lion bird! 100% 🦁'"
       },
       {
         "type": "programming_board",

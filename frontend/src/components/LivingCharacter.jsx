@@ -10,7 +10,7 @@ const LivingCharacter = ({
   const assets = {
     ace: '/ace.png',
     pico: '/pico-bird.png',
-    electric: '/happy-horse.png'
+    electric: '/happy-lion.png'
   };
 
   return (
