@@ -91,7 +91,7 @@ const Home = () => {
       'Hashing & Sets': '🗄️',
       'Advanced Data Structures': '💎',
       'Zoho Elite': '🦁'
-    }).find(([key]) => name.toLowerCase().includes(key.toLowerCase()));
+    }).find(([key]) => name && typeof name === 'string' && name.toLowerCase().includes(key.toLowerCase()));
     return entry ? entry[1] : '💻';
   };
 

@@ -5,7 +5,7 @@ import axios from 'axios';
 const PICO_PRIMARY_BACKEND = 'https://pico-3haq.onrender.com';
 
 export const baseURL = import.meta.env.VITE_API_URL || 
-  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
     ? 'http://localhost:5000' 
     : PICO_PRIMARY_BACKEND);
 

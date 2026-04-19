@@ -69,7 +69,7 @@ const PreLoader = ({ onReady }) => {
               </div>
             )}
             
-            {logs.some(l => l && typeof l === 'string' && l.includes('ERROR')) && (
+            {Array.isArray(logs) && logs.some(l => typeof l === 'string' && l.includes('ERROR')) && (
               <div style={{ marginTop: '20px' }}>
                 <button 
                   onClick={() => window.location.reload()}

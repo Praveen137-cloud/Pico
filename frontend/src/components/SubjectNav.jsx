@@ -24,7 +24,7 @@ const SubjectNav = ({ activeSubject, onSelect }) => {
       'Algorithm Design': { icon: 'Ω', color: '#F97316' },
       'Advanced': { icon: '◆', color: '#FBBF24' },
       'Zoho': { icon: '⬟', color: '#FBBF24' }
-    }).find(([key]) => name.toLowerCase().includes(key.toLowerCase()));
+    }).find(([key]) => name && typeof name === 'string' && name.toLowerCase().includes(key.toLowerCase()));
     
     return meta ? meta[1] : { icon: '⊕', color: '#94A3B8' };
   };
