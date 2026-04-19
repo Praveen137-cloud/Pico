@@ -1,0 +1,196 @@
+:root {
+  --toffee-brown: #3E2723;
+  --toffee-dark: #2D1B19;
+  --toffee-light: #5D4037;
+  --toffee-gold: #FFB300;
+  --toffee-cream: #FFF8E1;
+  --node-size: 110px;
+  --spring-bounce: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.map-page {
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background-color: var(--toffee-brown);
+  background-image: 
+    radial-gradient(circle at 20% 20%, rgba(93, 64, 55, 0.4) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(93, 64, 55, 0.3) 0%, transparent 50%);
+  background-size: 100% 100%;
+}
+
+.adventure-path-overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.5) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.scroll-container {
+  height: calc(100vh - 140px);
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+  padding: 40px 0; /* MOVED UP from 120px */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* 🍫 TOFFEE NODES */
+.adventure-node {
+  width: var(--node-size);
+  height: 100px;
+  background: linear-gradient(135deg, var(--toffee-light), var(--toffee-brown));
+  border-radius: 25px; /* Premium Blocky Shape */
+  z-index: 10;
+  position: relative;
+  border: 4px solid var(--toffee-light);
+  transition: all 0.3s var(--spring-bounce);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 14px 0px var(--toffee-dark);
+}
+
+.adventure-node:hover {
+  transform: translateY(-8px) scale(1.05);
+  box-shadow: 0 20px 0px var(--toffee-dark);
+  border-color: var(--toffee-gold);
+}
+
+.adventure-node:active {
+  transform: translateY(8px) scale(0.95);
+  box-shadow: 0 4px 0px var(--toffee-dark);
+}
+
+.adventure-node.locked {
+  background: #2D1B19 !important;
+  opacity: 0.5;
+  filter: grayscale(1);
+  box-shadow: 0 12px 0px #1A0F0E !important;
+  cursor: not-allowed;
+  border-color: rgba(255,255,255,0.05) !important;
+}
+
+.adventure-node.completed {
+  background: linear-gradient(135deg, var(--toffee-gold), #F59E0B) !important;
+  box-shadow: 0 14px 0px #B45309 !important;
+  border-color: var(--toffee-cream) !important;
+}
+
+/* ⚡ SYRUP PATHS */
+.trail-line {
+  position: absolute;
+  width: 14px;
+  height: 120px;
+  background: rgba(93, 64, 55, 0.3);
+  top: 90px;
+  border-radius: 10px;
+  z-index: 1;
+}
+
+.trail-line.active {
+  background: var(--toffee-gold);
+  box-shadow: 0 0 15px var(--toffee-gold);
+  animation: dripGlow 2s infinite alternate;
+}
+
+@keyframes dripGlow {
+  0% { opacity: 0.6; filter: brightness(1); }
+  100% { opacity: 1; filter: brightness(1.3); }
+}
+
+.node-label {
+  color: #D7CCC8;
+  margin-top: 25px;
+  font-weight: 900;
+  font-size: 16px;
+  text-align: center;
+  max-width: 250px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  text-shadow: 0 4px 8px rgba(0,0,0,0.8);
+}
+
+/* 🕊️ SILVER WINGS FOR FINISHED UNITS */
+.node-wing-left,
+.node-wing-right {
+  position: absolute;
+  top: 50%;
+  width: 40px;
+  height: 60px;
+  background: linear-gradient(to bottom, #E0E0E0, #9E9E9E);
+  z-index: 1;
+  transform: translateY(-50%);
+  border: 2px solid #FFF;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+  filter: brightness(1.2);
+}
+
+.node-wing-left {
+  left: -25px;
+  clip-path: polygon(100% 0, 5% 20%, 5% 80%, 100% 100%);
+}
+
+.node-wing-right {
+  right: -25px;
+  clip-path: polygon(0 0, 95% 20%, 95% 80%, 0 100%);
+}
+
+/* 🌊 EXPANDING ROUND RIPPLES (NEXT BITE) */
+.expanding-ripples {
+  position: absolute;
+  inset: -10px;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.expanding-ripples::before,
+.expanding-ripples::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 30px;
+  border: 4px solid var(--toffee-gold);
+  animation: expandingRound 2.5s infinite cubic-bezier(0.19, 1, 0.22, 1);
+  opacity: 0;
+}
+
+.expanding-ripples::after {
+  animation-delay: 1.25s;
+}
+
+@keyframes expandingRound {
+  0% { transform: scale(0.9); opacity: 0.8; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+.current-node-pulse {
+  position: absolute;
+  inset: -12px;
+  border: 4px solid var(--toffee-gold);
+  border-radius: 32px;
+  animation: nodePulse 2s infinite;
+  pointer-events: none;
+}
+
+@keyframes nodePulse {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  100% { transform: scale(1.15); opacity: 0; }
+}
+
+.entrance-anim {
+  animation: springPop 0.8s var(--spring-bounce) backwards;
+}
+
+@keyframes springPop {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}

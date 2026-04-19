@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "public": true,
+  "name": "pico-elite-academy",
+  "builds": [
+    {
+      "src": "frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "dist" }
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/(api|socket.io)(.*)",
+      "destination": "https://pico-3haq.onrender.com/$1$2"
+    },
+    { "source": "/(.*)", "destination": "frontend/$1" }
+  ]
+}

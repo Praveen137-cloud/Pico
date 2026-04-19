@@ -1,0 +1,19 @@
+{
+  "short_name": "Pico Elite",
+  "name": "Pico Elite Academy: DSA Training",
+  "description": "Professional 400,000-page academic DSA curriculum for high-fidelity training.",
+  "icons": [
+    {
+      "src": "/happy-lion.png",
+      "type": "image/png",
+      "sizes": "192x192 512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#10131c",
+  "background_color": "#10131c",
+  "categories": ["education", "coding", "productivity"]
+}

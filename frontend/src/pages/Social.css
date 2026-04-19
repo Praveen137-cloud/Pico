@@ -1,0 +1,233 @@
+.social-page {
+  padding: 40px 20px;
+  min-height: 100vh;
+  background: radial-gradient(circle at top right, rgba(251, 191, 36, 0.03), transparent);
+}
+
+.social-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.social-title {
+  font-size: 34px;
+  font-weight: 900;
+  letter-spacing: 4px;
+  color: #fff;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.social-subtitle {
+  color: var(--text-muted);
+  letter-spacing: 2px;
+  font-size: 13px;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.social-grid {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.social-tabs-container {
+  display: flex;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--divider);
+  padding: 6px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+  gap: 6px;
+}
+
+.social-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: all 0.2s;
+}
+
+.social-tab:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.social-tab.active {
+  background: var(--theme-primary);
+  color: #000;
+}
+
+.search-bar {
+  display: flex;
+  gap: 12px;
+  background: rgba(20, 20, 20, 0.8);
+  border: 1px solid var(--divider);
+  padding: 8px 16px;
+  border-radius: 12px;
+  align-items: center;
+  margin-bottom: 25px;
+  transition: all 0.3s;
+}
+
+.search-bar:focus-within {
+  border-color: var(--theme-primary);
+  box-shadow: 0 0 15px rgba(251, 191, 36, 0.05);
+}
+
+.search-icon {
+  color: var(--text-muted);
+}
+
+.search-bar input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 15px;
+  padding: 8px 0;
+  outline: none;
+}
+
+.search-bar button {
+  background: var(--theme-primary);
+  color: #000;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-weight: 900;
+  font-size: 11px;
+  cursor: pointer;
+  letter-spacing: 1px;
+}
+
+.agent-row {
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  background: rgba(15, 15, 15, 0.5) !important;
+  border: 1px solid var(--divider);
+  border-radius: 12px;
+}
+
+.agent-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.agent-avatar {
+  font-size: 24px;
+  background: rgba(255, 255, 255, 0.03);
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  border: 1px solid var(--divider);
+}
+
+.agent-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.agent-name {
+  font-weight: 800;
+  font-size: 16px;
+  color: #fff;
+}
+
+.mutual-heart {
+  color: #EF4444;
+  animation: heartBeat 2s infinite;
+}
+
+.agent-xp {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.follow-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--divider);
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.follow-btn:hover {
+  background: var(--theme-primary);
+  color: #000;
+  border-color: var(--theme-primary);
+}
+
+.follow-btn.unfollow {
+  border-color: rgba(239, 68, 68, 0.1);
+  color: #fca5a5;
+}
+
+.follow-btn.unfollow:hover {
+  background: rgba(220, 38, 38, 0.1);
+  border-color: #EF4444;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 14px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  border: 1px dashed var(--divider);
+}
+
+@keyframes heartBeat {
+  0% { transform: scale(1); }
+  5% { transform: scale(1.2); }
+  10% { transform: scale(1.1); }
+  15% { transform: scale(1.3); }
+  50% { transform: scale(1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+@media (max-width: 600px) {
+  .social-tabs-container { flex-direction: column; }
+  .social-tab { width: 100%; justify-content: flex-start; padding: 10px 20px; }
+  .agent-name { font-size: 15px; }
+  .agent-avatar { width: 42px; height: 42px; font-size: 20px; }
+}

@@ -1,0 +1,231 @@
+[
+  {
+    "title": "String Fundamentals",
+    "units": [
+      {
+        "title": "What is a String?",
+        "isUnlocked": true,
+        "lessons": [
+          {
+            "type": "teaching",
+            "questionText": "A string is a sequence of characters. In C, strings are null-terminated char arrays. In Python and Java, strings are objects.",
+            "options": [],
+            "codeSnippet": "// C\nchar name[] = \"Pico\";\n// Python\nname = \"Pico\"\n// Java\nString name = \"Pico\";",
+            "explanation": "Strings are just arrays of characters under the hood. The null character \\0 marks the end in C.",
+            "hint": "Think of a string as an array where each slot holds a character.",
+            "_id": "69d1fdde54ce5cd5f31d5b66"
+          },
+          {
+            "type": "multiple_choice",
+            "questionText": "In C, what character marks the end of a string?",
+            "options": [
+              "\\0",
+              "\\n",
+              "\\t",
+              "$"
+            ],
+            "correctAnswer": "\\0",
+            "explanation": "The null terminator \\0 tells C functions like printf where the string ends.",
+            "hint": "It's called the null terminator.",
+            "_id": "69d1fdde54ce5cd5f31d5b67"
+          },
+          {
+            "type": "multiple_choice",
+            "questionText": "What is the length of the string \"hello\"?",
+            "options": [
+              "5",
+              "6",
+              "4",
+              "0"
+            ],
+            "correctAnswer": "5",
+            "explanation": "\"hello\" has 5 characters: h, e, l, l, o. (The null terminator is not counted in the logical length.)",
+            "hint": "Count the actual visible characters.",
+            "_id": "69d1fdde54ce5cd5f31d5b68"
+          },
+          {
+            "type": "multiple_choice",
+            "questionText": "Which function returns string length in C?",
+            "options": [
+              "strlen()",
+              "length()",
+              "size()",
+              "count()"
+            ],
+            "correctAnswer": "strlen()",
+            "explanation": "strlen() from <string.h> returns the number of characters before the null terminator.",
+            "hint": "It's in the <string.h> library.",
+            "_id": "69d1fdde54ce5cd5f31d5b69"
+          }
+        ],
+        "_id": "69d1fdde54ce5cd5f31d5b65"
+      },
+      {
+        "title": "String Traversal",
+        "isUnlocked": true,
+        "lessons": [
+          {
+            "type": "teaching",
+            "questionText": "Like arrays, strings can be traversed character by character using a loop.",
+            "options": [],
+            "codeSnippet": "char* s = \"hello\";\nfor (int i = 0; s[i] != '\\0'; i++) {\n    printf(\"%c\\n\", s[i]);\n}",
+            "explanation": "We loop until we hit the null terminator. Each s[i] is one character.",
+            "hint": "Loop until s[i] is the null character.",
+            "_id": "69d1fddf54ce5cd5f31d5b6b"
+          },
+          {
+            "type": "multiple_choice",
+            "questionText": "How do you access the 3rd character of string s in C?",
+            "options": [
+              "s[2]",
+              "s[3]",
+              "s(2)",
+              "s.get(2)"
+            ],
+            "correctAnswer": "s[2]",
+            "explanation": "Strings are zero-indexed: s[0] is first, s[1] is second, s[2] is third.",
+            "hint": "Remember: index starts at 0.",
+            "_id": "69d1fddf54ce5cd5f31d5b6c"
+          },
+          {
+            "type": "code_fill_in",
+            "questionText": "Complete the loop to count all characters in string s:",
+            "options": [],
+            "correctAnswer": "s[i] != '\\0'",
+            "codeSnippet": "int count = 0;\nfor (int i = 0; ___; i++) count++;",
+            "language": "c",
+            "explanation": "We continue the loop while we haven't hit the null terminator.",
+            "hint": "Loop while the character is not the null terminator.",
+            "_id": "69d1fddf54ce5cd5f31d5b6d"
+          }
+        ],
+        "_id": "69d1fddf54ce5cd5f31d5b6a"
+      },
+      {
+        "title": "String Comparison",
+        "isUnlocked": true,
+        "lessons": [
+          {
+            "type": "teaching",
+            "questionText": "In C, use strcmp() to compare strings. It returns 0 if equal, negative if first < second, positive if first > second.",
+            "options": [],
+            "codeSnippet": "#include <string.h>\nif (strcmp(s1, s2) == 0) {\n    printf(\"Equal!\");\n}",
+            "explanation": "Never use == to compare strings in C — that compares memory addresses, not content!",
+            "hint": "Use strcmp(), not == for strings in C.",
+            "_id": "69d1fddf54ce5cd5f31d5b6f"
+          },
+          {
+            "type": "multiple_choice",
+            "questionText": "strcmp(\"abc\", \"abc\") returns:",
+            "options": [
+              "0",
+              "1",
+              "-1",
+              "true"
+            ],
+            "correctAnswer": "0",
+            "explanation": "strcmp returns 0 when both strings are identical.",
+            "hint": "Zero means \"no difference\" between the strings.",
+            "_id": "69d1fddf54ce5cd5f31d5b70"
+          },
+          {
+            "type": "multiple_choice",
+            "questionText": "What is wrong with: if (s1 == s2) in C?",
+            "options": [
+              "Compares addresses not content",
+              "Syntax error",
+              "String has no == operator",
+              "Nothing wrong"
+            ],
+            "correctAnswer": "Compares addresses not content",
+            "explanation": "In C, string variable names are pointers. == compares the pointer values (memory addresses), not the actual characters.",
+            "hint": "String names in C are just pointers to memory.",
+            "_id": "69d1fddf54ce5cd5f31d5b71"
+          }
+        ],
+        "_id": "69d1fddf54ce5cd5f31d5b6e"
+      }
+    ],
+    "_id": "69d1fdde54ce5cd5f31d5b64"
+  },
+  {
+    "title": "String Algorithms",
+    "units": [
+      {
+        "title": "String Reversal",
+        "isUnlocked": false,
+        "lessons": [
+          {
+            "type": "teaching",
+            "questionText": "To reverse a string in-place, swap characters from both ends moving toward the center.",
+            "options": [],
+            "codeSnippet": "void reverse(char* s) {\n    int l = 0, r = strlen(s) - 1;\n    while (l < r) {\n        char tmp = s[l];\n        s[l] = s[r];\n        s[r] = tmp;\n        l++; r--;\n    }\n}",
+            "explanation": "The two-pointer swap approach reverses in O(n) time and O(1) space.",
+            "hint": "Swap the first and last, then move inward.",
+            "_id": "69d1fddf54ce5cd5f31d5b74"
+          },
+          {
+            "type": "multiple_choice",
+            "questionText": "Reversing \"hello\" gives:",
+            "options": [
+              "olleh",
+              "helol",
+              "ohell",
+              "elloh"
+            ],
+            "correctAnswer": "olleh",
+            "explanation": "h↔o, e↔l, l stays in the middle: o-l-l-e-h → olleh.",
+            "hint": "The first char swaps with the last, second with second-to-last, etc.",
+            "_id": "69d1fddf54ce5cd5f31d5b75"
+          }
+        ],
+        "_id": "69d1fddf54ce5cd5f31d5b73"
+      },
+      {
+        "title": "Palindrome Check",
+        "isUnlocked": false,
+        "lessons": [
+          {
+            "type": "teaching",
+            "questionText": "A palindrome reads the same forwards and backwards. \"racecar\", \"level\", \"noon\" are palindromes.",
+            "options": [],
+            "codeSnippet": "int is_palindrome(char* s) {\n    int l = 0, r = strlen(s) - 1;\n    while (l < r) {\n        if (s[l] != s[r]) return 0;\n        l++; r--;\n    }\n    return 1;\n}",
+            "explanation": "If ANY pair of mirrored characters differ, it's not a palindrome.",
+            "hint": "Compare from both ends inward. Any mismatch means it's not a palindrome.",
+            "_id": "69d1fddf54ce5cd5f31d5b77"
+          },
+          {
+            "type": "multiple_choice",
+            "questionText": "Which of these is a palindrome?",
+            "options": [
+              "racecar",
+              "hello",
+              "world",
+              "string"
+            ],
+            "correctAnswer": "racecar",
+            "explanation": "\"racecar\" spelled backwards is \"racecar\" — same word!",
+            "hint": "Try spelling each word backwards.",
+            "_id": "69d1fddf54ce5cd5f31d5b78"
+          },
+          {
+            "type": "multiple_choice",
+            "questionText": "Is an empty string a palindrome?",
+            "options": [
+              "Yes",
+              "No",
+              "Depends",
+              "Error"
+            ],
+            "correctAnswer": "Yes",
+            "explanation": "By convention, an empty string is considered a palindrome since it trivially reads the same in both directions.",
+            "hint": "There are no characters to mismatch.",
+            "_id": "69d1fddf54ce5cd5f31d5b79"
+          }
+        ],
+        "_id": "69d1fddf54ce5cd5f31d5b76"
+      }
+    ],
+    "_id": "69d1fddf54ce5cd5f31d5b72"
+  }
+]
