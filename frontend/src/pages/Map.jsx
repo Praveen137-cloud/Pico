@@ -3,6 +3,8 @@ import api from '../api';
 import { AuthContext } from '../context/AuthContext';
 import { useParams, useNavigate } from 'react-router-dom';
 import AdSenseBanner from '../components/AdSenseBanner';
+import VideoModal from '../components/VideoModal';
+import { Play } from 'lucide-react';
 import './Map.css';
 
 const Map = () => {
@@ -11,6 +13,7 @@ const Map = () => {
   const [stage, setStage] = useState(null);
   const [units, setUnits] = useState([]);
   const [subjectName, setSubjectName] = useState('');
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
   const navigate = useNavigate();
   const activeNodeRef = useRef(null);
   const scrollContainerRef = useRef(null);
@@ -137,6 +140,15 @@ const Map = () => {
           <div style={styles.subjectName}>{getSubjectIcon(subjectName)} {subjectName.toUpperCase()} RESEARCH</div>
           <div style={styles.sectionTitle}>{stage.title}</div>
         </div>
+        {stage.videoUrl && (
+          <button 
+            style={styles.briefingBtn} 
+            onClick={() => setIsVideoOpen(true)}
+          >
+            <Play size={14} fill="currentColor" />
+            <span>BRIEFING</span>
+          </button>
+        )}
       </header>
 
       {/* Progress Bar (Chocolate Filling style) */}
@@ -234,6 +246,13 @@ const Map = () => {
         <AdSenseBanner slot="map_footer_ads" style={{ maxWidth: '400px', margin: '40px auto' }} />
         <div style={{ height: 150 }} />
       </div>
+
+      <VideoModal 
+        isOpen={isVideoOpen} 
+        onClose={() => setIsVideoOpen(false)}
+        videoUrl={stage.videoUrl}
+        videoTitle={stage.videoTitle || stage.title}
+      />
     </div>
   );
 };
@@ -261,6 +280,22 @@ const styles = {
     cursor: 'pointer',
     letterSpacing: '1.5px',
     boxShadow: '0 4px 10px rgba(0,0,0,0.5)',
+    transition: 'all 0.3s'
+  },
+  briefingBtn: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    background: 'linear-gradient(135deg, #FFB300, #F57C00)',
+    border: 'none',
+    color: '#3E2723',
+    padding: '10px 18px',
+    borderRadius: '12px',
+    fontSize: '12px',
+    fontWeight: '900',
+    cursor: 'pointer',
+    letterSpacing: '1px',
+    boxShadow: '0 4px 15px rgba(255,179,0,0.3)',
     transition: 'all 0.3s'
   },
   subjectName: { color: '#BCAAA4', fontSize: '10px', fontWeight: '800', letterSpacing: '2px' },
