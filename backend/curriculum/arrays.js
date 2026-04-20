@@ -6,8 +6,6 @@ const arrays = {
   sections: [
     {
       title: '1. The Sequential Stride',
-      videoUrl: 'https://www.youtube.com/watch?v=37E9ckMDdTk',
-      videoTitle: 'Arrays Masterclass - Part 1',
       units: [
         { 
           title: 'Max Element: The First Step', desc: 'Find the biggest bird in the nest.', isUnlocked: true, xp: 30, lessons: [
@@ -333,8 +331,6 @@ const arrays = {
     },
     { 
       title: '2. Multidimensional Battlegrounds', 
-      videoUrl: 'https://www.youtube.com/watch?v=M2dW9L9V99I',
-      videoTitle: '2D Arrays & Matrix Mastery',
       units: [
         {
           title: 'Matrix Intro: The Bird High-Rise', desc: 'Rows and columns of bird houses! 🏢', xp: 30, lessons: [
@@ -644,8 +640,6 @@ const arrays = {
     },
     { 
       title: '3. The Two-Pointer Duel', 
-      videoUrl: 'https://www.youtube.com/watch?v=On03HWe2t68',
-      videoTitle: 'Two-Pointer Technique Elite Guide',
       units: [
         {
           title: 'Remove Duplicates II', desc: 'Twice is fine, thrice is a crime! 🦜', xp: 30, lessons: [
