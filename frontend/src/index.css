@@ -127,6 +127,19 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* 📖 Dyslexic Friendly Mode Overrides */
+body.dyslexic-mode {
+  font-family: 'OpenDyslexic', 'Comic Sans MS', 'Verdana', sans-serif !important;
+  letter-spacing: 0.05em !important;
+  line-height: 1.6 !important;
+}
+
+body.dyslexic-mode * {
+  font-family: inherit !important;
+  letter-spacing: inherit !important;
+  line-height: inherit !important;
+}
+
 html {
   background-color: #080c14 !important;
 }

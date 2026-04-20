@@ -313,11 +313,12 @@ app.get('/api/user', authMiddleware, async (req, res) => {
 
 app.put('/api/user', authMiddleware, async (req, res) => {
   try {
-    const { name, avatar, preferredLanguage } = req.body;
+    const { name, avatar, preferredLanguage, isDyslexic } = req.body;
     const updates = {};
     if (name !== undefined) updates.name = name;
     if (avatar !== undefined) updates.avatar = avatar;
     if (preferredLanguage !== undefined) updates.preferredLanguage = preferredLanguage;
+    if (isDyslexic !== undefined) updates.isDyslexic = isDyslexic;
     const user = await User.findByIdAndUpdate(req.user.id, updates, { new: true });
     res.json(user);
   } catch(err) {

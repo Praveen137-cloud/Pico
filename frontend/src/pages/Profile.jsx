@@ -43,6 +43,7 @@ const Profile = () => {
   const [editName, setEditName] = useState(authUser?.name || '');
   const [activeTheme, setActiveTheme] = useState('Gold');
   const [prefLang, setPrefLang] = useState(authUser?.preferredLanguage || 'c');
+  const [isDyslexic, setIsDyslexic] = useState(authUser?.isDyslexic || false);
   const [shareFeedback, setShareFeedback] = useState(false);
 
   const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
@@ -52,6 +53,7 @@ const Profile = () => {
       setUser(authUser);
       setEditName(authUser.name);
       setPrefLang(authUser.preferredLanguage || 'c');
+      setIsDyslexic(authUser.isDyslexic || false);
     }
   }, [authUser]);
 
@@ -59,8 +61,6 @@ const Profile = () => {
     if (!user) return;
     try {
       const res = await api.put('/api/user', {
-        name: user.name,
-        avatar: user.avatar,
         ...updates
       });
       setUser(res.data);
@@ -146,6 +146,16 @@ const Profile = () => {
     setActiveTheme(nextTheme.name);
     document.documentElement.style.setProperty('--theme-primary', nextTheme.primary);
     document.documentElement.style.setProperty('--theme-secondary', nextTheme.secondary);
+  };
+  
+  const toggleDyslexic = (enabled) => {
+    setIsDyslexic(enabled);
+    if (enabled) {
+      document.body.classList.add('dyslexic-mode');
+    } else {
+      document.body.classList.remove('dyslexic-mode');
+    }
+    saveProfile({ isDyslexic: enabled });
   };
 
   const handleShare = async () => {
@@ -247,6 +257,20 @@ const Profile = () => {
         <button className="theme-toggle-btn" onClick={cycleTheme}>
           <Palette size={18} />
           Change Theme
+        </button>
+      </div>
+
+      <div className="theme-toggle-container" style={{ marginTop: -15, borderTop: 'none' }}>
+        <div className="theme-toggle-info">
+          <span className="theme-toggle-label">Accessibility Font</span>
+          <span className="theme-toggle-current">Dyslexic Friendly</span>
+        </div>
+        <button 
+          className={`theme-toggle-btn ${isDyslexic ? 'active' : ''}`} 
+          onClick={() => toggleDyslexic(!isDyslexic)}
+          style={isDyslexic ? { backgroundColor: 'var(--theme-primary)', color: '#000' } : {}}
+        >
+          {isDyslexic ? 'ON' : 'OFF'}
         </button>
       </div>
 

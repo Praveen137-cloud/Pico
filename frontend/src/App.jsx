@@ -80,6 +80,15 @@ const MainLayout = ({ children }) => {
 
 const GlobalPremiumWrapper = ({ children, onClick }) => {
   const { user } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (user?.isDyslexic) {
+      document.body.classList.add('dyslexic-mode');
+    } else {
+      document.body.classList.remove('dyslexic-mode');
+    }
+  }, [user?.isDyslexic]);
+
   return (
     <div className={`app-container ${user?.isPremium ? 'premium-mode' : ''}`} onClick={onClick}>
       {children}

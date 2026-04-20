@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema({
   followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   preferredLanguage: { type: String, default: 'c', enum: ['c', 'python', 'java'] },
+  isDyslexic: { type: Boolean, default: false },
   isPremium: { type: Boolean, default: false },
   adsHidden: { type: Boolean, default: false },
   lastDailyQuestReset: { type: Date, default: Date.now },
