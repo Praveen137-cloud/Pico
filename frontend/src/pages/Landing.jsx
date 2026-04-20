@@ -120,9 +120,14 @@ const Landing = () => {
     <div className="landing-root">
       <Helmet>
         <title>Pico Elite Academy — Master DSA & Crack Any Interview</title>
-        <meta name="description" content="Pico Elite Academy is a free, AI-powered technical training platform. Master Data Structures, Algorithms, Web Dev, and more with 40,000+ interactive lessons." />
+        <meta name="description" content="Pico Elite Academy is a free, AI-powered technical training platform. Master Data Structures, Algorithms, Web Dev, and more with 40,000+ interactive lessons and official training videos." />
         <meta property="og:title" content="Pico Elite Academy — Master DSA & Crack Any Interview" />
-        <meta property="og:description" content="Free AI-powered platform to master DSA, Algorithms, and Web Development. Start your elite journey today." />
+        <meta property="og:description" content="Free AI-powered platform to master DSA, Algorithms, and Web Development. Start your elite journey today with our official curriculum." />
+        <meta property="og:image" content="https://pico-sooty.vercel.app/logo.png" />
+        <meta property="og:video" content="https://www.youtube.com/watch?v=zCQPVbYJRck" />
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:title" content="Pico Elite Academy — Professional Technical Training" />
+        <meta property="twitter:description" content="Explore the Matrix. Master Data Structures and Algorithms with cinematic AI-powered lessons." />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "EducationalOrganization",
@@ -130,7 +135,16 @@ const Landing = () => {
           "url": "https://pico-sooty.vercel.app",
           "description": "Elite AI-powered DSA and technical interview training platform with 40,000+ interactive lessons.",
           "educationalCredentialAwarded": "Certificate of Completion",
-          "teaches": ["Data Structures", "Algorithms", "Web Development", "Dynamic Programming", "System Design"]
+          "teaches": ["Data Structures", "Algorithms", "Web Development", "Dynamic Programming", "System Design"],
+          "video": {
+            "@type": "VideoObject",
+            "name": "Pico Elite Academy Walkthrough",
+            "description": "An introduction to the Pico Elite Academy training matrix.",
+            "thumbnailUrl": "https://pico-sooty.vercel.app/logo.png",
+            "uploadDate": "2024-04-20",
+            "contentUrl": "https://youtu.be/zCQPVbYJRck",
+            "embedUrl": "https://www.youtube.com/embed/zCQPVbYJRck"
+          }
         })}</script>
       </Helmet>
 
@@ -223,6 +237,29 @@ const Landing = () => {
               <span className="landing-stat-label">{s.label}</span>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* VIDEO BRIEFING SECTION */}
+      <section className="landing-video-section" aria-label="Official Platform Briefing">
+        <div className="video-section-header">
+           <span className="briefing-dot"></span>
+           <span className="video-section-tag">OFFICIAL BROADCAST</span>
+           <h2 className="video-section-heading">Project Pico: The Briefing</h2>
+        </div>
+        <div className="video-frame-outer">
+          <div className="video-frame-glow" />
+          <div className="video-frame-container">
+            <iframe 
+              width="100%" 
+              height="100%" 
+              src="https://www.youtube.com/embed/zCQPVbYJRck" 
+              title="Pico Elite Academy Briefing" 
+              frameBorder="0" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+              allowFullScreen
+            ></iframe>
+          </div>
         </div>
       </section>
 
